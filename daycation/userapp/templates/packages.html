@@ -1,0 +1,152 @@
+{% extends 'userdashboard.html' %}
+{% block content %}
+{% load static %}
+<div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+                <div class="text">
+                    <p class="breadcrumbs mb-2"><span class="mr-2"><a href="{% url 'home' %}">Home</a></span> <span>Packages</span></p>
+                    <h1 class="mb-4 bread">Our Daycation Packages</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+            </div>
+        </div>
+        <div class="row">
+            <!-- Relaxation Package -->
+            <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                <div class="package-card">
+                    <a href="{% url 'login' %}">
+                        <img src="{% static 'images/rel.jpeg' %}" alt="Relaxation Package" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="text">
+                            <h3>Relaxation Package</h3>
+                            <p><span class="price mr-2">₹6,150.00</span> <span class="per">per day</span></p>
+                            <p><a href="{% url 'login' %}" class="btn-custom">View Packages <span class="icon-long-arrow-right"></span></a></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Family Fun Package -->
+            <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                <div class="package-card">
+                    <a href="{% url 'login' %}">
+                        <img src="{% static 'images/fam.jpeg' %}" alt="Family Fun Package" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="text">
+                            <h3>Family Fun Package</h3>
+                            <p><span class="price mr-2">₹8,200.00</span> <span class="per">per day</span></p>
+                            <p><a href="{% url 'login' %}" class="btn-custom">View Packages <span class="icon-long-arrow-right"></span></a></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Adventure Package -->
+            <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                <div class="package-card">
+                    <a href="{% url 'login' %}">
+                        <img src="{% static 'images/adv.jpeg' %}" alt="Adventure Package" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="text">
+                            <h3>Adventure Package</h3>
+                            <p><span class="price mr-2">₹7,380.00</span> <span class="per">per day</span></p>
+                            <p><a href="{% url 'login' %}" class="btn-custom">View Packages <span class="icon-long-arrow-right"></span></a></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Luxury Package -->
+            <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                <div class="package-card">
+                    <a href="{% url 'login' %}">
+                        <img src="{% static 'images/lex.jpeg' %}" alt="Luxury Package" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="text">
+                            <h3>Luxury Package</h3>
+                            <p><span class="price mr-2">₹16,400.00</span> <span class="per">per day</span></p>
+                            <p><a href="{% url 'login' %}" class="btn-custom">View Packages <span class="icon-long-arrow-right"></span></a></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Wellness Package -->
+            <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                <div class="package-card">
+                    <a href="{% url 'login' %}">
+                        <img src="{% static 'images/Well.jpeg' %}" alt="Wellness Package" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="text">
+                            <h3>Wellness Package</h3>
+                            <p><span class="price mr-2">₹6,970.00</span> <span class="per">per day</span></p>
+                            <p><a href="{% url 'login' %}" class="btn-custom">View Packages <span class="icon-long-arrow-right"></span></a></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Romantic Getaway Package -->
+            <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                <div class="package-card">
+                    <a href="{% url 'login' %}">
+                        <img src="{% static 'images/cop.jpeg' %}" alt="Romantic Getaway Package" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="text">
+                            <h3>Romantic Getaway Package</h3>
+                            <p><span class="price mr-2">₹9,840.00</span> <span class="per">per day</span></p>
+                            <p><a href="{% url 'login' %}" class="btn-custom">View Packages <span class="icon-long-arrow-right"></span></a></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Corporate Retreat Package -->
+            <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                <div class="package-card">
+                    <a href="{% url 'login' %}">
+                        <img src="{% static 'images/team.jpeg' %}" alt="Corporate Retreat Package" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="text">
+                            <h3>Corporate Retreat Package</h3>
+                            <p><span class="price mr-2">₹20,500.00</span> <span class="per">per day</span></p>
+                            <p><a href="{% url 'login' %}" class="btn-custom">View Packages <span class="icon-long-arrow-right"></span></a></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Student Package -->
+            <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                <div class="package-card">
+                    <a href="{% url 'login' %}">
+                        <img src="{% static 'images/student.jpeg' %}" alt="Student Package" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="text">
+                            <h3>Student Package</h3>
+                            <p><span class="price mr-2">₹4,100.00</span> <span class="per">per day</span></p>
+                            <p><a href="{% url 'login' %}" class="btn-custom">View Packages <span class="icon-long-arrow-right"></span></a></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Adventure Plus Package -->
+            <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                <div class="package-card">
+                    <a href="{% url 'login' %}">
+                        <img src="{% static 'images/adven.jpeg' %}" alt="Adventure Plus Package" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="text">
+                            <h3>Adventure Plus Package</h3>
+                            <p><span class="price mr-2">₹9,840.00</span> <span class="per">per day</span></p>
+                            <p><a href="{% url 'login' %}" class="btn-custom">View Packages <span class="icon-long-arrow-right"></span></a></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

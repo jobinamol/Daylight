@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Profile</title>
+</head>
+<body>
+    <h1>Profile</h1>
+    <p>Name: {{ data.name }}</p>
+    <p>Mobile Number: {{ data.mobilenumber }}</p>
+    <p>Email: {{ data.emailid }}</p>
+    <p>District: {{ data.district }}</p>
+    <p><img src="{{ data.image.url }}" alt="Profile Image"></p>
+    <a href="{% url 'usereditprofile' data.id %}">Edit Profile</a>
+    <a href="{% url 'userchangepassword' data.id %}">Change Password</a>
+    <a href="{% url 'userlogout' %}">Logout</a>
+</body>
+</html>

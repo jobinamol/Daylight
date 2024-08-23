@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile</title>
+</head>
+<body>
+    <h1>Edit Profile</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ data.name }}" required>
+        <br>
+        <label for="mobilenumber">Mobile Number:</label>
+        <input type="text" id="mobilenumber" name="mobilenumber" value="{{ data.mobilenumber }}" required>
+        <br>
+        <label for="emailid">Email:</label>
+        <input type="email" id="emailid" name="emailid" value="{{ data.emailid }}" required>
+        <br>
+        <label for="district">District:</label>
+        <input type="text" id="district" name="district" value="{{ data.district }}" required>
+        <br>
+        <label for="image">Profile Image:</label>
+        <input type="file" id="image" name="image">
+        <br>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ data.username }}" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="submit">Update Profile</button>
+    </form>
+    <a href="{% url 'userviewprofile' %}">View Profile</a>
+    <a href="{% url 'userlogout' %}">Logout</a>
+</body>
+</html>
