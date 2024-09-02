@@ -12,22 +12,21 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0d)e6rso3=rp5tb^q1y!dax(swu0a#*@oq4q_k_gxd796v6$il'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
 
 # Application definition
 
@@ -40,16 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    
+
     # AllAuth for social login
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    #providers
-    'allauth.socialaccount.providers.google', 
-    
-    
+
+    # Providers for social login
+    'allauth.socialaccount.providers.google',
+
     # Your apps
     'resort',
     'userapp',
@@ -63,9 +62,12 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',  # For allauth
 )
 
+# Redirect settings after login and logout
+LOGIN_REDIRECT_URL = 'userdashboard'  # Redirect to user dashboard after login
+LOGOUT_REDIRECT_URL = 'home'  # Redirect to home after logout
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+# Login URL for @login_required decorator
+LOGIN_URL = 'login'  # URL to redirect when login is required
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -80,7 +82,6 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -89,23 +90,20 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  # Add this line
+    'allauth.account.middleware.AccountMiddleware',  # For allauth
 ]
 
-
 ROOT_URLCONF = 'daycation.urls'
-
-# settings.py
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],  # This is where you specify your custom template directory
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Ensure your custom templates are here
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',  # Required by `allauth`
+                'django.template.context_processors.request',  # Required by allauth
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -113,35 +111,30 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'daycation.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+# MySQL Database Configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'UserDB',
-        'USER': 'root',
-        'PASSWORD': 'Jobina@123*',
+        'USER': 'jobina',  # Replace with your MySQL username
+        'PASSWORD': '1234',  # Replace with your MySQL password
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
 
-
-
-
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,  # Enforcing minimum length of 8 characters
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -151,10 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -163,19 +153,19 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
-STATIC_URL = 'static/'
+# Media files (uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-STATIC_ROOT = os.path.join(BASE_DIR,'assets')
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Sites framework
 SITE_ID = 1
 
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '::1']
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT=os.path.join(BASE_DIR,'media')
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

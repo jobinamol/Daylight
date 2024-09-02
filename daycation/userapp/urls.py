@@ -1,5 +1,3 @@
-# userapp/urls.py
-
 from django.urls import path
 from . import views
 
@@ -9,7 +7,7 @@ urlpatterns = [
     path('blog/', views.blog, name='blog'),
     path('packages/', views.packages, name='packages'),
     path('contact/', views.contact, name='contact'),
-    path('login/', views.login, name='login'),
+    path('login/', views.login_view, name='login'),  # Updated to 'login_view'
     path('userdashboard/', views.userdashboard, name='userdashboard'),
     path('userregister/', views.userregister, name='userregister'),
     path('userviewprofile/', views.userviewprofile, name='userviewprofile'),
@@ -19,6 +17,4 @@ urlpatterns = [
     path('userchangepassword/<int:id>/', views.userchangepassword, name='userchangepassword'),
     path('userlogout/', views.userlogout, name='userlogout'),
     path('forgot-password/', views.userforgotpassword, name='userforgotpassword'),
-
-
 ]

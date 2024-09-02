@@ -1,89 +1,105 @@
 from django.shortcuts import render, redirect
-from django.core.files.storage import FileSystemStorage
-from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib import messages
-from django.http import JsonResponse
-from .models import userdb 
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from .models import Profile
+from django.utils.datastructures import MultiValueDictKeyError
 
-# Create your views here.
+# Home view
 def home(request):
     return render(request, 'home.html')
 
+# About view
 def about(request):
     return render(request, 'about.html')
 
+# Blog view
 def blog(request):
     return render(request, 'blog.html')
 
+# Packages view
 def packages(request):
     return render(request, 'packages.html')
 
+# Contact view
 def contact(request):
     return render(request, 'contact.html')
 
 # Login view
-def login(request):
+def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        try:
-            user = userdb.objects.get(username=username, password=password, status=1)
-            # Store user details in session
-            request.session['id'] = user.id
-            request.session['name'] = user.name
-            request.session['username'] = user.username
-
+        user = authenticate(request, username=username, password=password)
+        if user is not None and user.status == 1:
+            auth_login(request, user)
             return redirect('userdashboard')
-        except userdb.DoesNotExist:
-            messages.error(request, 'Invalid user credentials')
-            return redirect('userdashboard')
+        else:
+            messages.error(request, 'Invalid credentials or account not active')
+            return redirect('login')
 
     return render(request, 'login.html')
 
 # User dashboard view
+@login_required
 def userdashboard(request):
     return render(request, 'userdashboard.html')
 
 # User registration view
 def userregister(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
-        mobilenumber = request.POST.get('mobilenumber')
-        emailid = request.POST.get('emailid')
-        district = request.POST.get('district')
-        image = request.FILES.get('image', None)
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['emailid']
+        mobile_number = request.POST['mobilenumber']
+        address = request.POST['address']
+        city = request.POST['city']
+        district = request.POST['district']
+        age = request.POST['age']
+        sex = request.POST['sex']
+        profile_image = request.FILES.get('profile_image')
 
-        data = userdb(
-            name=name,
-            mobilenumber=mobilenumber,
-            emailid=emailid,
+        # Check if username already exists
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists.')
+            return redirect('userregister')
+
+        # Create user
+        user = User.objects.create_user(username=username, email=email, password=password)
+        
+        # Create profile
+        Profile.objects.create(
+            user=user,
+            mobile_number=mobile_number,
+            address=address,
+            city=city,
             district=district,
-            image=image,
-            username=username,
-            password=password
+            age=age,
+            sex=sex,
+            profile_image=profile_image
         )
-        data.save()
 
-        messages.success(request, 'Registration successful! Please log in.')
+        messages.success(request, 'Registration successful. You can now log in.')
         return redirect('login')
 
     return render(request, 'userregister.html')
-
 # View user profile
+@login_required
 def userviewprofile(request):
-    id = request.session.get('id')
-    data = userdb.objects.filter(id=id).first()
+    user = request.user
+    data = UserDB.objects.filter(username=user.username).first()
     return render(request, 'userviewprofile.html', {'data': data})
 
 # Edit user profile view
+@login_required
 def usereditprofile(request, id):
-    data = userdb.objects.filter(id=id).first()
+    data = get_object_or_404(UserDB, id=id)
     return render(request, 'usereditprofile.html', {'data': data})
 
 # Update user profile view
+@login_required
 def userupdate(request, id):
     if request.method == "POST":
         name = request.POST.get('name')
@@ -97,19 +113,19 @@ def userupdate(request, id):
             fs = FileSystemStorage()
             file = fs.save(image.name, image)
         except MultiValueDictKeyError:
-            file = userdb.objects.get(id=id).image  # Keep existing image if not updated
+            file = UserDB.objects.get(id=id).image  # Keep existing image if not updated
 
         username = request.POST.get('username')
         password = request.POST.get('password')
 
         # Update the user's details
-        userdb.objects.filter(id=id).update(
+        UserDB.objects.filter(id=id).update(
             name=name,
             mobilenumber=mobilenumber,
             emailid=emailid,
             district=district,
             username=username,
-            password=password,
+            password=make_password(password) if password else UserDB.objects.get(id=id).password,
             image=file
         )
         messages.success(request, 'Profile updated successfully!')
@@ -118,33 +134,38 @@ def userupdate(request, id):
     return redirect('usereditprofile', id=id)
 
 # Delete user profile view
+@login_required
 def userdelete(request, id):
-    userdb.objects.filter(id=id).delete()
+    UserDB.objects.filter(id=id).delete()
     messages.success(request, 'User profile deleted successfully.')
     return redirect('home')
 
 # Change password view
+@login_required
 def userchangepassword(request, id):
     if request.method == 'POST':
         oldpassword = request.POST.get('oldpassword')
         newpassword = request.POST.get('newpassword')
         confirmnewpassword = request.POST.get('confirmnewpassword')
 
-        if newpassword == confirmnewpassword:
-            if userdb.objects.filter(id=id, password=oldpassword).exists():
-                userdb.objects.filter(id=id).update(password=newpassword)
+        user = UserDB.objects.filter(id=id).first()
+        if user and check_password(oldpassword, user.password):
+            if newpassword == confirmnewpassword:
+                user.password = make_password(newpassword)
+                user.save()
                 messages.success(request, 'Password updated successfully!')
                 return redirect('userviewprofile')
             else:
-                messages.error(request, 'Incorrect old password')
+                messages.error(request, 'New passwords do not match')
         else:
-            messages.error(request, 'New passwords do not match')
+            messages.error(request, 'Incorrect old password')
 
     return render(request, 'userchangepassword.html')
 
 # Logout view
+@login_required
 def userlogout(request):
-    request.session.flush()  # Clear session data
+    auth_logout(request)
     messages.success(request, 'You have successfully logged out.')
     return redirect('home')
 
