@@ -36,11 +36,11 @@
 
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="{% url 'userdashboard' %}" class="nav-link">Home</a></li>
                     <li class="nav-item"><a href="{% url 'packages' %}" class="nav-link">Packages</a></li>
                     <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
                     <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
-                    <li class="nav-item active"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                    <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
                     <li class="nav-item"><a href="{% url 'userregister' %}" class="nav-link">Create New Account</a></li>
                 </ul>
             </div>
@@ -71,7 +71,7 @@
                     <div class="card">
                         <div class="card-body p-4">
                             <h3 class="text-center mb-4">Login</h3>
-                            <form method="POST" action="{% url 'login' %}">
+                            <form method="post" action="{% url 'userindex' %}">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="username">Username</label>
@@ -86,7 +86,7 @@
                                 </div>
                                 <div class="text-center mt-4">
                                     <p><a href="{% url 'userregister' %}" class="btn btn-secondary">Create New Account</a></p>
-                                    <p><a href="{% url 'userforgotpassword' %}" class="btn btn-link">Forgot Password?</a></p>
+                                    <p><a href="#" class="btn btn-link">Forgot Password?</a></p>
                                 </div>
                                 {% if messages %}
                                     <div class="messages mt-3">
@@ -163,14 +163,14 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <p>
-                        &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
+                        &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | Daylight Resort
                     </p>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- JavaScript -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
@@ -183,8 +183,8 @@
     <script src="{% static 'js/aos.js' %}"></script>
     <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
     <script src="{% static 'js/scrollax.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
-
 </body>
 </html>

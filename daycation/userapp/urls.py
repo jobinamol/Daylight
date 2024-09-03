@@ -9,12 +9,6 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('login/', views.login_view, name='login'),  # Updated to 'login_view'
     path('userdashboard/', views.userdashboard, name='userdashboard'),
+    path('userindex/',views.userindex,name='userindex'),
     path('userregister/', views.userregister, name='userregister'),
-    path('userviewprofile/', views.userviewprofile, name='userviewprofile'),
-    path('usereditprofile/<int:id>/', views.usereditprofile, name='usereditprofile'),
-    path('userupdateprofile/<int:id>/', views.userupdate, name='userupdateprofile'),
-    path('userdeleteprofile/<int:id>/', views.userdelete, name='userdeleteprofile'),
-    path('userchangepassword/<int:id>/', views.userchangepassword, name='userchangepassword'),
-    path('userlogout/', views.userlogout, name='userlogout'),
-    path('forgot-password/', views.userforgotpassword, name='userforgotpassword'),
 ]

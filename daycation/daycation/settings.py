@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 # Application definition
 
@@ -59,7 +59,9 @@ INSTALLED_APPS = [
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # For regular username/password login
-    'allauth.account.auth_backends.AuthenticationBackend',  # For allauth
+    'allauth.account.auth_backends.AuthenticationBackend',
+ 
+# For allauth
 )
 
 # Redirect settings after login and logout
@@ -110,6 +112,7 @@ TEMPLATES = [
         },
     },
 ]
+SILENCED_SYSTEM_CHECKS = ['models.W036']
 
 WSGI_APPLICATION = 'daycation.wsgi.application'
 
@@ -117,13 +120,20 @@ WSGI_APPLICATION = 'daycation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'UserDB',
-        'USER': 'jobina',  # Replace with your MySQL username
-        'PASSWORD': '1234',  # Replace with your MySQL password
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': 'DRMS',  # Your new database name
+        'USER': 'jobina',  # Your MySQL username
+        'PASSWORD': '1234',  # Your MySQL password
+        'HOST': 'localhost',  # Or IP address of your MySQL server
+        'PORT': '3306',  # Default MySQL port
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        },
     }
 }
+
+
+import pymysql
+pymysql.install_as_MySQLdb()
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -166,6 +176,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Sites framework
 SITE_ID = 1
-
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '::1']
-

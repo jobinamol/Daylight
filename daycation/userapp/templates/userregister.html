@@ -11,11 +11,51 @@
     <!-- Link to CSS stylesheets -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        .hero-wrap {
+            background-size: cover;
+            background-position: center;
+            height: 300px;
+        }
+        .hero-wrap .overlay {
+            background: rgba(0, 0, 0, 0.5);
+            height: 100%;
+        }
+        .hero-wrap .text {
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .card-body {
+            padding: 2rem;
+        }
+        .form-control, .form-control-file, .btn {
+            border-radius: 10px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            background: #333;
+            color: #fff;
+            padding: 1rem 0;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">Daylight</a>
+            <a class="navbar-brand" href="{% url 'home' %}">Daylight Resort</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
             </button>
@@ -47,105 +87,85 @@
         </div>
     </div>
 
-    <div class="container mt-5">
+    <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="text-center">Register</h3>
-                        <form method="POST" action="{% url 'useredit' %}" enctype="multipart/form-data" class="mt-4">
+            <div class="col-md-10 col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="text-center mb-4">Create Your Account</h3>
+                        <form method="POST" action="{% url 'userregister' %}" enctype="multipart/form-data">
                             {% csrf_token %}
                         
-                            <!-- ID (read-only, as it’s usually not editable by the user) -->
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="id">ID</label>
-                                    <input type="text" class="form-control" id="id" name="id" value="{{ profile.id }}" readonly>
-                                </div>
-                            </div>
-                        
                             <!-- Name -->
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" value="{{ profile.name }}" required>
-                                </div>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
                             </div>
                         
                             <!-- Address -->
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="address">Address</label>
-                                    <input type="text" class="form-control" id="address" name="address" value="{{ profile.address }}" required>
-                                </div>
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input type="text" class="form-control" id="address" name="address" placeholder="Enter your address" required>
                             </div>
                         
                             <!-- Mobile Number -->
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="mobilenumber">Mobile Number</label>
-                                    <input type="text" class="form-control" id="mobilenumber" name="mobilenumber" value="{{ profile.mobilenumber }}" required>
-                                </div>
+                            <div class="form-group">
+                                <label for="mobilenumber">Mobile Number</label>
+                                <input type="text" class="form-control" id="mobilenumber" name="mobilenumber" placeholder="Enter your mobile number" required>
                             </div>
                         
                             <!-- Email ID -->
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="emailid">Email ID</label>
-                                    <input type="email" class="form-control" id="emailid" name="emailid" value="{{ profile.emailid }}" required>
-                                </div>
+                            <div class="form-group">
+                                <label for="emailid">Email ID</label>
+                                <input type="email" class="form-control" id="emailid" name="emailid" placeholder="Enter your email ID" required>
                             </div>
                         
                             <!-- District -->
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="district">District</label>
-                                    <input type="text" class="form-control" id="district" name="district" value="{{ profile.district }}" required>
-                                </div>
+                            <div class="form-group">
+                                <label for="district">District</label>
+                                <input type="text" class="form-control" id="district" name="district" placeholder="Enter your district" required>
                             </div>
                         
                             <!-- Age -->
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="age">Age</label>
-                                    <input type="number" class="form-control" id="age" name="age" value="{{ profile.age }}" required>
+                                    <input type="number" class="form-control" id="age" name="age" placeholder="Enter your age" required>
                                 </div>
                                 <!-- Sex -->
                                 <div class="form-group col-md-6">
                                     <label for="sex">Sex</label>
                                     <select class="form-control" id="sex" name="sex" required>
-                                        <option value="" disabled>Choose...</option>
-                                        <option value="male" {% if profile.sex == "male" %}selected{% endif %}>Male</option>
-                                        <option value="female" {% if profile.sex == "female" %}selected{% endif %}>Female</option>
-                                        <option value="other" {% if profile.sex == "other" %}selected{% endif %}>Other</option>
+                                        <option value="" disabled selected>Choose...</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
                                     </select>
                                 </div>
                             </div>
                         
                             <!-- Profile Image -->
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="profile_image">Profile Image</label>
-                                    <input type="file" class="form-control-file" id="profile_image" name="profile_image" accept="image/*">
-                                </div>
+                            <div class="form-group">
+                                <label for="profile_image">Profile Image</label>
+                                <input type="file" class="form-control-file" id="profile_image" name="profile_image" accept="image/*">
                             </div>
                         
                             <!-- Username -->
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="username">Username</label>
-                                    <input type="text" class="form-control" id="username" name="username" value="{{ profile.username }}" required>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
                                 </div>
                         
                                 <!-- Password -->
                                 <div class="form-group col-md-6">
                                     <label for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password">
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" required>
                                 </div>
                             </div>
                         
                             <div class="form-group text-center">
-                                <button type="submit" class="btn btn-primary btn-block">Update</button>
+                                <button type="submit" class="btn btn-primary btn-block">Register</button>
                             </div>
                         </form>
                         
@@ -156,10 +176,8 @@
     </div>
 
     <!-- Footer -->
-    <footer class="ftco-footer ftco-bg-dark ftco-section">
-        <div class="container">
-            <!-- Footer content omitted for brevity -->
-        </div>
+    <footer class="footer text-center mt-5">
+        <p>© 2024 Daylight Resort. All rights reserved.</p>
     </footer>
 
     <!-- Include necessary JS files -->
