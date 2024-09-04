@@ -1,169 +1,208 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Daycation Resort Housekeeping Dashboard">
+    <meta name="author" content="AdminKit">
+    <meta name="keywords" content="housekeeping, management, dashboard, template, responsive, css, html, theme, UI, web">
+
+    <link rel="shortcut icon" href="{% static 'assets/img/icons/icon-48x48.png' %}" />
     <title>Housekeeping Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            margin: 0;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #f4f4f4;
-            padding: 15px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-        }
-        .sidebar h2 {
-            margin-top: 0;
-            font-size: 24px;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sidebar ul li {
-            margin: 10px 0;
-        }
-        .sidebar ul li a {
-            text-decoration: none;
-            color: #333;
-            font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 4px;
-            transition: background 0.3s;
-        }
-        .sidebar ul li a:hover {
-            background-color: #ddd;
-        }
-        .main-content {
-            flex: 1;
-            padding: 20px;
-        }
-        .main-content section {
-            margin-bottom: 20px;
-        }
-        .main-content h3 {
-            font-size: 22px;
-        }
-        .main-content button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .main-content button:hover {
-            background-color: #0056b3;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 20px;
-            border-radius: 4px;
-            width: 80%;
-            max-width: 600px;
-        }
-        .modal-content h4 {
-            margin-top: 0;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover {
-            color: #000;
-        }
-    </style>
+    <link href="{% static 'assets/css/app.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <div class="sidebar">
-        <h2>Housekeeping Dashboard</h2>
-        <ul>
-            <li><a href="#cleaning">Cleaning Tasks</a></li>
-            <li><a href="#inventory">Inventory Monitoring</a></li>
-            <li><a href="#requests">Guest Requests</a></li>
-            <li><a href="#maintenance">Maintenance Reports</a></li>
-        </ul>
-    </div>
-    <div class="main-content">
-        <section id="cleaning">
-            <h3>Cleaning Tasks</h3>
-            <button onclick="showModal('cleaning-modal')">Manage Cleaning Tasks</button>
-        </section>
-        <section id="inventory">
-            <h3>Inventory Monitoring</h3>
-            <button onclick="showModal('inventory-modal')">View Inventory</button>
-        </section>
-        <section id="requests">
-            <h3>Guest Requests</h3>
-            <button onclick="showModal('requests-modal')">Manage Requests</button>
-        </section>
-        <section id="maintenance">
-            <h3>Maintenance Reports</h3>
-            <button onclick="showModal('maintenance-modal')">Report Maintenance Issues</button>
-        </section>
+    <div class="wrapper">
+        <nav id="sidebar" class="sidebar js-sidebar">
+            <div class="sidebar-content js-simplebar">
+                <a class="sidebar-brand" href="{% url 'housekeep_dashboard' %}">
+                    <span class="align-middle">Housekeeping Dashboard</span>
+                </a>
+
+                <ul class="sidebar-nav">
+                    <li class="sidebar-header">Management</li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'housekeep_dashboard' %}">
+                            <i class="align-middle" data-feather="home"></i> <span class="align-middle">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'housekeep_dashboard' %}">
+                            <i class="align-middle" data-feather="bed"></i> <span class="align-middle">Room Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'housekeep_dashboard' %}">
+                            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Inventory</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'housekeep_dashboard' %}">
+                            <i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Guest Requests</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'housekeep_dashboard' %}">
+                            <i class="align-middle" data-feather="tool"></i> <span class="align-middle">Maintenance</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="main">
+            <nav class="navbar navbar-expand navbar-light navbar-bg">
+                <a class="sidebar-toggle js-sidebar-toggle">
+                    <i class="hamburger align-self-center"></i>
+                </a>
+
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav navbar-align">
+                        <li class="nav-item dropdown">
+                            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+                                <div class="position-relative">
+                                    <i class="align-middle" data-feather="bell"></i>
+                                    <span class="indicator">{{ countnoti }}</span>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+                                <div class="dropdown-menu-header">Notifications</div>
+                                <div class="list-group">
+                                    <a href="{% url 'housekeep_dashboard' %}" class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-2">
+                                                <i class="text-danger" data-feather="alert-circle"></i>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="text-dark">New Requests <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ new_requests_count }}</span></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="{% url 'housekeep_dashboard' %}" class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-2">
+                                                <i class="text-danger" data-feather="alert-circle"></i>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="text-dark">Low Inventory <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ low_inventory_count }}</span></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="{% url 'housekeep_dashboard' %}" class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-2">
+                                                <i class="text-danger" data-feather="alert-circle"></i>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="text-dark">Maintenance Issues <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ maintenance_issues_count }}</span></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            {% block content %}
+            <main class="content">
+                <div class="container-fluid p-0">
+                    <h1 class="h3 mb-3"><strong>Housekeeping Dashboard</strong></h1>
+                    <div class="row">
+                        <div class="col-xl-6 col-xxl-5 d-flex">
+                            <div class="w-100">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col mt-0">
+                                                        <h5 class="card-title">Rooms Ready for Use</h5>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="stat text-primary">
+                                                            <i class="align-middle" data-feather="check-circle"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h1 class="mt-1 mb-3">{{ rooms_ready_for_use }}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col mt-0">
+                                                        <h5 class="card-title">Inventory Status</h5>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="stat text-primary">
+                                                            <i class="align-middle" data-feather="box"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h1 class="mt-1 mb-3">{{ inventory_status }}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-xxl-5 d-flex">
+                            <div class="w-100">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col mt-0">
+                                                        <h5 class="card-title">Guest Requests</h5>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="stat text-primary">
+                                                            <i class="align-middle" data-feather="file-text"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h1 class="mt-1 mb-3">{{ guest_requests }}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col mt-0">
+                                                        <h5 class="card-title">Maintenance Issues</h5>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="stat text-primary">
+                                                            <i class="align-middle" data-feather="tool"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h1 class="mt-1 mb-3">{{ maintenance_issues }}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            {% endblock %}
+        </div>
     </div>
 
-    <!-- Modals -->
-    <div id="cleaning-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="hideModal('cleaning-modal')">&times;</span>
-            <h4>Manage Cleaning Tasks</h4>
-            <!-- Add form or table here -->
-        </div>
-    </div>
-    <div id="inventory-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="hideModal('inventory-modal')">&times;</span>
-            <h4>View Inventory</h4>
-            <!-- Add form or table here -->
-        </div>
-    </div>
-    <div id="requests-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="hideModal('requests-modal')">&times;</span>
-            <h4>Manage Requests</h4>
-            <!-- Add form or table here -->
-        </div>
-    </div>
-    <div id="maintenance-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="hideModal('maintenance-modal')">&times;</span>
-            <h4>Report Maintenance Issues</h4>
-            <!-- Add form or table here -->
-        </div>
-    </div>
-
-    <script>
-        function showModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
-        }
-
-        function hideModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-    </script>
+    <script src="{% static 'assets/js/app.js' %}"></script>
 </body>
+
 </html>

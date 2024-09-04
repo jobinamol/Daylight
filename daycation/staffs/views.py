@@ -36,3 +36,25 @@ def concierge_login(request):
 
 def arranger_login(request):
     return render(request, 'arranger_login.html')
+
+def frontdesk_dashboard(request):
+    return render(request, 'frontdesk_dashboard.html')
+
+def housekeep_dashboard(request):
+    return render(request,'housekeep_dashboard.html')
+
+
+def kitchenstaff_dashboard(request):
+    return render(request,'kitchenstaff_dashboard.html')
+
+def fud_dashboard(request):
+    return render(request,'fud_dashboard.html')
+
+def evant_dashboard(request):
+    return render(request,"evant_dashboard.html")
+
+def guestservice_dashboard(request):
+    return render(request,"guestservice_dashboard.html")
+
+
+

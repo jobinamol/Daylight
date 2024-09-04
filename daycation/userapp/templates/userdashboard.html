@@ -37,7 +37,22 @@
                   <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
                   <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
                   <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-                  <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Login</a></li>
+                  <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="{% url 'user_view_profile' %}"><i class="fas fa-user"></i> View Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'edit_profile' %}"><i class="fas fa-edit"></i> Edit Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'change_password' %}"><i class="fas fa-key"></i> Change Password</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
               </ul>
           </div>
       </div>

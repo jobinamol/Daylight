@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
+from django.core.files.storage import FileSystemStorage
 from .models import UserDB
+from django.contrib.auth import logout as auth_logout
+
 
 # Home view
 def home(request):
@@ -51,7 +54,11 @@ def login_view(request):
 
 # User dashboard view
 def userdashboard(request):
-    return render(request, 'userdashboard.html')
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    user = UserDB.objects.get(id=user_id)
+    return render(request, 'userdashboard.html', {'user': user})
 
 # User index view
 def userindex(request):
@@ -113,3 +120,55 @@ def userregister(request):
         return redirect('login')
 
     return render(request, 'userregister.html')
+
+# View profile view
+def user_view_profile(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    user = UserDB.objects.get(id=user_id)
+    return render(request, 'user_view_profile.html', {'user': user})
+
+# Edit profile view
+def edit_profile(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    user = UserDB.objects.get(id=user_id)
+    
+    if request.method == 'POST':
+        user.name = request.POST.get('name')
+        user.address = request.POST.get('address')
+        user.mobilenumber = request.POST.get('mobilenumber')
+        user.emailid = request.POST.get('emailid')
+        user.district = request.POST.get('district')
+        user.age = request.POST.get('age')
+        user.sex = request.POST.get('sex')
+
+        if 'profile_image' in request.FILES:
+            user.profile_image = request.FILES['profile_image']
+
+        user.save()
+        messages.success(request, 'Profile updated successfully.')
+        return redirect('user_view_profile')
+
+    return render(request, 'edit_profile.html', {'user': user})
+
+# Forgot password view
+def forgot_password(request):
+    if request.method == 'POST':
+        emailid = request.POST.get('emailid')
+        try:
+            user = UserDB.objects.get(emailid=emailid)
+            # You would typically send a password reset email here
+            messages.success(request, 'Password reset instructions have been sent to your email.')
+        except UserDB.DoesNotExist:
+            messages.error(request, 'No account found with that email.')
+
+    return render(request, 'forgot_password.html')
+
+# Logout view
+def logout(request):
+    auth_logout(request)
+    messages.success(request, 'You have been logged out.')
+    return redirect('home')
