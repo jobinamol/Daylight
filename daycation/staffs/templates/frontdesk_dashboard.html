@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front Desk Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Front Desk Dashboard</h2>
+        <ul>
+            <li><a href="#checkin">Check-in/Check-out</a></li>
+            <li><a href="#reservations">Reservations</a></li>
+            <li><a href="#inquiries">Guest Inquiries</a></li>
+            <li><a href="#payments">Payments</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <section id="checkin">
+            <h3>Check-in/Check-out</h3>
+            <button onclick="showModal('checkin-modal')">Manage Check-ins/Check-outs</button>
+        </section>
+        <section id="reservations">
+            <h3>Reservations</h3>
+            <button onclick="showModal('reservations-modal')">View Reservations</button>
+        </section>
+        <section id="inquiries">
+            <h3>Guest Inquiries</h3>
+            <button onclick="showModal('inquiries-modal')">Manage Inquiries</button>
+        </section>
+        <section id="payments">
+            <h3>Payments</h3>
+            <button onclick="showModal('payments-modal')">Process Payments</button>
+        </section>
+    </div>
+
+    <!-- Modals -->
+    <div id="checkin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('checkin-modal')">&times;</span>
+            <h4>Manage Check-ins/Check-outs</h4>
+            <!-- Add form or table here -->
+        </div>
+    </div>
+    <div id="reservations-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('reservations-modal')">&times;</span>
+            <h4>View Reservations</h4>
+            <!-- Add form or table here -->
+        </div>
+    </div>
+    <div id="inquiries-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('inquiries-modal')">&times;</span>
+            <h4>Manage Inquiries</h4>
+            <!-- Add form or table here -->
+        </div>
+    </div>
+    <div id="payments-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('payments-modal')">&times;</span>
+            <h4>Process Payments</h4>
+            <!-- Add form or table here -->
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

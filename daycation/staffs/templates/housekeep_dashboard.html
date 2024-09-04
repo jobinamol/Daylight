@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housekeeping Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #f4f4f4;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar h2 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .sidebar ul li a:hover {
+            background-color: #ddd;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+        .main-content section {
+            margin-bottom: 20px;
+        }
+        .main-content h3 {
+            font-size: 22px;
+        }
+        .main-content button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .main-content button:hover {
+            background-color: #0056b3;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 4px;
+            width: 80%;
+            max-width: 600px;
+        }
+        .modal-content h4 {
+            margin-top: 0;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Housekeeping Dashboard</h2>
+        <ul>
+            <li><a href="#cleaning">Cleaning Tasks</a></li>
+            <li><a href="#inventory">Inventory Monitoring</a></li>
+            <li><a href="#requests">Guest Requests</a></li>
+            <li><a href="#maintenance">Maintenance Reports</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <section id="cleaning">
+            <h3>Cleaning Tasks</h3>
+            <button onclick="showModal('cleaning-modal')">Manage Cleaning Tasks</button>
+        </section>
+        <section id="inventory">
+            <h3>Inventory Monitoring</h3>
+            <button onclick="showModal('inventory-modal')">View Inventory</button>
+        </section>
+        <section id="requests">
+            <h3>Guest Requests</h3>
+            <button onclick="showModal('requests-modal')">Manage Requests</button>
+        </section>
+        <section id="maintenance">
+            <h3>Maintenance Reports</h3>
+            <button onclick="showModal('maintenance-modal')">Report Maintenance Issues</button>
+        </section>
+    </div>
+
+    <!-- Modals -->
+    <div id="cleaning-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('cleaning-modal')">&times;</span>
+            <h4>Manage Cleaning Tasks</h4>
+            <!-- Add form or table here -->
+        </div>
+    </div>
+    <div id="inventory-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('inventory-modal')">&times;</span>
+            <h4>View Inventory</h4>
+            <!-- Add form or table here -->
+        </div>
+    </div>
+    <div id="requests-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('requests-modal')">&times;</span>
+            <h4>Manage Requests</h4>
+            <!-- Add form or table here -->
+        </div>
+    </div>
+    <div id="maintenance-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('maintenance-modal')">&times;</span>
+            <h4>Report Maintenance Issues</h4>
+            <!-- Add form or table here -->
+        </div>
+    </div>
+
+    <script>
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>

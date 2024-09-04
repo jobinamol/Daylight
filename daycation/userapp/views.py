@@ -1,12 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login as auth_login
-from django.contrib.auth.models import User
-from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.hashers import make_password, check_password
 from .models import UserDB
-from django.contrib.auth import get_backends
-
 
 # Home view
 def home(request):
@@ -40,14 +35,11 @@ def login_view(request):
             
             # Check if the provided password matches the hashed password in the database
             if check_password(password, user_db.password):
-                # Get the first available authentication backend
-                backend = get_backends()[0].__class__.__name__
-
-                # Set the backend manually
-                user_db.backend = f'django.contrib.auth.backends.{backend}'
-
-                # Authenticate and log in the user
-                auth_login(request, user_db)
+                # Manually log in the user by setting session data
+                request.session['user_id'] = user_db.id
+                request.session['username'] = user_db.username
+                
+                # Redirect to the user index page
                 return redirect('userindex')
             else:
                 messages.error(request, 'Invalid credentials.')
@@ -56,6 +48,7 @@ def login_view(request):
             messages.error(request, 'Invalid credentials.')
     
     return render(request, 'login.html')
+
 # User dashboard view
 def userdashboard(request):
     return render(request, 'userdashboard.html')
@@ -63,9 +56,6 @@ def userdashboard(request):
 # User index view
 def userindex(request):
     return render(request, 'userindex.html')
-
-
-
 
 def userregister(request):
     if request.method == 'POST':
@@ -123,4 +113,3 @@ def userregister(request):
         return redirect('login')
 
     return render(request, 'userregister.html')
-
