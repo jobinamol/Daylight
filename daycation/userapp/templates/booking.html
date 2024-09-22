@@ -1,0 +1,135 @@
+{% extends 'userindex.html' %}
+{% block content %}
+{% load static %}
+
+<div class="hero-wrap" style="background-image: url('{% static 'images/rel8.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+                <div class="text">
+                    <p class="breadcrumbs mb-2">
+                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> 
+                        <span>Relaxation Package Booking</span>
+                    </p>
+                    <h1 class="mb-4 bread">Book Your Relaxation Package</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h2>Relaxation Package Reservation Form</h2>
+                <p><strong>Package Price: ₹6,150</strong></p>
+                <form action="{% url 'booking' %}" method="POST">
+                    {% csrf_token %}
+
+                    <!-- Room Selection (Predefined for Relaxation Package) -->
+                    <div class="form-group">
+                        <label for="room_choice">Room (Relaxation Package)</label>
+                        <input type="text" class="form-control" id="room_choice" name="room_choice" value="Standard Room" readonly>
+                    </div>
+
+                    <!-- Food Time Selection -->
+                    <div class="form-group">
+                        <label for="food_time">Choose Food Time</label>
+                        <select class="form-control" id="food_time" name="food_time" required>
+                            <option value="breakfast">Breakfast</option>
+                            <option value="lunch">Lunch</option>
+                            <option value="dinner">Dinner</option>
+                        </select>
+                    </div>
+
+                    <!-- Food Menu (Dynamically Loaded Based on Time) -->
+                    <div class="form-group">
+                        <label for="food_menu">Choose Dishes from Menu</label>
+                        <select class="form-control" id="food_menu" name="food_menu" required>
+                            <!-- Breakfast Menu -->
+                            <optgroup label="Breakfast" id="breakfast_menu" class="food-time-menu">
+                                <option value="idli">Idli with Sambar (₹100)</option>
+                                <option value="dosa">Masala Dosa (₹120)</option>
+                                <option value="paratha">Aloo Paratha (₹150)</option>
+                            </optgroup>
+
+                            <!-- Lunch Menu -->
+                            <optgroup label="Lunch" id="lunch_menu" class="food-time-menu" style="display: none;">
+                                <option value="veg_thali">Vegetarian Thali (₹250)</option>
+                                <option value="non_veg_thali">Non-Vegetarian Thali (₹350)</option>
+                                <option value="biryani">Chicken Biryani (₹300)</option>
+                            </optgroup>
+
+                            <!-- Dinner Menu -->
+                            <optgroup label="Dinner" id="dinner_menu" class="food-time-menu" style="display: none;">
+                                <option value="pasta">Pasta with Garlic Bread (₹200)</option>
+                                <option value="grilled_chicken">Grilled Chicken (₹350)</option>
+                                <option value="dal_makhani">Dal Makhani with Naan (₹180)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- Number of People -->
+                    <div class="form-group">
+                        <label for="num_people">Number of People</label>
+                        <input type="number" class="form-control" id="num_people" name="num_people" placeholder="Enter number of adults" required>
+                    </div>
+
+                    <!-- Number of Children -->
+                    <div class="form-group">
+                        <label for="num_children">Number of Children</label>
+                        <input type="number" class="form-control" id="num_children" name="num_children" placeholder="Enter number of children" required>
+                    </div>
+
+                    <!-- Additional Requests -->
+                    <div class="form-group">
+                        <label for="additional_requests">Additional Requests</label>
+                        <textarea class="form-control" id="additional_requests" name="additional_requests" rows="4" placeholder="Add any special requests..."></textarea>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="form-group">
+                        <label for="payment_method">Payment Method</label>
+                        <select class="form-control" id="payment_method" name="payment_method" required>
+                            <option value="credit_card">Credit Card</option>
+                            <option value="debit_card">Debit Card</option>
+                            <option value="net_banking">Net Banking</option>
+                            <option value="upi">UPI</option>
+                            <option value="cash_on_arrival">Cash on Arrival</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Submit Booking</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // JavaScript to display the appropriate menu based on food time selection
+    document.getElementById('food_time').addEventListener('change', function() {
+        var foodTime = this.value;
+
+        // Hide all menus first
+        document.querySelectorAll('.food-time-menu').forEach(function(menu) {
+            menu.style.display = 'none';
+        });
+
+        // Show the selected time menu
+        if (foodTime === 'breakfast') {
+            document.getElementById('breakfast_menu').style.display = 'block';
+        } else if (foodTime === 'lunch') {
+            document.getElementById('lunch_menu').style.display = 'block';
+        } else if (foodTime === 'dinner') {
+            document.getElementById('dinner_menu').style.display = 'block';
+        }
+    });
+</script>
+
+{% endblock %}

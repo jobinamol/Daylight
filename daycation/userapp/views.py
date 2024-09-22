@@ -172,3 +172,13 @@ def logout(request):
     auth_logout(request)
     messages.success(request, 'You have been logged out.')
     return redirect('home')
+
+def rel(request):
+    return render(request, 'rel.html')
+
+
+def packs(request):
+    return render(request, 'packs.html')
+
+def booking(request):
+    return render(request,'booking.html')
