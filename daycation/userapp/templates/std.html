@@ -3,7 +3,7 @@
 {% load static %}
 
 <!-- Hero Section -->
-<div class="hero-wrap" style="background-image: url('{% static 'images/rel3.jpeg' %}');">
+<div class="hero-wrap" style="background-image: url('{% static 'images/std.jpg' %}');">
     <div class="overlay"></div>
     <div class="container">
         <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
@@ -12,9 +12,9 @@
                     <p class="breadcrumbs mb-2">
                         <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> 
                         <span>Packages</span> 
-                        <span>Relaxation Package</span>
+                        <span>Student Package</span>
                     </p>
-                    <h1 class="mb-4 bread">Relaxation Package</h1>
+                    <h1 class="mb-4 bread">Student Package</h1>
                 </div>
             </div>
         </div>
@@ -26,40 +26,35 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <h2 class="mb-4">Relaxation Package</h2>
+                <h2 class="mb-4">Student Package</h2>
                 <div class="single-slider owl-carousel">
                     <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/rel5.jpeg' %}');"></div>
+                        <div class="room-img" style="background-image: url('{% static 'images/std.avif' %}');"></div>
                     </div>
                     <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/r3.jpeg' %}');"></div>
+                        <div class="room-img" style="background-image: url('{% static 'images/std1.jpg' %}');"></div>
                     </div>
                     <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/relaxation14.jpeg' %}');"></div>
+                        <div class="room-img" style="background-image: url('{% static 'images/std2.jpg' %}');"></div>
                     </div>
                 </div>
                 <p>
-                    Experience complete serenity with our Relaxation Package, including spa services, yoga classes, and meditation sessions designed to rejuvenate your mind and body.
+                    The Student Package offers a budget-friendly adventure designed specifically for students. It includes thrilling outdoor activities, group fun, and memories to last a lifetime—all at an affordable price.
                 </p>
                 
                 <!-- Package Features -->
-                <h3>Spa Services</h3>
+                <h3>Features</h3>
                 <ul>
-                    <li>Full-body massages</li>
-                    <li>Facials and skin treatments</li>
-                    <li>Aromatherapy</li>
-                    <li>Hydrotherapy baths</li>
+                    <li>Discounted pricing exclusively for students.</li>
+                    <li>Access to adventure sports like zip-lining and kayaking.</li>
+                    <li>Group games and activities such as scavenger hunts.</li>
+                    <li>Free snacks and soft drinks throughout the day.</li>
+                    <li>Group photography and video coverage of the activities.</li>
                 </ul>
-
-                <h3>Yoga Classes</h3>
-                <p>Daily yoga sessions in a tranquil environment, suitable for both beginners and advanced levels.</p>
-
-                <h3>Meditation Sessions</h3>
-                <p>Join guided meditation sessions for relaxation, stress relief, and mental clarity.</p>
 
                 <!-- Booking Button -->
                 <div class="package-booking">
-                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now for ₹6,150</a>
+                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now for ₹2,500</a>
                 </div>
             </div>
 
@@ -118,8 +113,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Available Rooms Section -->
+        <!-- Available Rooms Section (if any) -->
         <div class="row">
             <div class="col-md-12 package-single ftco-animate mb-5 mt-5">
                 <h4 class="mb-4">Available Rooms</h4>
@@ -132,8 +126,8 @@
                                 </div>
                             </a>
                             <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="#">Deluxe Room</a></h3>
-                                <p><span class="price mr-2">₹5,500/night</span></p>
+                                <h3 class="mb-3"><a href="#">Dormitory Room</a></h3>
+                                <p><span class="price mr-2">₹1,200/night</span></p>
                                 <hr>
                                 <p class="pt-1"><a href="#" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
                             </div>
@@ -141,14 +135,14 @@
                     </div>
                     <div class="col-md-6 ftco-animate">
                         <div class="room">
-                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/room-2.jpg' %}');">
+                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/room-4.jpg' %}');">
                                 <div class="icon d-flex justify-content-center align-items-center">
                                     <span class="icon-search2"></span>
                                 </div>
                             </a>
                             <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="#">Executive Room</a></h3>
-                                <p><span class="price mr-2">₹7,200/night</span></p>
+                                <h3 class="mb-3"><a href="#">Shared Room</a></h3>
+                                <p><span class="price mr-2">₹1,500/night</span></p>
                                 <hr>
                                 <p class="pt-1"><a href="#" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
                             </div>
@@ -156,8 +150,8 @@
                     </div>
                 </div>
             </div>
-
-            
+        </div>
+    </div>
 </section>
 
 {% endblock %}

@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
 from pathlib import Path
 import os
 from django.core.management.utils import get_random_secret_key
@@ -18,8 +17,6 @@ from django.core.management.utils import get_random_secret_key
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
@@ -29,7 +26,6 @@ DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 # Application definition
-
 INSTALLED_APPS = [
     # Default Django apps
     'django.contrib.admin',
@@ -57,12 +53,10 @@ INSTALLED_APPS = [
     'reservations',
 ]
 
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # For regular username/password login
-    'allauth.account.auth_backends.AuthenticationBackend',
- 
-# For allauth
-)
+    'allauth.account.auth_backends.AuthenticationBackend',  # For allauth social login
+]
 
 # Redirect settings after login and logout
 LOGIN_REDIRECT_URL = 'userdashboard'  # Redirect to user dashboard after login
@@ -73,13 +67,8 @@ LOGIN_URL = 'login'  # URL to redirect when login is required
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
         'OAUTH_PKCE_ENABLED': True,
     }
 }
@@ -116,21 +105,29 @@ SILENCED_SYSTEM_CHECKS = ['models.W036']
 
 WSGI_APPLICATION = 'daycation.wsgi.application'
 
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.your-email-provider.com')
+EMAIL_PORT = os.getenv('EMAIL_PORT', 587)
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'your-email@example.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'your-email-password')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'your-email@example.com')
+
 # MySQL Database Configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DRMS',  # Your new database name
-        'USER': 'jobina',  # Your MySQL username
-        'PASSWORD': '1234',  # Your MySQL password
-        'HOST': 'localhost',  # Or IP address of your MySQL server
-        'PORT': '3306',  # Default MySQL port
+        'NAME': os.getenv('DB_NAME', 'DRMS'),
+        'USER': os.getenv('DB_USER', 'jobina'),
+        'PASSWORD': os.getenv('DB_PASSWORD', '1234'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
     }
 }
-
 
 import pymysql
 pymysql.install_as_MySQLdb()
@@ -156,11 +153,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)

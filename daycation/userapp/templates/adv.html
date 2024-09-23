@@ -3,7 +3,7 @@
 {% load static %}
 
 <!-- Hero Section -->
-<div class="hero-wrap" style="background-image: url('{% static 'images/rel3.jpeg' %}');">
+<div class="hero-wrap" style="background-image: url('{% static 'images/adv.jpg' %}');">
     <div class="overlay"></div>
     <div class="container">
         <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
@@ -12,9 +12,9 @@
                     <p class="breadcrumbs mb-2">
                         <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> 
                         <span>Packages</span> 
-                        <span>Relaxation Package</span>
+                        <span>Adventure Package</span>
                     </p>
-                    <h1 class="mb-4 bread">Relaxation Package</h1>
+                    <h1 class="mb-4 bread">Adventure Package</h1>
                 </div>
             </div>
         </div>
@@ -26,40 +26,35 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <h2 class="mb-4">Relaxation Package</h2>
+                <h2 class="mb-4">Adventure Package</h2>
                 <div class="single-slider owl-carousel">
                     <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/rel5.jpeg' %}');"></div>
+                        <div class="room-img" style="background-image: url('{% static 'images/adv.png' %}');"></div>
                     </div>
                     <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/r3.jpeg' %}');"></div>
+                        <div class="room-img" style="background-image: url('{% static 'images/adv1.jpg' %}');"></div>
                     </div>
                     <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/relaxation14.jpeg' %}');"></div>
+                        <div class="room-img" style="background-image: url('{% static 'images/adv2.jpg' %}');"></div>
                     </div>
                 </div>
                 <p>
-                    Experience complete serenity with our Relaxation Package, including spa services, yoga classes, and meditation sessions designed to rejuvenate your mind and body.
+                    Tailored for thrill-seekers who enjoy outdoor adventures and active recreation. This package includes adrenaline-filled activities, ensuring an unforgettable experience for those looking for excitement.
                 </p>
-                
+
                 <!-- Package Features -->
-                <h3>Spa Services</h3>
+                <h3>Exciting Features</h3>
                 <ul>
-                    <li>Full-body massages</li>
-                    <li>Facials and skin treatments</li>
-                    <li>Aromatherapy</li>
-                    <li>Hydrotherapy baths</li>
+                    <li>Rock climbing and zip-lining.</li>
+                    <li>Guided nature hikes and trekking through scenic routes.</li>
+                    <li>Kayaking or paddleboarding in serene waters.</li>
+                    <li>Mountain biking along dedicated trails for adventurers.</li>
+                    <li>Bonfire and storytelling sessions in the evening, perfect for winding down.</li>
                 </ul>
-
-                <h3>Yoga Classes</h3>
-                <p>Daily yoga sessions in a tranquil environment, suitable for both beginners and advanced levels.</p>
-
-                <h3>Meditation Sessions</h3>
-                <p>Join guided meditation sessions for relaxation, stress relief, and mental clarity.</p>
 
                 <!-- Booking Button -->
                 <div class="package-booking">
-                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now for ₹6,150</a>
+                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now for ₹9,500</a>
                 </div>
             </div>
 
@@ -156,8 +151,9 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            
+    </div>
 </section>
 
 {% endblock %}

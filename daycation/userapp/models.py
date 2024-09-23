@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
+from django.utils import timezone
 
 class UserDB(models.Model):
     name = models.CharField(max_length=255)
@@ -41,6 +42,7 @@ class UserDB(models.Model):
     )
     profile_image = models.ImageField(upload_to='profile_images/', default='default.jpg')
     password = models.CharField(max_length=128)  # Ensure hashed password
+    last_login = models.DateTimeField(default=timezone.now)  # Add last_login field
 
     class Meta:
         db_table = 'users'

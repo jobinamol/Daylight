@@ -1,0 +1,141 @@
+{% extends 'userindex.html' %}
+{% block content %}
+{% load static %}
+
+<!-- Hero Section -->
+<div class="hero-wrap" style="background-image: url('{% static 'images/fam12.jpeg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <div class="text">
+                    <p class="breadcrumbs mb-2">
+                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> 
+                        <span>Packages</span> 
+                        <span>Family Fun Package</span>
+                    </p>
+                    <h1 class="mb-4 bread">Family Fun Package</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Package Details Section -->
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h2 class="mb-4">Family Fun Package</h2>
+                <div class="single-slider owl-carousel">
+                    <div class="item">
+                        <div class="room-img" style="background-image: url('{% static 'images/fam17.jpeg' %}');"></div>
+                    </div>
+                    <div class="item">
+                        <div class="room-img" style="background-image: url('{% static 'images/fam13.jpeg' %}');"></div>
+                    </div>
+                    <div class="item">
+                        <div class="room-img" style="background-image: url('{% static 'images/fam14.jpeg' %}');"></div>
+                    </div>
+                </div>
+                <p>
+                    Designed for families looking to spend quality time together, this package is packed with family-friendly activities and entertainment for all ages.
+                </p>
+                
+                <!-- Package Features -->
+                <h3>Family-Friendly Activities</h3>
+                <ul>
+                    <li>Access to kid-friendly activities such as mini-golf, treasure hunts, and pool games.</li>
+                    <li>Group games including volleyball, badminton, and more.</li>
+                </ul>
+
+                <h3>Family Meals</h3>
+                <p>Enjoy family lunch and dinner with a special kids' menu catered to the younger members of the family.</p>
+
+                <h3>Childcare Services</h3>
+                <p>Childcare services are available, providing parents some well-deserved relaxation time.</p>
+
+                <h3>Discounts for Children</h3>
+                <p>Discounted entry for children, making it affordable and enjoyable for the whole family.</p>
+
+                <!-- Booking Button -->
+                <div class="package-booking">
+                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now for ₹8,200</a>
+                </div>
+            </div>
+
+            <!-- Sidebar Section -->
+            <div class="col-lg-4 sidebar">
+                <h3>Available Menu</h3>
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="#">
+                            <img src="{% static 'images/bf.jpeg' %}" alt="Breakfast Menu" class="img-fluid mb-2">
+                            Breakfast Menu
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="{% static 'images/lunch1.jpg' %}" alt="Lunch Menu" class="img-fluid mb-2">
+                            Lunch Menu
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="{% static 'images/supper.jpg' %}" alt="Dinner Menu" class="img-fluid mb-2">
+                            Dinner Menu
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="{% static 'images/snaks.jpeg' %}" alt="Snacks & Beverages" class="img-fluid mb-2">
+                            Snacks & Beverages
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Available Rooms Section -->
+        <div class="row">
+            <div class="col-md-12 package-single ftco-animate mb-5 mt-5">
+                <h4 class="mb-4">Available Rooms</h4>
+                <div class="row">
+                    <div class="col-md-6 ftco-animate">
+                        <div class="room">
+                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/room-1.jpg' %}');">
+                                <div class="icon d-flex justify-content-center align-items-center">
+                                    <span class="icon-search2"></span>
+                                </div>
+                            </a>
+                            <div class="text p-3 text-center">
+                                <h3 class="mb-3"><a href="#">Deluxe Room</a></h3>
+                                <p><span class="price mr-2">₹5,500/night</span></p>
+                                <hr>
+                                <p class="pt-1"><a href="#" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ftco-animate">
+                        <div class="room">
+                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/room-2.jpg' %}');">
+                                <div class="icon d-flex justify-content-center align-items-center">
+                                    <span class="icon-search2"></span>
+                                </div>
+                            </a>
+                            <div class="text p-3 text-center">
+                                <h3 class="mb-3"><a href="#">Executive Room</a></h3>
+                                <p><span class="price mr-2">₹7,200/night</span></p>
+                                <hr>
+                                <p class="pt-1"><a href="#" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+  
+</section>
+
+{% endblock %}

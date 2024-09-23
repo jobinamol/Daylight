@@ -3,7 +3,7 @@
 {% load static %}
 
 <!-- Hero Section -->
-<div class="hero-wrap" style="background-image: url('{% static 'images/rel3.jpeg' %}');">
+<div class="hero-wrap" style="background-image: url('{% static 'images/corp.jpg' %}');">
     <div class="overlay"></div>
     <div class="container">
         <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
@@ -12,9 +12,9 @@
                     <p class="breadcrumbs mb-2">
                         <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> 
                         <span>Packages</span> 
-                        <span>Relaxation Package</span>
+                        <span>Corporate Retreat Package</span>
                     </p>
-                    <h1 class="mb-4 bread">Relaxation Package</h1>
+                    <h1 class="mb-4 bread">Corporate Retreat Package</h1>
                 </div>
             </div>
         </div>
@@ -26,40 +26,35 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <h2 class="mb-4">Relaxation Package</h2>
+                <h2 class="mb-4">Corporate Retreat Package</h2>
                 <div class="single-slider owl-carousel">
                     <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/rel5.jpeg' %}');"></div>
+                        <div class="room-img" style="background-image: url('{% static 'images/corp.webp' %}');"></div>
                     </div>
                     <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/r3.jpeg' %}');"></div>
+                        <div class="room-img" style="background-image: url('{% static 'images/corp1.webp' %}');"></div>
                     </div>
                     <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/relaxation14.jpeg' %}');"></div>
+                        <div class="room-img" style="background-image: url('{% static 'images/corp1.jpg' %}');"></div>
                     </div>
                 </div>
                 <p>
-                    Experience complete serenity with our Relaxation Package, including spa services, yoga classes, and meditation sessions designed to rejuvenate your mind and body.
+                    Tailored for corporate teams seeking team-building activities and relaxation, this package is perfect for professional retreats and workshops. With comprehensive facilities, it offers a balanced mix of work and play.
                 </p>
                 
                 <!-- Package Features -->
-                <h3>Spa Services</h3>
+                <h3>Features</h3>
                 <ul>
-                    <li>Full-body massages</li>
-                    <li>Facials and skin treatments</li>
-                    <li>Aromatherapy</li>
-                    <li>Hydrotherapy baths</li>
+                    <li>Conference room access with state-of-the-art AV facilities.</li>
+                    <li>Team-building activities, including trust-building exercises and obstacle courses.</li>
+                    <li>Group lunch and dinner catered for the entire team.</li>
+                    <li>Access to recreational facilities like sports, swimming pool, and more.</li>
+                    <li>Workshop and seminar support with in-house facilitators.</li>
                 </ul>
-
-                <h3>Yoga Classes</h3>
-                <p>Daily yoga sessions in a tranquil environment, suitable for both beginners and advanced levels.</p>
-
-                <h3>Meditation Sessions</h3>
-                <p>Join guided meditation sessions for relaxation, stress relief, and mental clarity.</p>
 
                 <!-- Booking Button -->
                 <div class="package-booking">
-                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now for ₹6,150</a>
+                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now for ₹15,000</a>
                 </div>
             </div>
 
@@ -118,7 +113,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Available Rooms Section -->
         <div class="row">
             <div class="col-md-12 package-single ftco-animate mb-5 mt-5">
@@ -132,21 +126,6 @@
                                 </div>
                             </a>
                             <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="#">Deluxe Room</a></h3>
-                                <p><span class="price mr-2">₹5,500/night</span></p>
-                                <hr>
-                                <p class="pt-1"><a href="#" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 ftco-animate">
-                        <div class="room">
-                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/room-2.jpg' %}');">
-                                <div class="icon d-flex justify-content-center align-items-center">
-                                    <span class="icon-search2"></span>
-                                </div>
-                            </a>
-                            <div class="text p-3 text-center">
                                 <h3 class="mb-3"><a href="#">Executive Room</a></h3>
                                 <p><span class="price mr-2">₹7,200/night</span></p>
                                 <hr>
@@ -154,10 +133,25 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6 ftco-animate">
+                        <div class="room">
+                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/room-3.jpg' %}');">
+                                <div class="icon d-flex justify-content-center align-items-center">
+                                    <span class="icon-search2"></span>
+                                </div>
+                            </a>
+                            <div class="text p-3 text-center">
+                                <h3 class="mb-3"><a href="#">Presidential Suite</a></h3>
+                                <p><span class="price mr-2">₹15,000/night</span></p>
+                                <hr>
+                                <p class="pt-1"><a href="#" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            
+        </div>
+    </div>
 </section>
 
 {% endblock %}
