@@ -12,20 +12,17 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from django.core.management.utils import get_random_secret_key
+import pymysql
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# SECURITY WARNING: keep the secret key used in production secret!
+# Security settings
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', get_random_secret_key())
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
-
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
-# Application definition
+# Installed Apps
 INSTALLED_APPS = [
     # Default Django apps
     'django.contrib.admin',
@@ -34,15 +31,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions',
-
-    # AllAuth for social login
-    'django.contrib.sites',
+    'django.contrib.sites',  # Required for Django Allauth
+    
+    # Django Allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-
-    # Providers for social login
+    
+    # Providers for social login (e.g., Google)
     'allauth.socialaccount.providers.google',
 
     # Your apps
@@ -53,18 +49,26 @@ INSTALLED_APPS = [
     'reservations',
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # For regular username/password login
-    'allauth.account.auth_backends.AuthenticationBackend',  # For allauth social login
-]
+# Site ID for Django Sites framework
+SITE_ID = 1
+
+# Authentication Backends
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',  # Default authentication
+    'allauth.account.auth_backends.AuthenticationBackend',  # Allauth authentication backend
+)
 
 # Redirect settings after login and logout
-LOGIN_REDIRECT_URL = 'userdashboard'  # Redirect to user dashboard after login
-LOGOUT_REDIRECT_URL = 'home'  # Redirect to home after logout
+LOGIN_REDIRECT_URL = 'userdashboard'  # Redirect to dashboard after login
+LOGOUT_REDIRECT_URL = 'userdashboard'  # Redirect to home after logout
+LOGIN_URL = 'login'  # URL to redirect to when login is required
 
-# Login URL for @login_required decorator
-LOGIN_URL = 'login'  # URL to redirect when login is required
+# Allauth settings
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 
+# Google provider for Django Allauth
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': ['profile', 'email'],
@@ -73,6 +77,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -81,40 +86,35 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  # For allauth
+    'allauth.account.middleware.AccountMiddleware',  # Add this line
 ]
 
+# Root URL configuration
 ROOT_URLCONF = 'daycation.urls'
 
+# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Ensure your custom templates are here
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Use a 'templates' folder in the project root
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',  # Required by allauth
+                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
-SILENCED_SYSTEM_CHECKS = ['models.W036']
 
+# WSGI application
 WSGI_APPLICATION = 'daycation.wsgi.application'
 
-# Email Configuration
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.your-email-provider.com')
-EMAIL_PORT = os.getenv('EMAIL_PORT', 587)
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'your-email@example.com')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'your-email-password')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'your-email@example.com')
-
 # MySQL Database Configuration
+pymysql.install_as_MySQLdb()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -129,9 +129,6 @@ DATABASES = {
     }
 }
 
-import pymysql
-pymysql.install_as_MySQLdb()
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -140,7 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
         'OPTIONS': {
-            'min_length': 8,  # Enforcing minimum length of 8 characters
+            'min_length': 8,  # Enforce a minimum length of 8 characters
         }
     },
     {
@@ -168,5 +165,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Sites framework
-SITE_ID = 1
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'jobinamoljaimon2025@mca.ajce.in'
+EMAIL_HOST_PASSWORD = 'jaimon@123*'
+DEFAULT_FROM_EMAIL = 'jobinamoljaimon2025@mca.ajce.in'
+

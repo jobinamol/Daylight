@@ -31,30 +31,41 @@
           </button>
   
           <div class="collapse navbar-collapse" id="ftco-nav">
-              <ul class="navbar-nav ml-auto">
-                  <li class="nav-item"><a href="{% url 'userdashboard' %}" class="nav-link">Home</a></li>
-                  <li class="nav-item"><a href="{% url 'packs' %}" class="nav-link">Packages</a></li>
-                  <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
-                  <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
-                  <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-  
-                  {% if user.is_authenticated %}
-                  <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          {{ user.username }}
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{% url 'user_view_profile' %}">View Profile</a>
-                          <a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a>
-                          <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-                      </div>
-                  </li>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a href="{% url 'userdashboard' %}" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="{% url 'packs' %}" class="nav-link">Packages</a></li>
+                <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
+                <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                {% if request.session.username %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      {% if request.session.profile_image %}
+                      <img src="{{ user.profile_image.url }}" alt="User Icon" style="width: 20px; height: 20px; margin-right: 5px;" />
                   {% else %}
-                  {% endif %}
-              </ul>
-          </div>
+                      <img src="{% static 'icons/userlogin.jpeg' %}" alt="User Icon" style="width: 50px; height: 50px; margin-right: 15px;" />
+                  {% endif %}                       
+                  
+                  {{ request.session.username }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'viewprofile' %}">View Profile</a>
+                        <a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a>
+                        <a class="dropdown-item" href="{% url 'changepassword' %}">Change Password</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="{% url 'login' %}" class="nav-link">Login</a>
+                </li>
+            {% endif %}
+
+              </li>                
+            </ul>
+        </div>
+        
       </div>
   </nav>
   
@@ -135,8 +146,8 @@
                 <!-- Relaxation Package -->
                 <div class="col-sm col-md-6 col-lg-4 ftco-animate">
                     <div class="package-card">
-                        <a href="relaxation.html">
-                            <img src="{% static 'images/rel.jpeg' %}" alt="Relaxation Package" style="width: 100%; height: 200px; object-fit: cover;">
+                      <a href="{% url 'rel' %}">
+                        <img src="{% static 'images/rel.jpeg' %}" alt="Relaxation Package" style="width: 100%; height: 200px; object-fit: cover;">
                             <div class="text">
                                 <h3>Relaxation Package</h3>
                                 <p><span class="price mr-2">₹6,150.00</span> <span class="per">per day</span></p>
@@ -149,8 +160,8 @@
                 <!-- Family Fun Package -->
                 <div class="col-sm col-md-6 col-lg-4 ftco-animate">
                     <div class="package-card">
-                        <a href="family-fun.html">
-                            <img src="{% static 'images/fam.jpeg' %}" alt="Family Fun Package" style="width: 100%; height: 200px; object-fit: cover;">
+                      <a href="{% url 'fam' %}">
+                        <img src="{% static 'images/fam.jpeg' %}" alt="Family Fun Package" style="width: 100%; height: 200px; object-fit: cover;">
                             <div class="text">
                                 <h3>Family Fun Package</h3>
                                 <p><span class="price mr-2">₹8,200.00</span> <span class="per">per day</span></p>
@@ -163,8 +174,8 @@
                 <!-- Adventure Package -->
                 <div class="col-sm col-md-6 col-lg-4 ftco-animate">
                     <div class="package-card">
-                        <a href="adventure.html">
-                            <img src="{% static 'images/adv.jpeg' %}" alt="Adventure Package" style="width: 100%; height: 200px; object-fit: cover;">
+                      <a href="{% url 'adv' %}">
+                        <img src="{% static 'images/adv.jpeg' %}" alt="Adventure Package" style="width: 100%; height: 200px; object-fit: cover;">
                             <div class="text">
                                 <h3>Adventure Package</h3>
                                 <p><span class="price mr-2">₹7,380.00</span> <span class="per">per day</span></p>
@@ -177,8 +188,8 @@
                 <!-- Luxury Package -->
                 <div class="col-sm col-md-6 col-lg-4 ftco-animate">
                     <div class="package-card">
-                        <a href="luxury.html">
-                            <img src="{% static 'images/lex.jpeg' %}" alt="Luxury Package" style="width: 100%; height: 200px; object-fit: cover;">
+                      <a href="{% url 'lux' %}">
+                        <img src="{% static 'images/lex.jpeg' %}" alt="Luxury Package" style="width: 100%; height: 200px; object-fit: cover;">
                             <div class="text">
                                 <h3>Luxury Package</h3>
                                 <p><span class="price mr-2">₹16,400.00</span> <span class="per">per day</span></p>
@@ -191,8 +202,8 @@
                 <!-- Wellness Package -->
                 <div class="col-sm col-md-6 col-lg-4 ftco-animate">
                     <div class="package-card">
-                        <a href="wellness.html">
-                            <img src="{% static 'images/Well.jpeg' %}" alt="Wellness Package" style="width: 100%; height: 200px; object-fit: cover;">
+                      <a href="{% url 'well' %}">
+                        <img src="{% static 'images/Well.jpeg' %}" alt="Wellness Package" style="width: 100%; height: 200px; object-fit: cover;">
                             <div class="text">
                                 <h3>Wellness Package</h3>
                                 <p><span class="price mr-2">₹6,970.00</span> <span class="per">per day</span></p>
@@ -205,8 +216,8 @@
                 <!-- Romantic Getaway Package -->
                 <div class="col-sm col-md-6 col-lg-4 ftco-animate">
                     <div class="package-card">
-                        <a href="romantic-getaway.html">
-                            <img src="{% static 'images/cop.jpeg' %}" alt="Romantic Getaway Package" style="width: 100%; height: 200px; object-fit: cover;">
+                      <a href="{% url 'rom' %}">
+                        <img src="{% static 'images/cop.jpeg' %}" alt="Romantic Getaway Package" style="width: 100%; height: 200px; object-fit: cover;">
                             <div class="text">
                                 <h3>Romantic Getaway Package</h3>
                                 <p><span class="price mr-2">₹9,840.00</span> <span class="per">per day</span></p>
@@ -219,8 +230,8 @@
                 <!-- Corporate Retreat Package -->
                 <div class="col-sm col-md-6 col-lg-4 ftco-animate">
                     <div class="package-card">
-                        <a href="corporate-retreat.html">
-                            <img src="{% static 'images/team.jpeg' %}" alt="Corporate Retreat Package" style="width: 100%; height: 200px; object-fit: cover;">
+                      <a href="{% url 'corp' %}">
+                        <img src="{% static 'images/team.jpeg' %}" alt="Corporate Retreat Package" style="width: 100%; height: 200px; object-fit: cover;">
                             <div class="text">
                                 <h3>Corporate Retreat Package</h3>
                                 <p><span class="price mr-2">₹20,500.00</span> <span class="per">per day</span></p>
@@ -233,8 +244,8 @@
                 <!-- Student Package -->
                 <div class="col-sm col-md-6 col-lg-4 ftco-animate">
                     <div class="package-card">
-                        <a href="student-package.html">
-                            <img src="{% static 'images/student.jpeg' %}" alt="Student Package" style="width: 100%; height: 200px; object-fit: cover;">
+                      <a href="{% url 'std' %}">
+                        <img src="{% static 'images/student.jpeg' %}" alt="Student Package" style="width: 100%; height: 200px; object-fit: cover;">
                             <div class="text">
                                 <h3>Student Package</h3>
                                 <p><span class="price mr-2">₹4,100.00</span> <span class="per">per day</span></p>
@@ -247,10 +258,10 @@
                 <!-- Adventure Plus Package -->
                 <div class="col-sm col-md-6 col-lg-4 ftco-animate">
                     <div class="package-card">
-                        <a href="adventure-plus.html">
-                            <img src="{% static 'images/adven.jpeg' %}" alt="Adventure Plus Package" style="width: 100%; height: 200px; object-fit: cover;">
+                      <a href="{% url 'cel' %}">
+                        <img src="{% static 'images/cel.jpeg' %}" alt="Adventure Plus Package" style="width: 100%; height: 200px; object-fit: cover;">
                             <div class="text">
-                                <h3>Adventure Plus Package</h3>
+                                <h3>Celebration  Package</h3>
                                 <p><span class="price mr-2">₹9,840.00</span> <span class="per">per day</span></p>
                                 <p><a href="adventure-plus.html" class="btn-custom">View Packages <span class="icon-long-arrow-right"></span></a></p>
                             </div>

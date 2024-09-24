@@ -47,3 +47,6 @@ class UserDB(models.Model):
     class Meta:
         db_table = 'users'
         unique_together = ('emailid', 'username')  # Ensure unique combination of email and username
+        
+    def get_email_field_name(self):
+        return 'emailid'

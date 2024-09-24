@@ -9,6 +9,14 @@
 <body>
     <div class="container mt-5">
         <h2>Edit Profile</h2>
+        
+        <!-- Display success/error messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3">
@@ -50,7 +58,9 @@
             <div class="mb-3">
                 <label for="profile_image" class="form-label">Profile Image</label>
                 <input type="file" class="form-control" id="profile_image" name="profile_image">
-                <img src="{{ user.profile_image.url }}" alt="Profile Image" class="img-fluid mt-3">
+                {% if user.profile_image %}
+                    <img src="{{ user.profile_image.url }}" alt="Profile Image" class="img-fluid mt-3" style="max-width: 150px;">
+                {% endif %}
             </div>
             <button type="submit" class="btn btn-primary">Update Profile</button>
         </form>

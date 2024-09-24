@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.files.storage import FileSystemStorage
 from .models import UserDB
-from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import logout as auth_logout, authenticate, login
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
@@ -11,59 +11,57 @@ from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
-# Home view
+
+
 def home(request):
     return render(request, 'home.html')
 
-# About view
 def about(request):
     return render(request, 'about.html')
 
-# Blog view
 def blog(request):
     return render(request, 'blog.html')
 
-# Packages view
 def packages(request):
     return render(request, 'packages.html')
 
-# Contact view
 def contact(request):
     return render(request, 'contact.html')
 
-# Login view
+def userdashboard(request):
+    if request.user.is_authenticated:
+        return render(request, 'userdashboard.html', {'user': request.user})
+    return redirect('login')
+
+def userindex(request):
+    return render(request, 'userindex.html', {'user': request.user})
+
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
         try:
-            user_db = UserDB.objects.get(username=username)
-            if check_password(password, user_db.password):
-                request.session['user_id'] = user_db.id
-                request.session['username'] = user_db.username
-                return redirect('userindex')
-            else:
-                messages.error(request, 'Invalid credentials.')
+            user = UserDB.objects.get(username=username)
         except UserDB.DoesNotExist:
-            messages.error(request, 'Invalid credentials.')
+            messages.error(request, 'Invalid username or password.')
+            return redirect('login')
+
+        if check_password(password, user.password):
+            request.session['user_id'] = user.id
+            request.session['username'] = user.username
+
+            messages.success(request, f'Welcome, {user.name}!')
+            return redirect('userindex')  
+        else:
+            messages.error(request, 'Invalid username or password.')
+            return redirect('login')
 
     return render(request, 'login.html')
 
-# User dashboard view
-def userdashboard(request):
-    user_id = request.session.get('user_id')
-    if not user_id:
-        return redirect('login')
-    user = UserDB.objects.get(id=user_id)
-    return render(request, 'userdashboard.html', {'user': user})
-
-# User index view
-def userindex(request):
-    return render(request, 'userindex.html')
-
-# User registration view
 def userregister(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -77,7 +75,6 @@ def userregister(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Check for existing username or email
         if UserDB.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists.')
             return redirect('userregister')
@@ -114,20 +111,24 @@ def userregister(request):
 
     return render(request, 'userregister.html')
 
-# View profile
-def user_view_profile(request):
-    user_id = request.session.get('user_id')
-    if not user_id:
-        return redirect('login')
-    user = UserDB.objects.get(id=user_id)
-    return render(request, 'user_view_profile.html', {'user': user})
 
-# Edit profile view
-def edit_profile(request):
-    user_id = request.session.get('user_id')
-    if not user_id:
+def viewprofile(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to view your profile.")
         return redirect('login')
-    user = UserDB.objects.get(id=user_id)
+
+    user = UserDB.objects.get(username=request.user.username)
+    
+    return render(request, 'userapp/viewprofile.html', {'user': user})
+
+
+
+def edit_profile(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to edit your profile.")
+        return redirect('login')
+
+    user = UserDB.objects.get(username=request.user.username)
 
     if request.method == 'POST':
         user.name = request.POST.get('name')
@@ -139,15 +140,44 @@ def edit_profile(request):
         user.sex = request.POST.get('sex')
 
         if 'profile_image' in request.FILES:
-            user.profile_image = request.FILES['profile_image']
+            profile_image = request.FILES['profile_image']
+            fs = FileSystemStorage()
+            filename = fs.save(profile_image.name, profile_image)
+            user.profile_image = filename
 
         user.save()
         messages.success(request, 'Profile updated successfully.')
-        return redirect('user_view_profile')
+        return redirect('view_profile')
 
-    return render(request, 'edit_profile.html', {'user': user})
+    return render(request, 'userapp/edit_profile.html', {'user': user})
 
-# Forgot password view
+
+def changepassword(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to change your password.")
+        return redirect('login')
+
+    user = UserDB.objects.get(username=request.user.username)
+
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if check_password(current_password, user.password):
+            if new_password == confirm_password:
+                user.password = make_password(new_password)
+                user.save()
+                messages.success(request, 'Password changed successfully.')
+                return redirect('view_profile')
+            else:
+                messages.error(request, 'New passwords do not match.')
+        else:
+            messages.error(request, 'Current password is incorrect.')
+
+    return render(request, 'userapp/change_password.html')
+
+
 def forgot_password(request):
     if request.method == 'POST':
         emailid = request.POST.get('emailid')
@@ -168,7 +198,6 @@ def forgot_password(request):
 
     return render(request, 'forgot_password.html')
 
-# Password reset confirm view
 def password_reset_confirm(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -189,7 +218,6 @@ def password_reset_confirm(request, uidb64, token):
         messages.error(request, 'The reset link is invalid or has expired.')
         return redirect('forgot_password')
 
-# Logout view
 def logout(request):
     auth_logout(request)
     messages.success(request, 'You have been logged out.')
