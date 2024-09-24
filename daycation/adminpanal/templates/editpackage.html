@@ -1,0 +1,50 @@
+{% extends 'adminindex.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Edit Package</h2>
+
+    <!-- Form for editing the package -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Package Name Field -->
+        <div class="form-group">
+            <label for="name">Package Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ package.name }}" required>
+        </div>
+        
+        <!-- Price Field -->
+        <div class="form-group">
+            <label for="price">Price (₹)</label>
+            <input type="number" class="form-control" id="price" name="price" value="{{ package.price }}" required>
+        </div>
+        
+        <!-- Description Field -->
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="4" required>{{ package.description }}</textarea>
+        </div>
+
+        <!-- Duration Field -->
+        <div class="form-group">
+            <label for="duration">Duration</label>
+            <input type="text" class="form-control" id="duration" name="duration" value="{{ package.duration }}" required>
+        </div>
+
+        <!-- Image Field (File Upload) -->
+        <div class="form-group">
+            <label for="image">Image</label>
+            <input type="file" class="form-control-file" id="image" name="image">
+            {% if package.image %}
+                <small>Current Image:</small>
+                <img src="{{ package.image }}" alt="{{ package.name }}" class="img-thumbnail" style="width: 150px;">
+            {% endif %}
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Update Package</button>
+    </form>
+
+</div>
+{% endblock %}

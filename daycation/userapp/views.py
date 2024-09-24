@@ -17,6 +17,8 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import Booking, Payment
+from adminpanal.models import*
+
 
 
 
@@ -287,60 +289,22 @@ def cel(request):
     return render(request, 'cel.html')
 
 def packs(request):
-    return render(request, 'packs.html')
-
+    packages = Package.objects.all()
+    
+    return render(request, 'packs.html', {'packages': packages})
 def booking(request):
-    # Fetch all food items from the database
-    food_items = FoodItem.objects.all()
-
-    if request.method == "POST":
-        package_name = request.POST.get("package_name")
-        package_price = float(request.POST.get("package_price", 0))  # Convert to float
-        food_timing = request.POST.getlist("food_timing")
-        food_item_ids = request.POST.getlist("food_items")  # IDs of selected food items
-        room_type = request.POST.get("room_type")
-
-        # Fetch food items based on selected IDs
-        selected_food_items = FoodItem.objects.filter(id__in=food_item_ids)
-
-        # Calculate total amount
-        total_amount = package_price + sum(item.price for item in selected_food_items)
-
-        # Create the booking
-        booking = Booking.objects.create(
-            package_name=package_name,
-            package_price=package_price,
-            food_timing=food_timing,
-            room_type=room_type,
-            total_amount=total_amount,
-        )
-
-        # Redirect to the payment view
-        return redirect('payment', booking_id=booking.id)
-
-    # Render the booking template with food items
-    return render(request, 'booking.html', {'food_items': food_items})
+    return render(request, 'booking.html')
+    
 
 def menu(request):
     return render(request, 'menu.html')
 
 def rooms(request):
     return render(request, 'rooms.html')
-
-def payment(request, booking_id):
-    booking = Booking.objects.get(id=booking_id)
-    if request.method == "POST":
-        payment_method = request.POST.get("payment_method")
-        payment = Payment.objects.create(
-            booking=booking,
-            payment_method=payment_method,
-            payment_status=True,  # Assume payment is successful for now
-        )
-        return redirect('confirmation', payment_id=payment.id)
-
-    return render(request, 'payment.html', {'booking': booking})
+def payment(request):
+    return render(request, 'payment.html')
 
 
-def confirmation(request, payment_id):
-    payment = Payment.objects.get(id=payment_id)
-    return render(request, 'confirmation.html', {'payment': payment})
+
+def confirmation(request):
+    return render(request, 'confirmation.html')

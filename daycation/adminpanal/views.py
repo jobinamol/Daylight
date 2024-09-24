@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from .models import*
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
+from userapp.models import*
 
 
 def admin_login(request):
@@ -32,32 +33,30 @@ def packagemanagement(request):
         price = request.POST['price']
         description = request.POST['description']
         duration = request.POST['duration']
-        image = request.FILES.get('image')
+        image = request.FILES.get('image')  # Handle the uploaded image
 
-        if image:
-            fs = FileSystemStorage()
-            filename = fs.save(image.name, image)
-            uploaded_file_url = fs.url(filename)
-        else:
-            uploaded_file_url = None 
-            
-        package = Package(
-            name=name,
-            price=price,
-            description=description,
-            duration=duration,
-            image=uploaded_file_url
-        )
-        package.save()
-        return redirect('packagemanagement')  # Redirect to the same page to see the updated list
+        try:
+            package = Package(
+                name=name,
+                price=price,
+                description=description,
+                duration=duration,
+                image=image  # Directly assign image
+            )
+            package.save()
+            messages.success(request, 'Package added successfully.')
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+        return redirect('packagemanagement')  
 
     return render(request, 'packagemanagement.html', {'packages': packages})
 
-def edit_package(request, package_id):
+def editpackage(request, package_id):
     package = Package.objects.filter(id=package_id).first()
-    
+
     if package is None:
-        return redirect('packagemanagement')  # Redirect if package does not exist
+        messages.error(request, 'Package not found.')
+        return redirect('packagemanagement')
 
     if request.method == 'POST':
         package.name = request.POST['name']
@@ -66,22 +65,35 @@ def edit_package(request, package_id):
         package.duration = request.POST['duration']
         
         if request.FILES.get('image'):
-            image = request.FILES['image']
-            fs = FileSystemStorage()
-            filename = fs.save(image.name, image)
-            uploaded_file_url = fs.url(filename)
-            package.image = uploaded_file_url
+            package.image = request.FILES['image']  # Update the image if a new one is provided
         
-        package.save()
-        return redirect('packagemanagement')
-
-    return render(request, 'edit_package.html', {'package': package})
+        try:
+            package.save()
+            messages.success(request, 'Package updated successfully.')
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+        return redirect('packagemanagement')  
+        
+    return render(request, 'editpackage.html', {'package': package})
 
 def delete_package(request, package_id):
     package = Package.objects.filter(id=package_id).first()
     
     if package:
-        package.delete()
+        try:
+            package.delete()
+            messages.success(request, 'Package deleted successfully.')
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+    else:
+        messages.error(request, 'Package not found.')
 
     return redirect('packagemanagement')
 
+
+def usermanagement(request):
+    # Fetch all users from the UserDB model without checking login status
+    users = UserDB.objects.all()
+
+    # Pass the list of users to the template
+    return render(request, 'usermanagement.html', {'users': users})
