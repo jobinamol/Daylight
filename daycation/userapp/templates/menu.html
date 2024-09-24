@@ -1,132 +1,153 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Deluxe - Free Bootstrap 4 Template by Colorlib</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    {% load static %}
-    
-    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+{% extends 'userindex.html' %}
+{% block content %}
+{% load static %}
 
-    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-    
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
-
-    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
-
-    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
-
-    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
-    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
-
-    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
-    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  </head>
-  <body>
-
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-	    <div class="container">
-	      <a class="navbar-brand" href="index.html">Deluxe</a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
-
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-	          <li class="nav-item"><a href="rooms.html" class="nav-link">Rooms</a></li>
-	          <li class="nav-item active"><a href="restaurant.html" class="nav-link">Restaurant</a></li>
-	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	        </ul>
-	      </div>
-	    </div>
-	  </nav>
-    <!-- END nav -->
-
-    <div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center">
-          <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
-          	<div class="text">
-	            <p class="breadcrumbs mb-2"><span class="mr-2"><a href="index.html">Home</a></span> <span>Restaurants</span></p>
-	            <h1 class="mb-4 bread">Restaurants</h1>
+<!-- Hero Section -->
+<div class="hero-wrap" style="background-image: url('{% static 'images/menu.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <div class="text">
+                    <p class="breadcrumbs mb-2">
+                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> 
+                        <span>Menu</span>
+                    </p>
+                    <h1 class="mb-4 bread">Daylight Daycation Resort Menu</h1>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-		
-		<section class="ftco-section ftc-no-pb ftc-no-pt">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-5 p-md-5 img img-2 img-3 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/about.jpg' %}');">
-					</div>
-					<div class="col-md-7 py-5 wrap-about pb-md-5 ftco-animate">
-	          <div class="heading-section heading-section-wo-line pt-md-4 mb-5">
-	          	<div class="ml-md-0">
-		          	<span class="subheading">Our Restaurants</span>
-		            <h2 class="mb-4">We Are Food Lover</h2>
-	            </div>
-	          </div>
-	          <div class="pb-md-4">
-							<p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times.</p>
-							<p class="pl-md-5">When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then she continued her way.</p>
-							<p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+</div>
 
-		<section class="ftco-section">
-			<div class="container">
-				<div class="row justify-content-center mb-5 pb-3">
-          <div class="col-md-7 heading-section text-center ftco-animate">
-            <h2>Our Menu</h2>
-          </div>
+<!-- Menu Section -->
+<section class="ftco-section">
+    <div class="container">
+        <!-- Breakfast Section -->
+        <div class="row mb-5">
+            <div class="col-md-12 mb-4">
+                <h2 class="mb-4">Breakfast</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="menu-item d-flex align-items-center">
+                            <div class="menu-img" style="background-image: url('{% static 'images/menu1.webp' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
+                            <div class="text pl-3">
+                                <h3>Pancakes with Maple Syrup</h3>
+                                <p>Fluffy pancakes served with fresh fruits and organic maple syrup.</p>
+                                <span class="price">₹350</span>
+                                <button class="btn btn-primary mt-2">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="menu-item d-flex align-items-center">
+                            <div class="menu-img" style="background-image: url('{% static 'images/menu6.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
+                            <div class="text pl-3">
+                                <h3>Avocado Toast</h3>
+                                <p>Crispy sourdough topped with creamy avocado and poached eggs.</p>
+                                <span class="price">₹400</span>
+                                <button class="btn btn-primary mt-2">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-				<div class="row">
-        	<div class="col-md-6">
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url('{% static 'images/menu-1.jpg' %}');"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Grilled Beef with potatoes</span></h3>
-	        				<span class="price">$20.00</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
-	        			</div>
-        			</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url('{% static 'images/menu-2.jpg' %}');"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Grilled Beef with potatoes</span></h3>
-	        				<span class="price">$29.00</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
-	        			</div>
-	        		</div>
-        		</div>
-        		<!-- Repeat similar structure for other items -->
-        	</div>
-        </div>
-			</div>
-		</section>
 
-    <!-- Add Instagram section, footer, etc. with similar static file handling -->
-    
-  </body>
-</html>
+        <!-- Lunch Section -->
+        <div class="row mb-5">
+            <div class="col-md-12 mb-4">
+                <h2 class="mb-4">Lunch</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="menu-item d-flex align-items-center">
+                            <div class="menu-img" style="background-image: url('{% static 'images/menu2.jpg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
+                            <div class="text pl-3">
+                                <h3>Grilled Vegetable Salad</h3>
+                                <p>A fresh mix of grilled seasonal vegetables, topped with a tangy dressing.</p>
+                                <span class="price">₹500</span>
+                                <button class="btn btn-primary mt-2">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="menu-item d-flex align-items-center">
+                            <div class="menu-img" style="background-image: url('{% static 'images/menu.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
+                            <div class="text pl-3">
+                                <h3>Quinoa and Roasted Chicken Bowl</h3>
+                                <p>A healthy bowl of quinoa, roasted chicken, and mixed greens.</p>
+                                <span class="price">₹600</span>
+                                <button class="btn btn-primary mt-2">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Snacks Section -->
+        <div class="row mb-5">
+            <div class="col-md-12 mb-4">
+                <h2 class="mb-4">Snacks</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="menu-item d-flex align-items-center">
+                            <div class="menu-img" style="background-image: url('{% static 'images/menu2.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
+                            <div class="text pl-3">
+                                <h3>Veggie Spring Rolls</h3>
+                                <p>Crunchy spring rolls filled with fresh vegetables, served with a spicy dip.</p>
+                                <span class="price">₹250</span>
+                                <button class="btn btn-primary mt-2">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="menu-item d-flex align-items-center">
+                            <div class="menu-img" style="background-image: url('{% static 'images/menu3.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
+                            <div class="text pl-3">
+                                <h3>Cheese Garlic Bread</h3>
+                                <p>Toasted bread topped with melted cheese and garlic seasoning.</p>
+                                <span class="price">₹300</span>
+                                <button class="btn btn-primary mt-2">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Juices Section -->
+        <div class="row mb-5">
+            <div class="col-md-12 mb-4">
+                <h2 class="mb-4">Juices</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="menu-item d-flex align-items-center">
+                            <div class="menu-img" style="background-image: url('{% static 'images/menu4.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
+                            <div class="text pl-3">
+                                <h3>Fresh Orange Juice</h3>
+                                <p>Freshly squeezed oranges for a refreshing drink.</p>
+                                <span class="price">₹200</span>
+                                <button class="btn btn-primary mt-2">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="menu-item d-flex align-items-center">
+                            <div class="menu-img" style="background-image: url('{% static 'images/menu5.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
+                            <div class="text pl-3">
+                                <h3>Mango Smoothie</h3>
+                                <p>A rich smoothie made with ripe mangoes and a hint of mint.</p>
+                                <span class="price">₹250</span>
+                                <button class="btn btn-primary mt-2">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

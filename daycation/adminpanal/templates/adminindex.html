@@ -21,7 +21,7 @@
         <nav id="sidebar" class="sidebar js-sidebar">
             <div class="sidebar-content js-simplebar">
                 <a class="sidebar-brand" href="{% url 'adminindex' %}">
-                    <span class="align-middle">Resort Admin Dashboard</span>
+                    <span class="align-middle">Daycation Admin Dashboard</span>
                 </a>
 
                 <ul class="sidebar-nav">
@@ -32,13 +32,13 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="{% url 'adminindex' %}">
-                            <i class="align-middle" data-feather="users"></i> <span class="align-middle">Staff Management</span>
+                        <a class="sidebar-link" href="{% url 'packagemanagement' %}">
+                            <i class="align-middle" data-feather="users"></i> <span class="align-middle"> Package Management</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{% url 'adminindex' %}">
-                            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Salary Management</span>
+                            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Staff Management</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -173,7 +173,7 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                        <h5 class="card-title">Pending Notifications</h5>
+                                                        <h5 class="card-title"> Packages Management</h5>
                                                     </div>
                                                     <div class="col-auto">
                                                         <div class="stat text-primary">
@@ -181,7 +181,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="mt-1 mb-3">{{ pending_notifications }}</h1>
+                                                <h1 class="mt-1 mb-3">{{ package_management }}</h1>
                                             </div>
                                         </div>
                                     </div>
@@ -190,7 +190,7 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                        <h5 class="card-title">Budget Summary</h5>
+                                                        <h5 class="card-title">Booking Details</h5>
                                                     </div>
                                                     <div class="col-auto">
                                                         <div class="stat text-primary">

@@ -40,17 +40,16 @@
                 {% if request.session.username %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      {% if request.session.profile_image %}
-                      <img src="{{ user.profile_image.url }}" alt="User Icon" style="width: 20px; height: 20px; margin-right: 5px;" />
-                  {% else %}
-                      <img src="{% static 'icons/userlogin.jpeg' %}" alt="User Icon" style="width: 50px; height: 50px; margin-right: 15px;" />
-                  {% endif %}                       
-                  
-                  {{ request.session.username }}
+                        {% if request.session.profile_image %}
+                            <img src="{{ request.session.profile_image }}" alt="User Icon" style="width: 50px; height: 50px; margin-right: 15px;" />
+                        {% else %}
+                            <img src="{% static 'icons/userlogin.jpeg' %}" alt="User Icon" style="width: 50px; height: 50px; margin-right: 15px;" />
+                        {% endif %}
+                        {{ request.session.username }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'viewprofile' %}">View Profile</a>
-                        <a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a>
+                        <a class="dropdown-item" href="{% url 'editprofile' %}">Edit Profile</a>
                         <a class="dropdown-item" href="{% url 'changepassword' %}">Change Password</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
@@ -61,7 +60,7 @@
                     <a href="{% url 'login' %}" class="nav-link">Login</a>
                 </li>
             {% endif %}
-
+            
               </li>                
             </ul>
         </div>

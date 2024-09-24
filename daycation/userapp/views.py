@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.files.storage import FileSystemStorage
-from .models import UserDB
+from .models import*
 from django.contrib.auth import logout as auth_logout, authenticate, login
 from django.core.mail import send_mail
+from django.utils.crypto import get_random_string
+from .forms import PasswordResetRequestForm 
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth.tokens import default_token_generator
@@ -13,6 +15,9 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from .models import Booking, Payment
+
 
 
 
@@ -53,6 +58,8 @@ def login_view(request):
         if check_password(password, user.password):
             request.session['user_id'] = user.id
             request.session['username'] = user.username
+            request.session['profile_image'] = user.profile_image.url
+            user.save()  
 
             messages.success(request, f'Welcome, {user.name}!')
             return redirect('userindex')  
@@ -113,22 +120,29 @@ def userregister(request):
 
 
 def viewprofile(request):
-    if not request.user.is_authenticated:
+    if 'username' not in request.session:
         messages.error(request, "You need to be logged in to view your profile.")
         return redirect('login')
 
-    user = UserDB.objects.get(username=request.user.username)
+    user = UserDB.objects.get(username=request.session['username'])
     
     return render(request, 'userapp/viewprofile.html', {'user': user})
 
 
 
-def edit_profile(request):
-    if not request.user.is_authenticated:
+
+def editprofile(request):
+    # Check if user is authenticated based on session
+    if 'username' not in request.session:
         messages.error(request, "You need to be logged in to edit your profile.")
         return redirect('login')
 
-    user = UserDB.objects.get(username=request.user.username)
+    # Get the user based on the session username
+    try:
+        user = UserDB.objects.get(username=request.session['username'])
+    except UserDB.DoesNotExist:
+        messages.error(request, "User not found.")
+        return redirect('login')
 
     if request.method == 'POST':
         user.name = request.POST.get('name')
@@ -139,6 +153,7 @@ def edit_profile(request):
         user.age = request.POST.get('age')
         user.sex = request.POST.get('sex')
 
+        # Handle profile image upload
         if 'profile_image' in request.FILES:
             profile_image = request.FILES['profile_image']
             fs = FileSystemStorage()
@@ -147,17 +162,23 @@ def edit_profile(request):
 
         user.save()
         messages.success(request, 'Profile updated successfully.')
-        return redirect('view_profile')
+        return redirect('viewprofile')
 
-    return render(request, 'userapp/edit_profile.html', {'user': user})
+    return render(request, 'userapp/editprofile.html', {'user': user})
 
 
 def changepassword(request):
-    if not request.user.is_authenticated:
+    # Check if user is authenticated based on session
+    if 'username' not in request.session:
         messages.error(request, "You need to be logged in to change your password.")
         return redirect('login')
 
-    user = UserDB.objects.get(username=request.user.username)
+    # Get the user based on the session username
+    try:
+        user = UserDB.objects.get(username=request.session['username'])
+    except UserDB.DoesNotExist:
+        messages.error(request, "User not found.")
+        return redirect('login')
 
     if request.method == 'POST':
         current_password = request.POST.get('current_password')
@@ -169,54 +190,68 @@ def changepassword(request):
                 user.password = make_password(new_password)
                 user.save()
                 messages.success(request, 'Password changed successfully.')
-                return redirect('view_profile')
+                return redirect('viewprofile')
             else:
                 messages.error(request, 'New passwords do not match.')
         else:
             messages.error(request, 'Current password is incorrect.')
 
-    return render(request, 'userapp/change_password.html')
+    return render(request, 'userapp/changepassword.html')
 
-
+ 
+ 
 def forgot_password(request):
     if request.method == 'POST':
-        emailid = request.POST.get('emailid')
-        try:
-            user = UserDB.objects.get(emailid=emailid)
-            token = default_token_generator.make_token(user)
-            uid = urlsafe_base64_encode(force_bytes(user.id))
-            reset_link = request.build_absolute_uri(reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token}))
-            
-            subject = 'Password Reset Request'
-            message = render_to_string('password_reset_email.html', {'reset_link': reset_link})
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [emailid])
-            
-            messages.success(request, 'Password reset instructions have been sent to your email.')
-            return redirect('login')
-        except UserDB.DoesNotExist:
-            messages.error(request, 'No account found with that email.')
-
-    return render(request, 'forgot_password.html')
-
-def password_reset_confirm(request, uidb64, token):
-    try:
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = UserDB.objects.get(id=uid)
-    except (TypeError, ValueError, OverflowError, UserDB.DoesNotExist):
-        user = None
-
-    if user is not None and default_token_generator.check_token(user, token):
-        if request.method == 'POST':
-            password = request.POST.get('password')
-            user.password = make_password(password)
-            user.save()
-            messages.success(request, 'Your password has been reset successfully.')
-            return redirect('login')
-        
-        return render(request, 'password_reset_confirm.html', {'user': user})
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            try:
+                user = UserDB.objects.get(emailid=email)
+                # Generate a random token (you can customize this)
+                reset_token = get_random_string(30)
+                user.reset_token = reset_token
+                user.save()
+                
+                # Send reset email (for now, let's print the link)
+                reset_link = f"http://http://localhost:8000/reset-password/{reset_token}/"
+                # Send the email
+                subject = "Password Reset Request"
+                message = f"Hi, please click the link below to reset your password:\n\n{reset_link}\n\nIf you did not request this, please ignore this email."
+                from_email = 'jobinamoljaimon2025@mca.ajce.in'
+                recipient_list = [email]
+                
+                send_mail(subject, message, from_email, recipient_list)
+                
+                messages.success(request, 'A password reset link has been sent to your email.')
+                return redirect('/login/')
+            except UserDB.DoesNotExist:
+                messages.error(request, 'Email address not found')
     else:
-        messages.error(request, 'The reset link is invalid or has expired.')
-        return redirect('forgot_password')
+        form = PasswordResetRequestForm()
+
+    return render(request, 'password_reset_request.html', {'form': form})
+
+def reset_password(request, token):
+    try:
+        user = UserDB.objects.get(reset_token=token)
+    except UserDB.DoesNotExist:
+        messages.error(request, 'Invalid or expired reset token')
+        return redirect('/login/')
+    
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        
+        if password == confirm_password and len(password) >= 8:
+            user.password = password  # Hash the password in a real-world scenario
+            user.reset_token = ''  # Clear the reset token
+            user.save()
+            messages.success(request, 'Your password has been reset successfully')
+            return redirect('/login/')
+        else:
+            messages.error(request, 'Passwords do not match or are not long enough')
+    
+    return render(request, 'password_reset.html')
 
 def logout(request):
     auth_logout(request)
@@ -255,4 +290,57 @@ def packs(request):
     return render(request, 'packs.html')
 
 def booking(request):
-    return render(request, 'booking.html')
+    # Fetch all food items from the database
+    food_items = FoodItem.objects.all()
+
+    if request.method == "POST":
+        package_name = request.POST.get("package_name")
+        package_price = float(request.POST.get("package_price", 0))  # Convert to float
+        food_timing = request.POST.getlist("food_timing")
+        food_item_ids = request.POST.getlist("food_items")  # IDs of selected food items
+        room_type = request.POST.get("room_type")
+
+        # Fetch food items based on selected IDs
+        selected_food_items = FoodItem.objects.filter(id__in=food_item_ids)
+
+        # Calculate total amount
+        total_amount = package_price + sum(item.price for item in selected_food_items)
+
+        # Create the booking
+        booking = Booking.objects.create(
+            package_name=package_name,
+            package_price=package_price,
+            food_timing=food_timing,
+            room_type=room_type,
+            total_amount=total_amount,
+        )
+
+        # Redirect to the payment view
+        return redirect('payment', booking_id=booking.id)
+
+    # Render the booking template with food items
+    return render(request, 'booking.html', {'food_items': food_items})
+
+def menu(request):
+    return render(request, 'menu.html')
+
+def rooms(request):
+    return render(request, 'rooms.html')
+
+def payment(request, booking_id):
+    booking = Booking.objects.get(id=booking_id)
+    if request.method == "POST":
+        payment_method = request.POST.get("payment_method")
+        payment = Payment.objects.create(
+            booking=booking,
+            payment_method=payment_method,
+            payment_status=True,  # Assume payment is successful for now
+        )
+        return redirect('confirmation', payment_id=payment.id)
+
+    return render(request, 'payment.html', {'booking': booking})
+
+
+def confirmation(request, payment_id):
+    payment = Payment.objects.get(id=payment_id)
+    return render(request, 'confirmation.html', {'payment': payment})

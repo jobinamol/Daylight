@@ -171,6 +171,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'jobinamoljaimon2025@mca.ajce.in'
-EMAIL_HOST_PASSWORD = 'jaimon@123*'
+EMAIL_HOST_PASSWORD = 'Jaimon@123*'
 DEFAULT_FROM_EMAIL = 'jobinamoljaimon2025@mca.ajce.in'
 

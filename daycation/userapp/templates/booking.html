@@ -2,134 +2,141 @@
 {% block content %}
 {% load static %}
 
-<div class="hero-wrap" style="background-image: url('{% static 'images/rel8.jpg' %}');">
+<!-- Hero Section -->
+<div class="hero-wrap" style="background-image: url('{% static 'images/booking.jpg' %}'); height: 25vh; background-position: center; background-size: cover;">
     <div class="overlay"></div>
-    <div class="container">
-        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
-            <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
-                <div class="text">
-                    <p class="breadcrumbs mb-2">
-                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> 
-                        <span>Relaxation Package Booking</span>
-                    </p>
-                    <h1 class="mb-4 bread">Book Your Relaxation Package</h1>
-                </div>
+    <div class="container h-100 d-flex align-items-center justify-content-center">
+        <div class="row no-gutters text-center">
+            <div class="col-md-12">
+                <h1 class="mb-0 text-white font-weight-bold">Booking</h1>
             </div>
         </div>
     </div>
 </div>
 
-<section class="ftco-section">
+<!-- Booking Section -->
+<section class="ftco-section py-5">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8">
-                <h2>Relaxation Package Reservation Form</h2>
-                <p><strong>Package Price: ₹6,150</strong></p>
-                <form action="{% url 'booking' %}" method="POST">
-                    {% csrf_token %}
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="p-4 bg-light rounded shadow-sm">
 
-                    <!-- Room Selection (Predefined for Relaxation Package) -->
-                    <div class="form-group">
-                        <label for="room_choice">Room (Relaxation Package)</label>
-                        <input type="text" class="form-control" id="room_choice" name="room_choice" value="Standard Room" readonly>
-                    </div>
+                    <!-- Section Title -->
+                    <h2 class="mb-4 text-center font-weight-bold">Complete Your Booking</h2>
 
-                    <!-- Food Time Selection -->
-                    <div class="form-group">
-                        <label for="food_time">Choose Food Time</label>
-                        <select class="form-control" id="food_time" name="food_time" required>
-                            <option value="breakfast">Breakfast</option>
-                            <option value="lunch">Lunch</option>
-                            <option value="dinner">Dinner</option>
-                        </select>
-                    </div>
+                    <!-- Form Starts Here -->
+                    <form>
 
-                    <!-- Food Menu (Dynamically Loaded Based on Time) -->
-                    <div class="form-group">
-                        <label for="food_menu">Choose Dishes from Menu</label>
-                        <select class="form-control" id="food_menu" name="food_menu" required>
-                            <!-- Breakfast Menu -->
-                            <optgroup label="Breakfast" id="breakfast_menu" class="food-time-menu">
-                                <option value="idli">Idli with Sambar (₹100)</option>
-                                <option value="dosa">Masala Dosa (₹120)</option>
-                                <option value="paratha">Aloo Paratha (₹150)</option>
-                            </optgroup>
+                        <!-- Step 1: Package Selection -->
+                        <div class="form-group row mb-3 align-items-center">
+                            <label for="package-select" class="col-sm-4 col-form-label font-weight-bold">Select Package</label>
+                            <div class="col-sm-8">
+                                <select id="package-select" class="form-control" onchange="updatePrice()">
+                                    <option value="6150">Relaxation - ₹6,150.00</option>
+                                    <option value="8200">Family Fun - ₹8,200.00</option>
+                                    <option value="7380">Adventure - ₹7,380.00</option>
+                                    <option value="16400">Luxury - ₹16,400.00</option>
+                                    <option value="6970">Wellness - ₹6,970.00</option>
+                                    <option value="9840">Romantic Getaway - ₹9,840.00</option>
+                                    <option value="20500">Corporate Retreat - ₹20,500.00</option>
+                                    <option value="4100">Student - ₹4,100.00</option>
+                                </select>
+                            </div>
+                        </div>
 
-                            <!-- Lunch Menu -->
-                            <optgroup label="Lunch" id="lunch_menu" class="food-time-menu" style="display: none;">
-                                <option value="veg_thali">Vegetarian Thali (₹250)</option>
-                                <option value="non_veg_thali">Non-Vegetarian Thali (₹350)</option>
-                                <option value="biryani">Chicken Biryani (₹300)</option>
-                            </optgroup>
+                        <!-- Step 2: Room Selection -->
+                        <div class="form-group row mb-3 align-items-center">
+                            <label for="room-select" class="col-sm-4 col-form-label font-weight-bold">Select Room</label>
+                            <div class="col-sm-8">
+                                <select id="room-select" class="form-control" onchange="updatePrice()">
+                                    <option value="0">No Room</option>
+                                    <option value="2000">Single - ₹2,000.00</option>
+                                    <option value="3500">Double - ₹3,500.00</option>
+                                    <option value="5000">Family Suite - ₹5,000.00</option>
+                                    <option value="8000">Luxury Suite - ₹8,000.00</option>
+                                </select>
+                            </div>
+                        </div>
 
-                            <!-- Dinner Menu -->
-                            <optgroup label="Dinner" id="dinner_menu" class="food-time-menu" style="display: none;">
-                                <option value="pasta">Pasta with Garlic Bread (₹200)</option>
-                                <option value="grilled_chicken">Grilled Chicken (₹350)</option>
-                                <option value="dal_makhani">Dal Makhani with Naan (₹180)</option>
-                            </optgroup>
-                        </select>
-                    </div>
+                        <!-- Step 3: Number of People -->
+                        <div class="form-group row mb-3 align-items-center">
+                            <label for="num-people" class="col-sm-4 col-form-label font-weight-bold">Number of People</label>
+                            <div class="col-sm-8">
+                                <input type="number" id="num-people" class="form-control" min="1" value="1" onchange="updatePrice()">
+                            </div>
+                        </div>
 
-                    <!-- Number of People -->
-                    <div class="form-group">
-                        <label for="num_people">Number of People</label>
-                        <input type="number" class="form-control" id="num_people" name="num_people" placeholder="Enter number of adults" required>
-                    </div>
+                        <!-- Step 4: Number of Children -->
+                        <div class="form-group row mb-3 align-items-center">
+                            <label for="num-children" class="col-sm-4 col-form-label font-weight-bold">Number of Children</label>
+                            <div class="col-sm-8">
+                                <input type="number" id="num-children" class="form-control" min="0" value="0" onchange="updatePrice()">
+                            </div>
+                        </div>
 
-                    <!-- Number of Children -->
-                    <div class="form-group">
-                        <label for="num_children">Number of Children</label>
-                        <input type="number" class="form-control" id="num_children" name="num_children" placeholder="Enter number of children" required>
-                    </div>
+                        <!-- Total Price Display -->
+                        <div class="form-group row mb-4 text-center">
+                            <div class="col-md-12">
+                                <h4>Total Amount: <span id="total-price" class="text-primary">₹6,150.00</span></h4>
+                            </div>
+                        </div>
 
-                    <!-- Additional Requests -->
-                    <div class="form-group">
-                        <label for="additional_requests">Additional Requests</label>
-                        <textarea class="form-control" id="additional_requests" name="additional_requests" rows="4" placeholder="Add any special requests..."></textarea>
-                    </div>
+                        <!-- Step 5: Food Selection -->
+                        <div class="form-group row mb-3 align-items-center">
+                            <label class="col-sm-4 col-form-label font-weight-bold">Food Selection</label>
+                            <div class="col-sm-8">
+                                <div id="food-items" class="form-group" style="max-height: 150px; overflow-y: auto; padding: 10px; border: 1px solid #dee2e6; border-radius: 0.25rem;">
+                                    {% for item in food_items %}
+                                    <div class="form-check">
+                                        <input class="form-check-input food-checkbox" type="checkbox" value="{{ item.id }}" data-price="{{ item.price }}" onchange="updatePrice()">
+                                        <label class="form-check-label">{{ item.name }} - ₹{{ item.price }}</label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
 
-                    <!-- Payment Method -->
-                    <div class="form-group">
-                        <label for="payment_method">Payment Method</label>
-                        <select class="form-control" id="payment_method" name="payment_method" required>
-                            <option value="credit_card">Credit Card</option>
-                            <option value="debit_card">Debit Card</option>
-                            <option value="net_banking">Net Banking</option>
-                            <option value="upi">UPI</option>
-                            <option value="cash_on_arrival">Cash on Arrival</option>
-                        </select>
-                    </div>
+                        <!-- Submit Button -->
+                        <div class="form-group row text-center">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-primary btn-lg w-100" onclick="submitBooking()">Book Now</button>
+                            </div>
+                        </div>
+                    </form>
 
-                    <!-- Submit Button -->
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Submit Booking</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
 <script>
-    // JavaScript to display the appropriate menu based on food time selection
-    document.getElementById('food_time').addEventListener('change', function() {
-        var foodTime = this.value;
+    // Update total price dynamically
+    function updatePrice() {
+        const packagePrice = parseInt(document.getElementById("package-select").value);
+        const roomPrice = parseInt(document.getElementById("room-select").value);
+        const numPeople = parseInt(document.getElementById("num-people").value);
+        const numChildren = parseInt(document.getElementById("num-children").value);
+        let foodTotal = 0;
 
-        // Hide all menus first
-        document.querySelectorAll('.food-time-menu').forEach(function(menu) {
-            menu.style.display = 'none';
+        // Calculate food total
+        const foodCheckboxes = document.querySelectorAll(".food-checkbox:checked");
+        foodCheckboxes.forEach(item => {
+            foodTotal += parseInt(item.getAttribute("data-price"));
         });
 
-        // Show the selected time menu
-        if (foodTime === 'breakfast') {
-            document.getElementById('breakfast_menu').style.display = 'block';
-        } else if (foodTime === 'lunch') {
-            document.getElementById('lunch_menu').style.display = 'block';
-        } else if (foodTime === 'dinner') {
-            document.getElementById('dinner_menu').style.display = 'block';
-        }
-    });
+        const totalAmount = (packagePrice + roomPrice + foodTotal) * numPeople;
+        document.getElementById("total-price").innerText = `₹${totalAmount.toLocaleString()}`;
+    }
+
+    // Handle form submission
+    function submitBooking() {
+        const totalElement = document.getElementById("total-price").innerText.replace(/₹|,/g, '');
+        localStorage.setItem('totalAmount', totalElement);
+
+        // Redirect to the payment page
+        window.location.href = "{% url 'payment' %}";
+    }
 </script>
 
 {% endblock %}

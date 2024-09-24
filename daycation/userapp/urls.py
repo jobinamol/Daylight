@@ -12,10 +12,10 @@ urlpatterns = [
     path('userindex/', views.userindex, name='userindex'),
     path('userregister/', views.userregister, name='userregister'),
     path('viewprofile/',views. viewprofile, name='viewprofile'),              # URL for viewing user profile
-    path('edit-profile/', views.edit_profile, name='edit_profile'),
+    path('editprofile/', views.editprofile, name='editprofile'),
     path('changepassword/',views. changepassword, name='changepassword'),
-    path('forgot-password/', views.forgot_password, name='forgot_password'),
-    path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
+    path('forgot_password/', views.forgot_password,name='forgot_password'),
+    path('reset-password/<str:token>/', views.reset_password,name='reset_password'),
     path('logout/', views.logout, name='logout'),
     path('rel/', views.rel, name='rel'),
     path('fam/', views.fam, name='fam'),
@@ -28,4 +28,12 @@ urlpatterns = [
     path('cel/', views.cel, name='cel'),
     path('packs/', views.packs, name='packs'),
     path('booking/', views.booking, name='booking'),
+    path('menu/', views.menu, name='menu'),
+    path('rooms/', views.rooms, name='rooms'),
+    path('payment/', views.payment, name='payment'),
+    path('confirmation/', views.confirmation, name='confirmation'),
+
+
+
+
 ]

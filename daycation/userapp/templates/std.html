@@ -70,7 +70,7 @@
                                 </div>
                             </a>
                             <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="#">Breakfast Menu</a></h3>
+                                <h3 class="mb-3"><a href="{% url 'menu' %}">Breakfast Menu</a></h3>
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                                 </div>
                             </a>
                             <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="#">Lunch Menu</a></h3>
+                                <h3 class="mb-3"><a href="{% url 'menu' %}">Lunch Menu</a></h3>
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                                 </div>
                             </a>
                             <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="#">Dinner Menu</a></h3>
+                                <h3 class="mb-3"><a href="{% url 'menu' %}">Dinner Menu</a></h3>
                             </div>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                                 </div>
                             </a>
                             <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="#">Snacks & Beverages</a></h3>
+                                <h3 class="mb-3"><a href="{% url 'menu' %}">Snacks & Beverages</a></h3>
                             </div>
                         </div>
                     </div>
@@ -126,10 +126,10 @@
                                 </div>
                             </a>
                             <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="#">Dormitory Room</a></h3>
+                                <h3 class="mb-3"><a href="{% url 'rooms' %}">Dormitory Room</a></h3>
                                 <p><span class="price mr-2">₹1,200/night</span></p>
                                 <hr>
-                                <p class="pt-1"><a href="#" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
+                                <p class="pt-1"><a href"{% url 'rooms' %}" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
                             </div>
                         </div>
                     </div>
@@ -141,10 +141,10 @@
                                 </div>
                             </a>
                             <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="#">Shared Room</a></h3>
+                                <h3 class="mb-3"><a href="{% url 'rooms' %}">Shared Room</a></h3>
                                 <p><span class="price mr-2">₹1,500/night</span></p>
                                 <hr>
-                                <p class="pt-1"><a href="#" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
+                                <p class="pt-1"><a href="{% url 'rooms' %}" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
                             </div>
                         </div>
                     </div>
