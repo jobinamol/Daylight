@@ -11,19 +11,19 @@
     <meta name="keywords" content="resort, management, admin, dashboard, template, responsive, css, html, theme, UI, web">
 
     <link rel="shortcut icon" href="{% static 'assets/img/icons/icon-48x48.png' %}" />
-    <title>Daycation Resort Admin Dashboard</title>
+    <title>Welcome Admin | Daycation Resort Admin Dashboard</title>
     <link href="{% static 'assets/css/app.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="wrapper">
+        <!-- Sidebar -->
         <nav id="sidebar" class="sidebar js-sidebar">
             <div class="sidebar-content js-simplebar">
                 <a class="sidebar-brand" href="{% url 'adminindex' %}">
                     <span class="align-middle">Daycation Admin Dashboard</span>
                 </a>
-
                 <ul class="sidebar-nav">
                     <li class="sidebar-header">Management</li>
                     <li class="sidebar-item">
@@ -33,7 +33,7 @@
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{% url 'packagemanagement' %}">
-                            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle"> Package Management</span>
+                            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Package Management</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -56,12 +56,11 @@
                             <i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Record Management</span>
                         </a>
                     </li>
-                    
-                    
                 </ul>
             </div>
         </nav>
 
+        <!-- Main content -->
         <div class="main">
             <nav class="navbar navbar-expand navbar-light navbar-bg">
                 <a class="sidebar-toggle js-sidebar-toggle">
@@ -86,7 +85,9 @@
                                                 <i class="text-danger" data-feather="alert-circle"></i>
                                             </div>
                                             <div class="col-10">
-                                                <div class="text-dark">New Offers <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ new_offers_count }}</span></div>
+                                                <div class="text-dark">New Offers 
+                                                    <span class="indicator">{{ new_offers_count }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </a>
@@ -96,7 +97,9 @@
                                                 <i class="text-danger" data-feather="alert-circle"></i>
                                             </div>
                                             <div class="col-10">
-                                                <div class="text-dark">Event Updates <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ event_updates_count }}</span></div>
+                                                <div class="text-dark">Event Updates
+                                                    <span class="indicator">{{ event_updates_count }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </a>
@@ -106,7 +109,9 @@
                                                 <i class="text-danger" data-feather="alert-circle"></i>
                                             </div>
                                             <div class="col-10">
-                                                <div class="text-dark">Pricing Changes <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ pricing_changes_count }}</span></div>
+                                                <div class="text-dark">Pricing Changes
+                                                    <span class="indicator">{{ pricing_changes_count }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </a>
@@ -117,10 +122,14 @@
                 </div>
             </nav>
 
+            <!-- Main content block -->
             {% block content %}
             <main class="content">
                 <div class="container-fluid p-0">
-                    <h1 class="h3 mb-3"><strong>Dashboard</strong></h1>
+                    <!-- Welcome Message -->
+                    <h1 class="h3 mb-3"><strong>Welcome Admin</strong></h1>
+                    
+                    <!-- Dashboard stats -->
                     <div class="row">
                         <div class="col-xl-6 col-xxl-5 d-flex">
                             <div class="w-100">
@@ -133,9 +142,7 @@
                                                         <h5 class="card-title">Total Staff</h5>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="users"></i>
-                                                        </div>
+                                                        <i class="stat text-primary" data-feather="users"></i>
                                                     </div>
                                                 </div>
                                                 <h1 class="mt-1 mb-3">{{ total_staff }}</h1>
@@ -150,9 +157,7 @@
                                                         <h5 class="card-title">Total Users</h5>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="user-check"></i>
-                                                        </div>
+                                                        <i class="stat text-primary" data-feather="user-check"></i>
                                                     </div>
                                                 </div>
                                                 <h1 class="mt-1 mb-3">{{ total_users }}</h1>
@@ -170,12 +175,10 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                        <h5 class="card-title"> Packages Management</h5>
+                                                        <h5 class="card-title">Packages Management</h5>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="bell"></i>
-                                                        </div>
+                                                        <i class="stat text-primary" data-feather="bell"></i>
                                                     </div>
                                                 </div>
                                                 <h1 class="mt-1 mb-3">{{ package_management }}</h1>
@@ -190,9 +193,7 @@
                                                         <h5 class="card-title">Booking Details</h5>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="pie-chart"></i>
-                                                        </div>
+                                                        <i class="stat text-primary" data-feather="pie-chart"></i>
                                                     </div>
                                                 </div>
                                                 <h1 class="mt-1 mb-3">{{ budget_summary }}</h1>
@@ -209,7 +210,7 @@
         </div>
     </div>
 
+    <!-- JavaScript -->
     <script src="{% static 'assets/js/app.js' %}"></script>
 </body>
-
 </html>

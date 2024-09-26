@@ -39,86 +39,59 @@ def usermanagement(request):
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Staff
 
-def staffmanagement(request):
-    staff_list = Staff.objects.all()
-    staff_roles = [role[0] for role in Staff.ROLE_CHOICES]
+def staff_management(request):
+    staff_list = Staff.objects.all()  # Retrieve all staff members
+    return render(request, 'staffmanagement.html', {'staff_list': staff_list})
 
-    if request.method == "POST":
-        # Handle form submission for adding/editing staff
-        staff_id = request.POST.get('staff_id', None)
+def add_staff(request):
+    if request.method == 'POST':
         name = request.POST.get('name')
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        role = request.POST.get('role')
-        salary = request.POST.get('salary')
-        phone_number = request.POST.get('phone_number')
         email = request.POST.get('email')
-        address = request.POST.get('address')
-        start_date = request.POST.get('start_date')
-        profile_image = request.FILES.get('profile_image')
+        password = request.POST.get('password')  # Handle password securely in production
+        role = request.POST.get('role')
+        
+        # Check for existing staff with the same email
+        if Staff.objects.filter(email=email).exists():
+            messages.error(request, 'A staff member with this email already exists.')
+            return redirect('add_staff')
 
-        # Check if username and other required fields are provided
-        if not username or not name:  # Add other necessary checks
-            return render(request, 'staffmanagement.html', {
-                'staff_list': staff_list,
-                'staff_roles': staff_roles,
-                'edit_mode': False,
-                'staff': None,
-                'error': "Username and Name are required fields."
-            })
+        # Create and save new staff member
+        staff = Staff(name=name, email=email, password=password, role=role)
+        staff.save()
+        messages.success(request, 'Staff added successfully.')
+        return redirect('staffmanagement')
 
-        if staff_id:  # If staff_id is present, update the existing staff member
-            staff_member = get_object_or_404(Staff, id=staff_id)
-            staff_member.name = name
-            staff_member.username = username
-            staff_member.password = password
-            staff_member.role = role
-            staff_member.salary = salary
-            staff_member.phone_number = phone_number
-            staff_member.email = email
-            staff_member.address = address
-            staff_member.start_date = start_date
-            if profile_image:  # Only update profile image if provided
-                staff_member.profile_image = profile_image
-            staff_member.save()
-        else:  # Add a new staff member
-            Staff.objects.create(
-                name=name,
-                username=username,
-                password=password,
-                role=role,
-                salary=salary,
-                phone_number=phone_number,
-                email=email,
-                address=address,
-                start_date=start_date,
-                profile_image=profile_image
-            )
-        return redirect('staffmanagement')  # Redirect to the same page to see the updated staff list
-
-    return render(request, 'staffmanagement.html', {
-        'staff_list': staff_list,
-        'staff_roles': staff_roles,
-        'edit_mode': False,
-        'staff': None  # No staff data for the new entry form
-    })
+    return render(request, 'add_staff.html')
 
 def edit_staff(request, staff_id):
-    staff_member = get_object_or_404(Staff, id=staff_id)
-    staff_roles = [role[0] for role in Staff.ROLE_CHOICES]
-    
-    if request.method == "GET":
-        return render(request, 'staffmanagement.html', {
-            'staff_list': Staff.objects.all(),
-            'staff_roles': staff_roles,
-            'edit_mode': True,
-            'staff': staff_member,
-            'staff_id': staff_id  # Pass the staff_id to the template
-        })
+    try:
+        staff = Staff.objects.get(id=staff_id)
+    except Staff.DoesNotExist:
+        messages.error(request, 'Staff member not found.')
+        return redirect('staffmanagement')
+
+    if request.method == 'POST':
+        staff.name = request.POST.get('name')
+        staff.email = request.POST.get('email')
+        staff.role = request.POST.get('role')
+        if request.POST.get('password'):
+            staff.password = request.POST.get('password')  # Update password if provided
+        if request.FILES.get('profile_image'):
+            staff.profile_image = request.FILES.get('profile_image')
+        staff.save()
+        messages.success(request, 'Staff updated successfully.')
+        return redirect('staffmanagement')
+
+    return render(request, 'edit_staff.html', {'staff': staff})
 
 def delete_staff(request, staff_id):
-    staff_member = get_object_or_404(Staff, id=staff_id)
-    staff_member.delete()
+    try:
+        staff = Staff.objects.get(id=staff_id)
+        staff.delete()
+        messages.success(request, 'Staff deleted successfully.')
+    except Staff.DoesNotExist:
+        messages.error(request, 'Staff member not found.')
+    
     return redirect('staffmanagement')
 
 #package management
