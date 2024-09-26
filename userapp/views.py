@@ -338,8 +338,7 @@ def cel(request):
     return render(request, 'cel.html')
 
 def packs(request):
-    packages = Package.objects.all()
-    
+    packages = PackageManagement.objects.all()    
     return render(request, 'packs.html', {'packages': packages})
 def booking(request):
     return render(request, 'booking.html')

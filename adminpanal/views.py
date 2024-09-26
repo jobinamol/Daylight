@@ -94,70 +94,72 @@ def delete_staff(request, staff_id):
     
     return redirect('staffmanagement')
 
-#package management
 def packagemanagement(request):
-    packages = Package.objects.all()  # Retrieve all packages from the database
-    
-    if request.method == 'POST':  # Handle form submission to add a new package
-        name = request.POST['name']
-        price = request.POST['price']
-        description = request.POST['description']
-        duration = request.POST['duration']
-        image = request.FILES.get('image')  # Get the uploaded image, if provided
+    packages = PackageManagement.objects.all()
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        description = request.POST.get('description')
+        duration = request.POST.get('duration')
+        image = request.FILES.get('image')
+
+        if not name or not price or float(price) <= 0 or not description or not duration:
+            messages.error(request, 'Please fill in all fields correctly.')
+            return redirect('packagemanagement')
 
         try:
-            package = Package(
+            package = PackageManagement(
                 name=name,
                 price=price,
                 description=description,
                 duration=duration,
-                image=image  # Save image if provided
+                image=image
             )
-            package.save()  # Save the new package to the database
+            package.save()
             messages.success(request, 'Package added successfully.')
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
-        
-        return redirect('packagemanagement')  # Redirect to the same page to show updated package list
+        return redirect('packagemanagement')
 
     return render(request, 'packagemanagement.html', {'packages': packages})
 
-def editpackage(request, package_id):
-    package = Package.objects.filter(id=package_id).first()  # Retrieve package by ID
-    
-    if package is None:  # If no package is found, show an error message
-        messages.error(request, 'Package not found.')
-        return redirect('packagemanagement')
+def edit_package(request, package_id):
+    package = get_object_or_404(PackageManagement, id=package_id)
 
-    if request.method == 'POST':  # Handle form submission for updating package details
-        package.name = request.POST['name']
-        package.price = request.POST['price']
-        package.description = request.POST['description']
-        package.duration = request.POST['duration']
-        
-        if request.FILES.get('image'):  # If a new image is uploaded, update it
-            package.image = request.FILES['image']
-        
+    if request.method == 'POST':
+        package.name = request.POST.get('name')
+        package.price = request.POST.get('price')
+        package.description = request.POST.get('description')
+        package.duration = request.POST.get('duration')
+
+        if request.FILES.get('image'):
+            package.image = request.FILES['image']  # Update the image if a new one is provided
+
+        if not package.name or not package.price or float(package.price) <= 0 or not package.description or not package.duration:
+            messages.error(request, 'Please fill in all fields correctly.')
+            return redirect('edit_package', package_id=package.id)
+
         try:
-            package.save()  # Save the updated package details
+            package.save()
             messages.success(request, 'Package updated successfully.')
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
-        
         return redirect('packagemanagement')
 
-    return render(request, 'editpackage.html', {'package': package})
+    return render(request, 'edit_package.html', {'package': package})
 
 def delete_package(request, package_id):
-    package = Package.objects.filter(id=package_id).first()  # Retrieve the package by ID
-    
-    if package:  # If package exists, delete it
+    package = get_object_or_404(PackageManagement, id=package_id)
+
+    if request.method == 'POST':
         try:
             package.delete()
             messages.success(request, 'Package deleted successfully.')
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
-    else:
-        messages.error(request, 'Package not found.')
+        return redirect('packagemanagement')
 
-    return redirect('packagemanagement')
+    return render(request, 'deletepackage.html', {'package': package})
+
+

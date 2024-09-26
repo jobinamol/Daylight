@@ -1,0 +1,34 @@
+{% extends 'adminindex.html' %}
+{% block content %}
+
+<h1>Edit Package</h1>
+
+<form method="POST" action="{% url 'edit_package' package.id %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <label>Name:</label>
+    <input type="text" name="name" value="{{ package.name }}" required>
+    <br>
+
+    <label>Price:</label>
+    <input type="number" name="price" value="{{ package.price }}" required>
+    <br>
+
+    <label>Description:</label>
+    <textarea name="description" required>{{ package.description }}</textarea>
+    <br>
+
+    <label>Duration:</label>
+    <input type="text" name="duration" value="{{ package.duration }}" required>
+    <br>
+
+    <label>Image:</label>
+    <input type="file" name="image" accept="image/*">
+    <br>
+
+    <button type="submit">Update Package</button>
+</form>
+
+<a href="{% url 'packagemanagement' %}">Cancel</a>
+
+{% endblock %}

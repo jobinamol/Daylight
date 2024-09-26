@@ -1,0 +1,14 @@
+{% extends 'adminindex.html' %}
+{% block content %}
+
+<h1>Delete Package</h1>
+
+<p>Are you sure you want to delete the package: "{{ package.name }}"?</p>
+
+<form method="POST" action="{% url 'delete_package' package.id %}">
+    {% csrf_token %}
+    <button type="submit">Yes, Delete</button>
+    <a href="{% url 'packagemanagement' %}">Cancel</a>
+</form>
+
+{% endblock %}

@@ -1,64 +1,168 @@
 {% extends 'adminindex.html' %}
-{% block content %}
 {% load static %}
+{% block content %}
 
-<!-- Hero Section -->
-<div class="hero-wrap" style="background-image: url('{% static 'images/manage_packages.jpg' %}');">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
-            <div class="col-md-9 ftco-animate text-center">
-                <div class="text">
-                    <p class="breadcrumbs mb-2">
-                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> 
-                        <span>Admin</span>
-                        <span>Package Management</span>
-                    </p>
-                    <h1 class="mb-4 bread">Package Management</h1>
-                </div>
-            </div>
+<style>
+    body {
+        background-image: url('{% static "images/background.jpg" %}'); /* Replace with your background image path */
+        background-size: cover;
+        background-attachment: fixed;
+        color: #333;
+    }
+    .container {
+        background-color: rgba(255, 255, 255, 0.9); /* White background with transparency */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .form-inline .form-group {
+        margin-right: 15px;
+    }
+    .form-control, .btn {
+        border-radius: 20px; /* Rounded corners for input and buttons */
+    }
+    .table {
+        background-color: rgba(255, 255, 255, 0.8); /* Table background with transparency */
+    }
+    .btn-symbol {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        font-size: 1.2em; /* Increase font size for visibility */
+    }
+</style>
+
+<h1 class="text-center my-4">Package Management</h1>
+
+<!-- Add Package Form -->
+<div class="container mb-5">
+    <h3>Add Package</h3>
+    <form id="packageForm" method="POST" action="{% url 'packagemanagement' %}" enctype="multipart/form-data" class="form-inline">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name" class="mr-2">Name:</label>
+            <input type="text" id="name" name="name" class="form-control" required>
+            <span id="nameError" style="color:red;"></span>
         </div>
-    </div>
+
+        <div class="form-group">
+            <label for="price" class="mr-2">Price:</label>
+            <input type="number" id="price" name="price" class="form-control" required>
+            <span id="priceError" style="color:red;"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="description" class="mr-2">Description:</label>
+            <textarea id="description" name="description" class="form-control" required></textarea>
+            <span id="descriptionError" style="color:red;"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="duration" class="mr-2">Duration:</label>
+            <input type="text" id="duration" name="duration" class="form-control" required>
+            <span id="durationError" style="color:red;"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="image" class="mr-2">Image:</label>
+            <input type="file" id="image" name="image" accept="image/*" class="form-control-file">
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2">Add Package</button>
+    </form>
 </div>
 
-<!-- Package Management Section -->
-<section class="ftco-section">
+{% if packages %}
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <!-- Add New Package Form -->
-                <h3>Add New Package</h3>
-                <form method="POST" enctype="multipart/form-data" class="mb-4">
-                    {% csrf_token %}
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="name">Package Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required placeholder="Enter package name">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="price">Price (₹)</label>
-                            <input type="number" step="0.01" class="form-control" id="price" name="price" required placeholder="Enter price">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="3" required placeholder="Enter package description"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="duration">Duration</label>
-                            <input type="text" class="form-control" id="duration" name="duration" required placeholder="E.g., 1 day, 2 nights">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="image">Image</label>
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Package</button>
-                </form>
+        <h3 class="mt-4">Existing Packages</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Duration</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for package in packages %}
+                <tr>
+                    <td>{{ package.name }}</td>
+                    <td>{{ package.description }}</td>
+                    <td>₹{{ package.price }}</td>
+                    <td>{{ package.duration }}</td>
+                    <td>
+                        {% if package.image %}
+                            <img src="{{ package.image.url }}" alt="{{ package.name }}" style="width: 100px; height: auto;">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'edit_package' package.id %}" class="btn btn-warning btn-symbol btn-sm" title="Edit">
+                            ✎ Edit
+                        </a>
+                        <a href="{% url 'delete_package' package.id %}" class="btn btn-danger btn-symbol btn-sm" title="Delete" onclick="return confirm('Are you sure you want to delete this package?');">
+                            🗑️ Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="container">
+        <p>No packages available.</p>
+    </div>
+{% endif %}
 
-             
-</section>
+<script>
+    document.getElementById('packageForm').onsubmit = function(e) {
+        let isValid = true;
+
+        // Clear previous errors
+        document.getElementById('nameError').innerText = '';
+        document.getElementById('priceError').innerText = '';
+        document.getElementById('descriptionError').innerText = '';
+        document.getElementById('durationError').innerText = '';
+
+        // Validate Name
+        const name = document.getElementById('name').value;
+        if (name.trim() === '') {
+            document.getElementById('nameError').innerText = 'Name is required.';
+            isValid = false;
+        }
+
+        // Validate Price
+        const price = document.getElementById('price').value;
+        if (price <= 0) {
+            document.getElementById('priceError').innerText = 'Price must be a positive number.';
+            isValid = false;
+        }
+
+        // Validate Description
+        const description = document.getElementById('description').value;
+        if (description.trim() === '') {
+            document.getElementById('descriptionError').innerText = 'Description is required.';
+            isValid = false;
+        }
+
+        // Validate Duration
+        const duration = document.getElementById('duration').value;
+        if (duration.trim() === '') {
+            document.getElementById('durationError').innerText = 'Duration is required.';
+            isValid = false;
+        }
+
+        // Prevent form submission if invalid
+        if (!isValid) {
+            e.preventDefault();
+        }
+    };
+</script>
+
 {% endblock %}
