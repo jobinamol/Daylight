@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Front Desk Dashboard">
+    <meta name="author" content="AdminKit">
+    <meta name="keywords" content="resort, management, front desk, dashboard, template, responsive, css, html, theme, UI, web">
+
+    <link rel="shortcut icon" href="{% static 'assets/img/icons/icon-48x48.png' %}" />
+    <title>Front Desk Dashboard</title>
+    <link href="{% static 'assets/css/app.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="wrapper">
+        <nav id="sidebar" class="sidebar js-sidebar">
+            <div class="sidebar-content js-simplebar">
+                <a class="sidebar-brand" href="{% url 'frontdesk_dashboard' %}">
+                    <span class="align-middle">Front Desk Dashboard</span>
+                </a>
+
+                <ul class="sidebar-nav">
+                    <li class="sidebar-header">Management</li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'frontdesk_dashboard' %}">
+                            <i class="align-middle" data-feather="check-circle"></i> <span class="align-middle">Check-Ins/Outs</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'frontdesk_dashboard' %}">
+                            <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Reservations</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'frontdesk_dashboard' %}">
+                            <i class="align-middle" data-feather="info"></i> <span class="align-middle">Guest Inquiries</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'frontdesk_dashboard' %}">
+                            <i class="align-middle" data-feather="credit-card"></i> <span class="align-middle">Payments</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="main">
+            <nav class="navbar navbar-expand navbar-light navbar-bg">
+                <a class="sidebar-toggle js-sidebar-toggle">
+                    <i class="hamburger align-self-center"></i>
+                </a>
+
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav navbar-align">
+                        <li class="nav-item dropdown">
+                            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+                                <div class="position-relative">
+                                    <i class="align-middle" data-feather="bell"></i>
+                                    <span class="indicator">{{ countnoti }}</span>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+                                <div class="dropdown-menu-header">Notifications</div>
+                                <div class="list-group">
+                                    <a href="{% url 'frontdesk_dashboard' %}" class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-2">
+                                                <i class="text-danger" data-feather="alert-circle"></i>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="text-dark">New Guest Inquiries <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ new_inquiries_count }}</span></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="{% url 'frontdesk_dashboard' %}" class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-2">
+                                                <i class="text-danger" data-feather="alert-circle"></i>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="text-dark">Pending Reservations <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ pending_reservations_count }}</span></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="{% url 'frontdesk_dashboard' %}" class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-2">
+                                                <i class="text-danger" data-feather="alert-circle"></i>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="text-dark">Pending Payments <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ pending_payments_count }}</span></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            {% block content %}
+            <main class="content">
+                <div class="container-fluid p-0">
+                    <h1 class="h3 mb-3"><strong>Front Desk Dashboard</strong></h1>
+                    <div class="row">
+                        <div class="col-xl-6 col-xxl-5 d-flex">
+                            <div class="w-100">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col mt-0">
+                                                        <h5 class="card-title">Check-Ins Today</h5>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="stat text-primary">
+                                                            <i class="align-middle" data-feather="check-circle"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h1 class="mt-1 mb-3">{{ checkins_today }}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col mt-0">
+                                                        <h5 class="card-title">Reservations Today</h5>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="stat text-primary">
+                                                            <i class="align-middle" data-feather="calendar"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h1 class="mt-1 mb-3">{{ reservations_today }}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-xxl-5 d-flex">
+                            <div class="w-100">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col mt-0">
+                                                        <h5 class="card-title">Pending Check-Outs</h5>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="stat text-primary">
+                                                            <i class="align-middle" data-feather="clock"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h1 class="mt-1 mb-3">{{ pending_checkouts }}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col mt-0">
+                                                        <h5 class="card-title">Payments Today</h5>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="stat text-primary">
+                                                            <i class="align-middle" data-feather="credit-card"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h1 class="mt-1 mb-3">{{ payments_today }}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            {% endblock %}
+        </div>
+    </div>
+
+    <script src="{% static 'assets/js/app.js' %}"></script>
+</body>
+
+</html>

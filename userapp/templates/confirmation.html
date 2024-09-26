@@ -1,0 +1,59 @@
+{% extends 'userindex.html' %}
+{% block content %}
+{% load static %}
+
+<!-- Hero Section -->
+<div class="hero-wrap" style="background-image: url('{% static 'images/confirmation.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <div class="text">
+                    <h1 class="mb-4 bread">Booking Confirmation</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Section -->
+<section class="ftco-section">
+    <div class="container">
+        <h2 class="mb-4">Thank You for Your Booking!</h2>
+        <p>Your booking has been confirmed successfully. Below are the details of your reservation:</p>
+        
+        <div id="confirmation-details" class="mb-4">
+            <h4>Selected Package: <span id="confirmed-package"></span></h4>
+            <h4>Selected Room: <span id="confirmed-room"></span></h4>
+            <h4>Total Amount Paid: <span id="confirmed-amount"></span></h4>
+            <h4>Payment Method: <span id="confirmed-payment-method"></span></h4>
+        </div>
+
+        <h3 class="mb-4">Booking Reference Number: <span id="booking-reference"></span></h3>
+        <p>We appreciate your business and look forward to welcoming you!</p>
+
+        <div class="mt-4">
+            <a href="{% url 'home' %}" class="btn btn-primary">Return to Home</a>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get confirmation details from local storage
+        const packageConfirmed = localStorage.getItem('selectedPackage');
+        const roomConfirmed = localStorage.getItem('selectedRoom');
+        const totalAmount = localStorage.getItem('totalAmount');
+        const paymentMethod = localStorage.getItem('paymentMethod');
+        const bookingReference = Math.floor(Math.random() * 100000); // Simulate a booking reference number
+
+        // Display confirmation details
+        document.getElementById('confirmed-package').innerText = packageConfirmed || "Not Selected";
+        document.getElementById('confirmed-room').innerText = roomConfirmed || "Not Selected";
+        document.getElementById('confirmed-amount').innerText = `₹${parseInt(totalAmount).toLocaleString()}`;
+        document.getElementById('confirmed-payment-method').innerText = paymentMethod || "Not Specified";
+        document.getElementById('booking-reference').innerText = bookingReference;
+    });
+</script>
+
+{% endblock %}

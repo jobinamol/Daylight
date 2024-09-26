@@ -1,0 +1,47 @@
+{% extends 'userdashboard.html' %}
+
+{% load static %} <!-- Load the static tag -->
+
+{% block content %}
+<div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+                <div class="text">
+                    <p class="breadcrumbs mb-2"><span class="mr-2"><a href="{% url 'userdashboard' %}">Home</a></span> <span>About</span></p>
+                    <h1 class="mb-4 bread">About</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section ftc-no-pb ftc-no-pt">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 p-md-5 img img-2 d-flex justify-content-center align-items-center" 
+                 style="background-image: url('{% static 'images/aboutpic.jpg' %}');">
+                <!-- Removed the play button -->
+            </div>
+            <div class="col-md-7 py-5 wrap-about pb-md-5 ftco-animate">
+                <div class="heading-section heading-section-wo-line pt-md-5 pl-md-5 mb-5">
+                    <div class="ml-md-0">
+                        <span class="subheading">Welcome to Daylight</span>
+                        <h2 class="mb-4">Welcome To Our Daycation</h2>
+                    </div>
+                </div>
+                <div class="pb-md-5">
+                    <p>Welcome to Our Daycation! Experience a refreshing escape right in your city with our unique daycation packages designed for relaxation, family fun, adventure, luxury, corporate retreats, and student experiences. Whether you're looking to unwind with a spa treatment, bond with family through exciting activities, or indulge in a luxurious getaway, we have the perfect package for you. Join us for a memorable day where you can leave your worries behind and embrace joy, relaxation, and adventure. Book your daycation today and redefine your day off!</p>
+                    <ul class="ftco-social d-flex">
+                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-google-plus"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

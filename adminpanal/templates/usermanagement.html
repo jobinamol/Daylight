@@ -1,0 +1,54 @@
+{% extends 'adminindex.html' %}  <!-- Your main admin template -->
+
+{% block content %}
+<div class="container mt-5">
+    <h2>User Management</h2>
+
+    {% if users %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th>Address</th>
+                        <th>District</th>
+                        <th>Age</th>
+                        <th>Sex</th>
+                        <th>Last Login</th>
+                        <th>Profile Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.emailid }}</td>
+                            <td>{{ user.mobilenumber }}</td>
+                            <td>{{ user.address }}</td>
+                            <td>{{ user.district }}</td>
+                            <td>{{ user.age }}</td>
+                            <td>{{ user.get_sex_display }}</td>
+                            <td>{{ user.last_login }}</td>
+                            <td>
+                                {% if user.profile_image %}
+                                    <img src="{{ user.profile_image.url }}" alt="{{ user.name }}" class="img-thumbnail" style="width: 50px; height: auto;">
+                                {% else %}
+                                    No Image
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No users found.</p>
+    {% endif %}
+
+    <a href="{% url 'adminindex' %}" class="btn btn-secondary mt-4">Back to Home</a>
+</div>
+{% endblock %}

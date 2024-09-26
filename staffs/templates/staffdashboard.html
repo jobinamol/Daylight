@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <title>Staff Dashboard - Daylight Daycation Resort Management System</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .staff-dashboard {
+            padding: 50px 0;
+            background-color: #f8f9fa;
+        }
+        .staff-dashboard .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Center the cards horizontally */
+        }
+        .staff-dashboard .package-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px; /* Slightly more rounded corners */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Deeper shadow for better effect */
+            margin: 15px; /* More space between cards */
+            width: 100%; /* Responsive width */
+            max-width: 350px; /* Increased max width for larger screens */
+            height: 400px; /* Fixed height for larger cards */
+            transition: transform 0.3s;
+        }
+        .staff-dashboard .package-card img {
+            width: 100%;
+            height: 250px; /* Increased image height */
+            object-fit: cover;
+        }
+        .staff-dashboard .package-card:hover {
+            transform: scale(1.1); /* Larger scale on hover */
+        }
+        .staff-dashboard .package-card .text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6); /* Darker background for better readability */
+            color: white;
+            padding: 15px; /* Increased padding */
+            text-align: center;
+        }
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px; /* Increased margin */
+            font-size: 3em; /* Larger title font size */
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Daylight</a>
+        <!-- Add other navbar items if necessary -->
+      </div>
+    </nav>
+    <!-- END nav -->
+    
+    {% block content %}
+
+    <section class="staff-dashboard">
+      <div class="container">
+        <div class="page-title">Staff Dashboard</div>
+        <div class="row">
+          <!-- Receptionist -->
+          <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+            <div class="package-card">
+              <a href="{% url 'frontdesk_dashboard' %}">
+                <img src="{% static 'images/front3.png' %}" alt="Receptionist Login">
+                <div class="text">
+                  <h3>Front Desk Coordinator</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Chef -->
+          <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+            <div class="package-card">
+              <a href="{% url 'kitchenstaff_dashboard' %}">
+                <img src="{% static 'images/kit.png' %}" alt="Chef Login">
+                <div class="text">
+                  <h3>Kitchen Manage</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Server -->
+          <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+            <div class="package-card">
+              <a href="{% url 'fud_dashboard' %}">
+                <img src="{% static 'images/fud.jpeg' %}" alt="Server Login">
+                <div class="text">
+                  <h3>Food & Beverage Service Manager</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Entertainer -->
+          <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+            <div class="package-card">
+              <a href="{% url 'evant_dashboard' %}">
+                <img src="{% static 'images/evant1.png' %}" alt="Entertainer Login">
+                <div class="text">
+                  <h3>Events Coordinator</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Concierge -->
+          <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+            <div class="package-card">
+              <a href="{% url 'guestservice_dashboard' %}">
+                <img src="{% static 'images/guest1.png' %}" alt="Concierge Login">
+                <div class="text">
+                  <h3>Guest Relations Specialist</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Arranger -->
+          <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+            <div class="package-card">
+              <a href="{% url 'housekeep_dashboard' %}">
+                <img src="{% static 'images/house.png' %}" alt="Arranger Login">
+                <div class="text">
+                  <h3>Housekeeping Supervisor</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    {% endblock %}
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen">
+      <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/>
+      </svg>
+    </div>
+    
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+    <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'js/aos.js' %}"></script>
+    <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
+    <script src="{% static 'js/scrollax.min.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="{% static 'js/google-map.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    
+</body>
+</html>

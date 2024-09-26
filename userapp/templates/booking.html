@@ -1,0 +1,142 @@
+{% extends 'userindex.html' %}
+{% block content %}
+{% load static %}
+
+<!-- Hero Section -->
+<div class="hero-wrap" style="background-image: url('{% static 'images/booking.jpg' %}'); height: 25vh; background-position: center; background-size: cover;">
+    <div class="overlay"></div>
+    <div class="container h-100 d-flex align-items-center justify-content-center">
+        <div class="row no-gutters text-center">
+            <div class="col-md-12">
+                <h1 class="mb-0 text-white font-weight-bold">Booking</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Booking Section -->
+<section class="ftco-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="p-4 bg-light rounded shadow-sm">
+
+                    <!-- Section Title -->
+                    <h2 class="mb-4 text-center font-weight-bold">Complete Your Booking</h2>
+
+                    <!-- Form Starts Here -->
+                    <form>
+
+                        <!-- Step 1: Package Selection -->
+                        <div class="form-group row mb-3 align-items-center">
+                            <label for="package-select" class="col-sm-4 col-form-label font-weight-bold">Select Package</label>
+                            <div class="col-sm-8">
+                                <select id="package-select" class="form-control" onchange="updatePrice()">
+                                    <option value="6150">Relaxation - ₹6,150.00</option>
+                                    <option value="8200">Family Fun - ₹8,200.00</option>
+                                    <option value="7380">Adventure - ₹7,380.00</option>
+                                    <option value="16400">Luxury - ₹16,400.00</option>
+                                    <option value="6970">Wellness - ₹6,970.00</option>
+                                    <option value="9840">Romantic Getaway - ₹9,840.00</option>
+                                    <option value="20500">Corporate Retreat - ₹20,500.00</option>
+                                    <option value="4100">Student - ₹4,100.00</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Room Selection -->
+                        <div class="form-group row mb-3 align-items-center">
+                            <label for="room-select" class="col-sm-4 col-form-label font-weight-bold">Select Room</label>
+                            <div class="col-sm-8">
+                                <select id="room-select" class="form-control" onchange="updatePrice()">
+                                    <option value="0">No Room</option>
+                                    <option value="2000">Single - ₹2,000.00</option>
+                                    <option value="3500">Double - ₹3,500.00</option>
+                                    <option value="5000">Family Suite - ₹5,000.00</option>
+                                    <option value="8000">Luxury Suite - ₹8,000.00</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Number of People -->
+                        <div class="form-group row mb-3 align-items-center">
+                            <label for="num-people" class="col-sm-4 col-form-label font-weight-bold">Number of People</label>
+                            <div class="col-sm-8">
+                                <input type="number" id="num-people" class="form-control" min="1" value="1" onchange="updatePrice()">
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Number of Children -->
+                        <div class="form-group row mb-3 align-items-center">
+                            <label for="num-children" class="col-sm-4 col-form-label font-weight-bold">Number of Children</label>
+                            <div class="col-sm-8">
+                                <input type="number" id="num-children" class="form-control" min="0" value="0" onchange="updatePrice()">
+                            </div>
+                        </div>
+
+                        <!-- Total Price Display -->
+                        <div class="form-group row mb-4 text-center">
+                            <div class="col-md-12">
+                                <h4>Total Amount: <span id="total-price" class="text-primary">₹6,150.00</span></h4>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Food Selection -->
+                        <div class="form-group row mb-3 align-items-center">
+                            <label class="col-sm-4 col-form-label font-weight-bold">Food Selection</label>
+                            <div class="col-sm-8">
+                                <div id="food-items" class="form-group" style="max-height: 150px; overflow-y: auto; padding: 10px; border: 1px solid #dee2e6; border-radius: 0.25rem;">
+                                    {% for item in food_items %}
+                                    <div class="form-check">
+                                        <input class="form-check-input food-checkbox" type="checkbox" value="{{ item.id }}" data-price="{{ item.price }}" onchange="updatePrice()">
+                                        <label class="form-check-label">{{ item.name }} - ₹{{ item.price }}</label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-group row text-center">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-primary btn-lg w-100" onclick="submitBooking()">Book Now</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Update total price dynamically
+    function updatePrice() {
+        const packagePrice = parseInt(document.getElementById("package-select").value);
+        const roomPrice = parseInt(document.getElementById("room-select").value);
+        const numPeople = parseInt(document.getElementById("num-people").value);
+        const numChildren = parseInt(document.getElementById("num-children").value);
+        let foodTotal = 0;
+
+        // Calculate food total
+        const foodCheckboxes = document.querySelectorAll(".food-checkbox:checked");
+        foodCheckboxes.forEach(item => {
+            foodTotal += parseInt(item.getAttribute("data-price"));
+        });
+
+        const totalAmount = (packagePrice + roomPrice + foodTotal) * numPeople;
+        document.getElementById("total-price").innerText = `₹${totalAmount.toLocaleString()}`;
+    }
+
+    // Handle form submission
+    function submitBooking() {
+        const totalElement = document.getElementById("total-price").innerText.replace(/₹|,/g, '');
+        localStorage.setItem('totalAmount', totalElement);
+
+        // Redirect to the payment page
+        window.location.href = "{% url 'payment' %}";
+    }
+</script>
+
+{% endblock %}

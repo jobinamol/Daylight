@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register - Daylight Resort</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Load static template tag library -->
+    {% load static %}
+
+    <!-- Link to CSS stylesheets -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        .hero-wrap {
+            background-size: cover;
+            background-position: center;
+            height: 300px;
+        }
+        .hero-wrap .overlay {
+            background: rgba(0, 0, 0, 0.5);
+            height: 100%;
+        }
+        .hero-wrap .text {
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .card-body {
+            padding: 2rem;
+        }
+        .form-control, .form-control-file, .btn {
+            border-radius: 10px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            background: #333;
+            color: #fff;
+            padding: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Daylight Resort</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="oi oi-menu"></span> Menu
+            </button>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="{% url 'packages' %}" class="nav-link">Packages</a></li>
+                    <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
+                    <li class="nav-item active"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                    <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- END nav -->
+
+    <div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+                <div class="col-md-9 text-center d-flex align-items-end justify-content-center">
+                    <div class="text">
+                        <p class="breadcrumbs mb-2"><span class="mr-2"><a href="{% url 'home' %}">Home</a></span> <span>Register</span></p>
+                        <h1 class="mb-4 bread">Register</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="text-center mb-4">Create Your Account</h3>
+                        <form method="POST" action="{% url 'userregister' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                        
+                            <!-- Name -->
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                            </div>
+                        
+                            <!-- Address -->
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input type="text" class="form-control" id="address" name="address" placeholder="Enter your address" required>
+                            </div>
+                        
+                            <!-- Mobile Number -->
+                            <div class="form-group">
+                                <label for="mobilenumber">Mobile Number</label>
+                                <input type="text" class="form-control" id="mobilenumber" name="mobilenumber" placeholder="Enter your mobile number" required>
+                            </div>
+                        
+                            <!-- Email ID -->
+                            <div class="form-group">
+                                <label for="emailid">Email ID</label>
+                                <input type="email" class="form-control" id="emailid" name="emailid" placeholder="Enter your email ID" required>
+                            </div>
+                        
+                            <!-- District -->
+                            <div class="form-group">
+                                <label for="district">District</label>
+                                <input type="text" class="form-control" id="district" name="district" placeholder="Enter your district" required>
+                            </div>
+                        
+                            <!-- Age -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="age">Age</label>
+                                    <input type="number" class="form-control" id="age" name="age" placeholder="Enter your age" required>
+                                </div>
+                                <!-- Sex -->
+                                <div class="form-group col-md-6">
+                                    <label for="sex">Sex</label>
+                                    <select class="form-control" id="sex" name="sex" required>
+                                        <option value="" disabled selected>Choose...</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        
+                            <!-- Profile Image -->
+                            <div class="form-group">
+                                <label for="profile_image">Profile Image</label>
+                                <input type="file" class="form-control-file" id="profile_image" name="profile_image" accept="image/*">
+                            </div>
+                        
+                            <!-- Username -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                                </div>
+                        
+                                <!-- Password -->
+                                <div class="form-group col-md-6">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" required>
+                                </div>
+                            </div>
+                        
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-primary btn-block">Register</button>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center mt-5">
+        <p>© 2024 Daylight Resort. All rights reserved.</p>
+    </footer>
+
+    <!-- Include necessary JS files -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends 'userindex.html' %}
+{% block content %}
+{% load static %}
+
+    <!-- Hero Section -->
+    <div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text d-flex align-items-center justify-content-center">
+                <div class="col-md-12 ftco-animate text-center">
+                    <h1 class="mb-4 bread">User Profile</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <h2>Welcome, {{ user.username }}!</h2>
+        
+        <div class="profile card p-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <!-- Show profile picture if it exists -->
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="Profile Image" class="img-fluid rounded-circle" width="150">
+                    {% else %}
+                        <img src="{% static 'default.jpg' %}" alt="Default Profile Image" class="img-fluid rounded-circle" width="150">
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <p><strong>Name:</strong> {{ user.name }}</p>
+                    <p><strong>Email:</strong> {{ user.emailid }}</p>
+                    <p><strong>Mobile Number:</strong> {{ user.mobilenumber }}</p>
+                    <p><strong>District:</strong> {{ user.district }}</p>
+                    <p><strong>Age:</strong> {{ user.age }}</p>
+                    <p><strong>Gender:</strong> {{ user.sex }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Profile Button -->
+        <div class="mt-4">
+            <a href="{% url 'editprofile' %}" class="btn btn-primary">Edit Profile</a>
+        </div>
+    </div>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+{% endblock %}
