@@ -1,14 +1,58 @@
 {% extends 'adminindex.html' %}
+{% load static %}
 {% block content %}
 
-<h1>Delete Package</h1>
+<style>
+    body {
+        background-image: url('{% static "images/background.jpg" %}');
+        background-size: cover;
+        background-attachment: fixed;
+        color: #333;
+    }
+    .container {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .btn {
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-size: 1.1em;
+        margin: 10px;
+    }
+    .btn-symbol {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2em;
+    }
+    h1 {
+        margin-bottom: 20px;
+    }
+    p {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+    }
+</style>
 
-<p>Are you sure you want to delete the package: "{{ package.name }}"?</p>
+<div class="container">
+    <h1 class="text-center my-4">Delete Package</h1>
+    
+    <p>Are you sure you want to delete the package: <strong>"{{ package.name }}"</strong>?</p>
 
-<form method="POST" action="{% url 'delete_package' package.id %}">
-    {% csrf_token %}
-    <button type="submit">Yes, Delete</button>
-    <a href="{% url 'packagemanagement' %}">Cancel</a>
-</form>
+    <form method="POST" action="{% url 'delete_package' package.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-symbol">
+            🗑️ Yes, Delete
+        </button>
+        <a href="{% url 'packagemanagement' %}" class="btn btn-secondary btn-symbol">
+            ↩️ Cancel
+        </a>
+    </form>
+</div>
 
 {% endblock %}

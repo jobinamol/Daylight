@@ -2,6 +2,9 @@
 {% load static %}
 {% block content %}
 
+<!-- Include Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 <style>
     body {
         background-image: url('{% static "images/background.jpg" %}'); /* Replace with your background image path */
@@ -24,12 +27,26 @@
     .table {
         background-color: rgba(255, 255, 255, 0.8); /* Table background with transparency */
     }
-    .btn-symbol {
+    .action-icons {
+        font-size: 1.2em;
         display: flex;
-        align-items: center;
         justify-content: center;
-        padding: 5px;
-        font-size: 1.2em; /* Increase font size for visibility */
+        align-items: center;
+        gap: 10px;
+    }
+    .action-icons i {
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    .action-icons i:hover {
+        color: #ff0000; /* Highlight delete icon on hover */
+    }
+    .action-icons .fa-edit:hover {
+        color: #007bff; /* Highlight edit icon on hover */
+    }
+    .icon {
+        padding: 8px;
+        font-size: 1.2em;
     }
 </style>
 
@@ -73,6 +90,7 @@
     </form>
 </div>
 
+<!-- Display Existing Packages -->
 {% if packages %}
     <div class="container">
         <h3 class="mt-4">Existing Packages</h3>
@@ -101,12 +119,14 @@
                             No Image
                         {% endif %}
                     </td>
-                    <td>
-                        <a href="{% url 'edit_package' package.id %}" class="btn btn-warning btn-symbol btn-sm" title="Edit">
-                            ✎ Edit
+                    <td class="action-icons">
+                        <!-- Edit Icon -->
+                        <a href="{% url 'edit_package' package.id %}" class="icon" title="Edit">
+                            <i class="fas fa-edit"></i>
                         </a>
-                        <a href="{% url 'delete_package' package.id %}" class="btn btn-danger btn-symbol btn-sm" title="Delete" onclick="return confirm('Are you sure you want to delete this package?');">
-                            🗑️ Delete
+                        <!-- Delete Icon -->
+                        <a href="{% url 'delete_package' package.id %}" class="icon" title="Delete" onclick="return confirm('Are you sure you want to delete this package?');">
+                            <i class="fas fa-trash-alt"></i>
                         </a>
                     </td>
                 </tr>
@@ -121,6 +141,7 @@
 {% endif %}
 
 <script>
+    // JavaScript for form validation
     document.getElementById('packageForm').onsubmit = function(e) {
         let isValid = true;
 

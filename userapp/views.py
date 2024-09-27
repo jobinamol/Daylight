@@ -48,22 +48,41 @@ def userdashboard(request):
 def userindex(request):
     return render(request, 'userindex.html', {'user': request.user})
 
-
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
         # Clear previous session for the current user
-        request.session.flush()
+        request.session.flush() 
 
         # Check if the user is the admin
         if username == 'admin' and password == 'admin':
-            # Admin login
             request.session['user_type'] = 'admin'
             request.session['username'] = 'admin'
             messages.success(request, 'Welcome, Admin!')
             return redirect('adminindex')
+        
+        # Staff logins with redirection based on username
+        staff_credentials = {
+            'frontdesk@gmail.com': ('frontdesk', 'frontdesk_dashboard'),
+            'culinary@gmail.com': ('culinary', 'kitchenstaff_dashboard'),
+            'customerservice@gmail.com': ('customerservic', 'guestservice_dashboard'),
+            'housekeeping@gmail.com': ('housekeeping', 'housekeep_dashboard'),
+        }
+
+        # Check if the username is in the staff credentials
+        if username in staff_credentials:
+            # Verify the password for the respective staff
+            expected_password = staff_credentials[username][0]  # Get the expected password
+            if password == expected_password:  # Replace with actual password logic if needed
+                request.session['user_type'] = username.split('@')[0]  # Track user type based on email
+                request.session['username'] = username
+                messages.success(request, f'Welcome, {username.split("@")[0].capitalize()} Service!')
+                return redirect(staff_credentials[username][1])  # Redirect to respective dashboard
+            else:
+                messages.error(request, 'Invalid username or password.')
+                return redirect('login')
 
         # Check if the user exists in the UserDB (regular user)
         try:
@@ -83,31 +102,11 @@ def login_view(request):
                 messages.error(request, 'Invalid username or password.')
                 return redirect('login')
         except UserDB.DoesNotExist:
-            pass  # If user doesn't exist in UserDB, check staff model
-
-        # Check if the user exists in the Staff model (staff user)
-        try:
-            staff = Staff.objects.get(username=username)
-            if check_password(password, staff.password):
-                # Check if staff already has an active session and clear it
-                _invalidate_user_sessions(staff.id, 'staff')
-
-                # Start a new session for the staff member
-                request.session['staff_id'] = staff.id
-                request.session['username'] = staff.username
-                request.session['role'] = staff.role
-                request.session['profile_image'] = staff.profile_image.url
-                request.session['user_type'] = 'staff'  # Track the type of user
-                messages.success(request, f'Welcome, {staff.name}!')
-                return redirect('staffdashboard')
-            else:
-                messages.error(request, 'Invalid username or password.')
-                return redirect('login')
-        except Staff.DoesNotExist:
             messages.error(request, 'Invalid username or password.')
             return redirect('login')
 
     return render(request, 'login.html')
+
 
 
 def _invalidate_user_sessions(user_id, user_type):

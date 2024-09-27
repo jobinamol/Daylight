@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from userapp.models import*
 from django.http import HttpResponse
+from django.contrib.auth import logout
+
 
 
 
@@ -22,6 +24,10 @@ def admin_login(request):
             messages.error(request, 'Invalid username or password.')
     
     return render(request, 'adminlogin.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('login') 
 
 
 def admin_index(request):
