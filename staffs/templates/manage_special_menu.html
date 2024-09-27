@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Special Menu Items</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Use the same font for consistency */
+            background-image: url("{% static 'images/kit.jpg' %}"); /* Optional: Add a background image */
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #ff6347; /* Matching color from previous template */
+            font-size: 2em;
+            font-family: 'Lato', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px; /* Set a max width for better responsiveness */
+            margin: auto;
+            margin-top: 50px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold; /* Make the header bold */
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #28a745; /* Button color */
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Full width for better alignment */
+            margin-top: 20px; /* Spacing above the button */
+        }
+
+        button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Manage Special Menu Items</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Special</th>
+                <th>Special Start Date</th>
+                <th>Special End Date</th>
+            </tr>
+            {% for item in menu_items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>
+                    <input type="checkbox" name="is_special_{{ item.id }}" {% if item.is_special %}checked{% endif %}>
+                </td>
+                <td>
+                    <input type="date" name="special_start_{{ item.id }}" value="{{ item.special_start_date }}">
+                </td>
+                <td>
+                    <input type="date" name="special_end_{{ item.id }}" value="{{ item.special_end_date }}">
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <button type="submit">Save Special Menu Items</button>
+    </form>
+</div>
+
+</body>
+</html>

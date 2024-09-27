@@ -1,8 +1,8 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from .models import FrontDeskCoordinator
+from .models import *
 
 
 def staffdashboard(request):
@@ -55,6 +55,65 @@ def evant_dashboard(request):
 
 def guestservice_dashboard(request):
     return render(request,"guestservice_dashboard.html")
+
+def menu_management(request):
+    menu_items = MenuItem.objects.all()
+    return render(request, 'menu_management.html', {'menu_items': menu_items})
+
+
+
+def add_menu_item(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        category = request.POST['category']
+        description = request.POST.get('description', '')
+        price = request.POST['price']
+        image = request.FILES.get('image')
+
+        menu_item = MenuItem(name=name, category=category, description=description, price=price, image=image)
+        menu_item.save()
+        return redirect('menu_management')
+
+    return render(request, 'add_menu_item.html')
+
+def edit_menu_item(request, item_id):
+    menu_item = MenuItem.objects.get(id=item_id)
+
+    if request.method == 'POST':
+        menu_item.name = request.POST['name']
+        menu_item.category = request.POST['category']
+        menu_item.description = request.POST.get('description', '')
+        menu_item.price = request.POST['price']
+
+        if 'image' in request.FILES:
+            menu_item.image = request.FILES['image']
+
+        menu_item.save()
+        return redirect('menu_management')
+
+    return render(request, 'edit_menu_item.html', {'menu_item': menu_item})
+
+def delete_menu_item(request, item_id):
+    menu_item = MenuItem.objects.get(id=item_id)
+    menu_item.delete()
+    return redirect('menu_management')
+
+
+def manage_special_menu(request):
+    if request.method == 'POST':
+        for item in MenuItem.objects.all():
+            is_special = request.POST.get(f'is_special_{item.id}', False) == 'on'
+            special_start_date = request.POST.get(f'special_start_{item.id}', None)
+            special_end_date = request.POST.get(f'special_end_{item.id}', None)
+
+            item.is_special = is_special
+            item.special_start_date = special_start_date
+            item.special_end_date = special_end_date
+            item.save()
+        return redirect('menu_management')  # Redirect to the menu management page
+
+    menu_items = MenuItem.objects.all()
+    return render(request, 'manage_special_menu.html', {'menu_items': menu_items})
 
 
 

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Menu Item</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url("{% static 'images/kit.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            color: #ff6347;
+            font-size: 2em;
+            font-family: 'Lato', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .form-container {
+            width: 80%;
+            max-width: 600px; /* Set a max width for better responsiveness */
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            display: block; /* Ensure labels are block-level for alignment */
+            margin: 10px 0 5px; /* Adjust margins for spacing */
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px; /* More space between inputs */
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Full width for better alignment */
+            margin-top: 10px; /* Spacing above the button */
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 8px; /* Reduced padding for a smaller button */
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9em; /* Decreased font size */
+            display: inline-block; /* Ensures block display for alignment */
+            text-align: center; /* Center the text */
+            margin-top: 10px; /* Space above the button */
+            width: calc(100% - 20px); /* Adjust width for margin */
+            margin-left: 10px; /* Center alignment with a slight left margin */
+            margin-right: 10px; /* Center alignment with a slight right margin */
+        }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Edit Menu Item</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="name">Item Name:</label>
+        <input type="text" id="name" name="name" value="{{ menu_item.name }}" required>
+
+        <label for="category">Category:</label>
+        <select id="category" name="category" required>
+            <option value="starter" {% if menu_item.category == 'starter' %} selected {% endif %}>starter</option>
+            <option value="Main Course" {% if menu_item.category == 'Main Course' %} selected {% endif %}>Main Course</option>
+            <option value="Dessert" {% if menu_item.category == 'Dessert' %} selected {% endif %}>Dessert</option>
+            <option value="Beverage" {% if menu_item.category == 'Beverage' %} selected {% endif %}>Beverage</option>
+            <option value="Snack" {% if menu_item.category == 'Snack' %} selected {% endif %}>Snack</option>
+        </select>
+
+        <label for="price">Price:</label>
+        <input type="number" step="0.01" id="price" name="price" value="{{ menu_item.price }}" required>
+
+        <label for="image">Upload New Image (optional):</label>
+        <input type="file" id="image" name="image" accept="image/*">
+
+        <input type="submit" class="submit-btn" value="Update Menu Item">
+    </form>
+    <a href="{% url 'menu_management' %}" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back 
+    </a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Manage Daily or Seasonal Special Menus</h2>
+<form method="POST" action="{% url 'manage_special_menu' %}">
+    {% csrf_token %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Dish Name</th>
+                <th>Is Special</th>
+                <th>Special Start Date</th>
+                <th>Special End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in menu_items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td><input type="checkbox" name="is_special_{{ item.id }}" {% if item.is_special %}checked{% endif %}></td>
+                <td><input type="date" name="special_start_{{ item.id }}" value="{{ item.special_start_date }}"></td>
+                <td><input type="date" name="special_end_{{ item.id }}" value="{{ item.special_end_date }}"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Update Specials</button>
+</form>
+{% endblock %}

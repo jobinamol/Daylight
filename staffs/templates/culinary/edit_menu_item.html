@@ -1,0 +1,41 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Edit Menu Item: {{ menu_item.name }}</h2>
+<form method="POST" enctype="multipart/form-data" action="{% url 'edit_menu_item' menu_item.id %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="name">Dish Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ menu_item.name }}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select class="form-control" id="category" name="category">
+            <option value="breakfast" {% if menu_item.category == 'breakfast' %}selected{% endif %}>Breakfast</option>
+            <option value="lunch" {% if menu_item.category == 'lunch' %}selected{% endif %}>Lunch</option>
+            <option value="dinner" {% if menu_item.category == 'dinner' %}selected{% endif %}>Dinner</option>
+            <option value="beverages" {% if menu_item.category == 'beverages' %}selected{% endif %}>Beverages</option>
+            <option value="snacks" {% if menu_item.category == 'snacks' %}selected{% endif %}>Snacks</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description">{{ menu_item.description }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" class="form-control" id="price" name="price" value="{{ menu_item.price }}" step="0.01" required>
+    </div>
+
+    <div class="form-group">
+        <label for="image">Image (optional)</label>
+        <input type="file" class="form-control" id="image" name="image">
+    </div>
+
+    <button type="submit" class="btn btn-warning">Update Menu Item</button>
+</form>
+{% endblock %}
