@@ -43,7 +43,6 @@ class MenuItem(models.Model):
             return self.image.url
         return ''
 
-from django.db import models
 
 class Room(models.Model):
     ROOM_TYPES = [

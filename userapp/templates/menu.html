@@ -19,7 +19,7 @@
             <button id="submit-selection" class="btn btn-success">Submit Selection</button>
         </div>
         
-        <form id="menu-form" method="post" action="{% url 'menu' %}">
+        <form id="menu-form" method="post" action="{% url 'booking' %}">
             {% csrf_token %}
             <div class="row">
                 {% for item in menu %}
@@ -33,11 +33,7 @@
                             </div>
                             <div class="d-block">
                                 <p>{{ item.description }}</p>
-                                <p>Categories: 
-                                    {% for category in item.categories.all %}
-                                        <span>{{ category.name }}</span>{% if not forloop.last %}, {% endif %}
-                                    {% endfor %}
-                                </p>
+                                <p>Category: <span>{{ item.get_category_display }}</span></p> <!-- Display category -->
                                 <input type="checkbox" name="selected_items" value="{{ item.id }}" class="item-checkbox">
                             </div>
                         </div>
@@ -89,7 +85,6 @@
                     </div>
                 </a>
             </div>
-            <!-- More Instagram images can be added here -->
         </div>
     </div>
 </section>
@@ -106,7 +101,7 @@
         checkboxes.forEach(checkbox => checkbox.checked = false);
     };
 
-    document.getElementById('menu').onclick = function() {
+    document.getElementById('submit-selection').onclick = function() {
         document.getElementById('menu-form').submit();
     };
 </script>
