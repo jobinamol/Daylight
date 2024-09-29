@@ -29,7 +29,11 @@ urlpatterns = [
     path('packs/', views.packs, name='packs'),
     path('booking/', views.booking, name='booking'),
     path('menu/', views.menu, name='menu'),
+    path('Restaurants/', views.Restaurants, name='Restaurants'),
+
     path('rooms/', views.rooms, name='rooms'),
+    path('room_inquiry/',views.room_inquiry, name='room_inquiry'),
+    path('food_inquiry/', views.food_inquiry, name='food_inquiry'),
     path('payment/', views.payment, name='payment'),
     path('confirmation/', views.confirmation, name='confirmation'),
 

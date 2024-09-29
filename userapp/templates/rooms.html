@@ -1,49 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Rooms</title>
-</head>
-<body>
+{% extends 'userindex.html' %}
+{% block content %}
+{% load static %}
+
+<div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="overlay"></div>
     <div class="container">
-        <h2>Do you need a room?</h2>
-        <form method="POST" action="{% url 'menu' %}">
-            {% csrf_token %}
-            <!-- Selected package will be sent to the next step -->
-            <input type="hidden" name="selected_package" value="{{ package.id }}">
-
-            <!-- Ask if room is needed -->
-            <label><input type="radio" name="need_room" value="yes"> Yes</label>
-            <label><input type="radio" name="need_room" value="no"> No</label><br><br>
-
-            <!-- Room selection will appear only if "Yes" is selected -->
-            <div id="room-selection" style="display: none;">
-                <h3>Select Room Type</h3>
-                {% for room in rooms %}
-                <label>
-                    <input type="radio" name="selected_room" value="{{ room.id }}">
-                    {{ room.name }} - ₹{{ room.price }}
-                </label><br>
-                {% endfor %}
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <div class="text">
+                    <h1 class="mb-4 bread">Available Rooms</h1>
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> 
+                        <span>Rooms</span>
+                    </p>
+                </div>
             </div>
-
-            <!-- Button to proceed -->
-            <button type="submit">Next</button>
-        </form>
+        </div>
     </div>
+</div>
 
-    <script>
-        // Show/Hide room selection based on the "Yes" or "No" choice
-        document.querySelectorAll('input[name="need_room"]').forEach(input => {
-            input.addEventListener('change', function() {
-                if (this.value === 'yes') {
-                    document.getElementById('room-selection').style.display = 'block';
-                } else {
-                    document.getElementById('room-selection').style.display = 'none';
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+<!-- Rooms Section -->
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row">
+            {% for room in rooms %}
+            <div class="col-md-4 ftco-animate">
+                <div class="room-card card shadow-sm border-0 mb-4">
+                    <div class="card-img-top">
+                        {% if room.image %}
+                        <img src="{{ room.image.url }}" alt="{{ room.number }}" class="img-fluid" style="width: 100%; height: 200px; object-fit: cover;">
+                        {% else %}
+                        <img src="{% static 'images/default_room.jpg' %}" alt="No Image" class="img-fluid" style="width: 100%; height: 200px; object-fit: cover;">
+                        {% endif %}
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="card-title"> {{ room.get_room_type_display }}Room</h3>
+                        <p class="card-text">{{ room.get_room_type_display }}</p>
+                        <p class="card-text">{{ room.get_status_display }}</p>
+                        <p><strong class="price">₹{{ room.price|default:0 }}</strong> <small>per night</small></p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{% url 'food_inquiry' %}" class="btn btn-primary btn-block">Select Now</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>No available rooms found.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

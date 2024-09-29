@@ -19,6 +19,8 @@ from django.utils import timezone
 from .models import Booking, Payment
 from adminpanal.models import*
 from django.contrib.sessions.models import Session
+from staffs.models import*
+
 
 
 
@@ -345,13 +347,37 @@ def cel(request):
 
 def booking(request):
     return render(request, 'booking.html')
+
+
+def Restaurants(request):
+    menu = MenuItem.objects.all()  # Fetch all menu items
+
+    return render(request, 'Restaurants.html',{'menu': menu})
     
 
 def menu(request):
-    return render(request, 'menu.html')
+    menu = MenuItem.objects.all()  # Fetch all menu items
+    return render(request, 'menu.html', {'menu': menu})
 
 def rooms(request):
-    return render(request, 'rooms.html')
+    # Fetch available rooms
+    available_rooms = Room.objects.filter(status='available')
+    return render(request, 'rooms.html', {'rooms': available_rooms})
+
+
+def room_inquiry(request):
+    if request.method == 'POST':
+        response = request.POST.get('response')
+        if response == 'yes':
+            # Redirect to the available rooms page
+            return redirect('rooms')  # Ensure you have this URL mapped in your urls.py
+        else:
+            # Redirect to the food inquiry page
+            return redirect('food_inquiry')  # Ensure you have this URL mapped in your urls.py
+            
+    return render(request, 'room_inquiry.html')
+def food_inquiry(request):
+    return render(request, 'food_inquiry.html')
 def payment(request):
     return render(request, 'payment.html')
 

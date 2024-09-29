@@ -127,10 +127,17 @@ def add_room(request):
         number = request.POST.get('number')
         room_type = request.POST.get('room_type')
         status = request.POST.get('status')
+        price = request.POST.get('price')  # Get price from the request
         image = request.FILES.get('image')  # Handling image uploads
 
         # Create a new Room instance
-        room = Room.objects.create(number=number, room_type=room_type, status=status, image=image)
+        room = Room.objects.create(
+            number=number,
+            room_type=room_type,
+            status=status,
+            price=price,  # Set the price
+            image=image
+        )
         room.save()
 
         return redirect('roommanagement')
@@ -145,6 +152,7 @@ def edit_room(request, room_id):
         room.number = request.POST.get('number')
         room.room_type = request.POST.get('room_type')
         room.status = request.POST.get('status')
+        room.price = request.POST.get('price')  # Update the price
 
         # Update image if a new one is uploaded
         if request.FILES.get('image'):
@@ -156,12 +164,11 @@ def edit_room(request, room_id):
 
     return render(request, 'edit_rooms.html', {'room': room})
 
+# Delete a room
 def delete_room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     if request.method == 'POST':
         room.delete()
         return redirect('roommanagement')
     return render(request, 'confirm_delete.html', {'room': room})
-
-
 

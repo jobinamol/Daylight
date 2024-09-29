@@ -1,51 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Food</title>
-</head>
-<body>
+{% extends 'userindex.html' %}
+{% load static %}
+
+{% block content %}
+<!-- END nav -->
+
+<section class="ftco-section">
     <div class="container">
-        <h2>Do you need food?</h2>
-        <form method="POST" action="{% url 'booking' %}">
+        <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+                <h2>Our Menu</h2>
+            </div>
+        </div>
+        
+        <!-- Button to handle selected items -->
+        <div class="mb-3 text-center">
+            <button id="select-all" class="btn btn-primary">Select All</button>
+            <button id="deselect-all" class="btn btn-secondary">Deselect All</button>
+            <button id="submit-selection" class="btn btn-success">Submit Selection</button>
+        </div>
+        
+        <form id="menu-form" method="post" action="{% url 'menu' %}">
             {% csrf_token %}
-            <!-- Keep track of the selected package and room if applicable -->
-            <input type="hidden" name="selected_package" value="{{ selected_package }}">
-            <input type="hidden" name="selected_room" value="{{ selected_room }}">
-            <input type="hidden" name="need_room" value="{{ need_room }}">
-
-            <!-- Ask if food is needed -->
-            <label><input type="radio" name="need_food" value="yes"> Yes</label>
-            <label><input type="radio" name="need_food" value="no"> No</label><br><br>
-
-            <!-- Food selection will appear only if "Yes" is selected -->
-            <div id="food-selection" style="display: none;">
-                <h3>Select Food Items</h3>
-                {% for food in menu_items %}
-                <label>
-                    <input type="checkbox" name="selected_foods" value="{{ food.id }}">
-                    {{ food.name }} - ₹{{ food.price }}
-                </label><br>
+            <div class="row">
+                {% for item in menu %}
+                <div class="col-md-6">
+                    <div class="pricing-entry d-flex ftco-animate">
+                        <div class="img" style="background-image: url('{{ item.image_url }}');"></div>
+                        <div class="desc pl-3">
+                            <div class="d-flex text align-items-center">
+                                <h3><span>{{ item.name }}</span></h3>
+                                <span class="price">${{ item.price }}</span>
+                            </div>
+                            <div class="d-block">
+                                <p>{{ item.description }}</p>
+                                <p>Categories: 
+                                    {% for category in item.categories.all %}
+                                        <span>{{ category.name }}</span>{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </p>
+                                <input type="checkbox" name="selected_items" value="{{ item.id }}" class="item-checkbox">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-md-6">
+                    <p>No menu items available.</p>
+                </div>
                 {% endfor %}
             </div>
-
-            <!-- Button to proceed to booking summary -->
-            <button type="submit">Next</button>
         </form>
     </div>
+</section>
 
-    <script>
-        // Show/Hide food selection based on the "Yes" or "No" choice
-        document.querySelectorAll('input[name="need_food"]').forEach(input => {
-            input.addEventListener('change', function() {
-                if (this.value === 'yes') {
-                    document.getElementById('food-selection').style.display = 'block';
-                } else {
-                    document.getElementById('food-selection').style.display = 'none';
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+<section class="instagram pt-5">
+    <div class="container-fluid">
+        <div class="row no-gutters justify-content-center pb-5">
+            <div class="col-md-7 text-center heading-section ftco-animate">
+                <h2><span>Instagram</span></h2>
+            </div>
+        </div>
+        <div class="row no-gutters">
+            <div class="col-md-3 ftco-animate">
+                <a href="{% static 'images/insta-1.jpg' %}" class="insta-img image-popup" style="background-image: url('{% static 'images/insta-1.jpg' %}');">
+                    <div class="icon d-flex align-items-center justify-content-center">
+                        <span class="icon-instagram"></span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 ftco-animate">
+                <a href="{% static 'images/kit.jpg' %}" class="insta-img image-popup" style="background-image: url('{% static 'images/kit.jpg' %}');">
+                    <div class="icon d-flex align-items-center justify-content-center">
+                        <span class="icon-instagram"></span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 ftco-animate">
+                <a href="{% static 'images/menu.jpg' %}" class="insta-img image-popup" style="background-image: url('{% static 'images/menu.jpg' %}');">
+                    <div class="icon d-flex align-items-center justify-content-center">
+                        <span class="icon-instagram"></span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 ftco-animate">
+                <a href="{% static 'images/lunch.jpg' %}" class="insta-img image-popup" style="background-image: url('{% static 'images/lunch.jpg' %}');">
+                    <div class="icon d-flex align-items-center justify-content-center">
+                        <span class="icon-instagram"></span>
+                    </div>
+                </a>
+            </div>
+            <!-- More Instagram images can be added here -->
+        </div>
+    </div>
+</section>
+
+<script>
+    // JavaScript for handling select all and deselect all functionality
+    document.getElementById('select-all').onclick = function() {
+        const checkboxes = document.querySelectorAll('.item-checkbox');
+        checkboxes.forEach(checkbox => checkbox.checked = true);
+    };
+
+    document.getElementById('deselect-all').onclick = function() {
+        const checkboxes = document.querySelectorAll('.item-checkbox');
+        checkboxes.forEach(checkbox => checkbox.checked = false);
+    };
+
+    document.getElementById('menu').onclick = function() {
+        document.getElementById('menu-form').submit();
+    };
+</script>
+
+{% endblock %}

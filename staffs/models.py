@@ -31,10 +31,19 @@ class MenuItem(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=5, decimal_places=2)
-    image = models.ImageField(upload_to='menu_images/', blank=True, null=True)
+    image = models.ImageField(upload_to='menu_images/', blank=True, null=True)  # Image field
 
     def __str__(self):
         return self.name
+
+    @property
+    def image_url(self):
+        """Return the URL of the image if it exists."""
+        if self.image:
+            return self.image.url
+        return ''
+
+from django.db import models
 
 class Room(models.Model):
     ROOM_TYPES = [
@@ -52,8 +61,8 @@ class Room(models.Model):
     number = models.CharField(max_length=5, unique=True)
     room_type = models.CharField(max_length=10, choices=ROOM_TYPES)
     image = models.ImageField(upload_to='room_images/', blank=True, null=True)  # Room image
-
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')  # Status choices
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Price field
 
     def __str__(self):
-        return f"{self.number} - {self.room_type}"
+        return f"{self.number} - {self.room_type} - ₹{self.price}"
