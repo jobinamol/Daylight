@@ -35,3 +35,25 @@ class MenuItem(models.Model):
 
     def __str__(self):
         return self.name
+
+class Room(models.Model):
+    ROOM_TYPES = [
+        ('single', 'Single'),
+        ('double', 'Double'),
+        ('suite', 'Suite'),
+    ]
+
+    STATUS_CHOICES = [
+        ('available', 'Available'),
+        ('maintain', 'Maintain'),
+        ('occupied', 'Occupied'),
+    ]
+
+    number = models.CharField(max_length=5, unique=True)
+    room_type = models.CharField(max_length=10, choices=ROOM_TYPES)
+    image = models.ImageField(upload_to='room_images/', blank=True, null=True)  # Room image
+
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')  # Status choices
+
+    def __str__(self):
+        return f"{self.number} - {self.room_type}"

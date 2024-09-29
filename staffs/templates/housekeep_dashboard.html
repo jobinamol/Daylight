@@ -3,21 +3,131 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Daycation Resort Housekeeping Dashboard">
+    <meta name="description" content="Enhanced Housekeeping Dashboard">
     <meta name="author" content="AdminKit">
-    <meta name="keywords" content="housekeeping, management, dashboard, template, responsive, css, html, theme, UI, web">
+    <meta name="keywords" content="dashboard, management, housekeeping, clean, modern">
 
     <link rel="shortcut icon" href="{% static 'assets/img/icons/icon-48x48.png' %}" />
     <title>Housekeeping Dashboard</title>
+
+    <!-- Linking the styles -->
     <link href="{% static 'assets/css/app.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Linking external icons like FontAwesome or Feather Icons for a modern look -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <style>
+        /* Custom Styles for Better Aesthetics */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f6f9;
+        }
+
+        .wrapper {
+            display: flex;
+        }
+
+        .sidebar {
+            background-color: #2c3e50;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .sidebar a.sidebar-brand {
+            font-size: 22px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .sidebar .sidebar-nav li a {
+            color: #bdc3c7;
+            padding: 10px 15px;
+        }
+
+        .sidebar .sidebar-nav li a:hover {
+            background-color: #34495e;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .nav-icon {
+            color: #7f8c8d;
+        }
+
+        .navbar .nav-item .nav-link {
+            color: #7f8c8d;
+        }
+
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        .card .card-body {
+            padding: 20px;
+        }
+
+        .card h5 {
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .card h1 {
+            font-size: 36px;
+            color: #3498db;
+            margin-bottom: 0;
+        }
+
+        .stat.text-primary i {
+            color: #3498db;
+        }
+
+        .indicator {
+            background-color: #e74c3c;
+            color: #fff;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        /* Style for the Available Rooms section */
+        .available-rooms {
+            padding: 20px;
+            background-color: #e7f9ff;
+            border-radius: 12px;
+        }
+
+        /* Style for the Check Rooms button */
+        .check-rooms-btn {
+            margin-top: 15px;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .check-rooms-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 
 <body>
     <div class="wrapper">
+        <!-- Sidebar Section -->
         <nav id="sidebar" class="sidebar js-sidebar">
             <div class="sidebar-content js-simplebar">
                 <a class="sidebar-brand" href="{% url 'housekeep_dashboard' %}">
@@ -28,34 +138,31 @@
                     <li class="sidebar-header">Management</li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{% url 'housekeep_dashboard' %}">
-                            <i class="align-middle" data-feather="home"></i> <span class="align-middle">Dashboard</span>
+                            <i class="fas fa-home align-middle"></i> <span class="align-middle">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'roommanagement' %}">
+                            <i class="fas fa-bed align-middle"></i> <span class="align-middle">Room Availability</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{% url 'housekeep_dashboard' %}">
-                            <i class="align-middle" data-feather="bed"></i> <span class="align-middle">Room Management</span>
+                            <i class="fas fa-file-alt align-middle"></i> <span class="align-middle">Guest Requests</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{% url 'housekeep_dashboard' %}">
-                            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Inventory</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="{% url 'housekeep_dashboard' %}">
-                            <i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Guest Requests</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="{% url 'housekeep_dashboard' %}">
-                            <i class="align-middle" data-feather="tool"></i> <span class="align-middle">Maintenance</span>
+                            <i class="fas fa-tools align-middle"></i> <span class="align-middle">Maintenance</span>
                         </a>
                     </li>
                 </ul>
             </div>
         </nav>
 
+        <!-- Main Section -->
         <div class="main">
+            <!-- Top Navbar -->
             <nav class="navbar navbar-expand navbar-light navbar-bg">
                 <a class="sidebar-toggle js-sidebar-toggle">
                     <i class="hamburger align-self-center"></i>
@@ -63,51 +170,53 @@
 
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav navbar-align">
+                        <!-- Notification Icon -->
                         <li class="nav-item dropdown">
                             <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
                                 <div class="position-relative">
-                                    <i class="align-middle" data-feather="bell"></i>
+                                    <i class="fas fa-bell align-middle"></i>
                                     <span class="indicator">{{ countnoti }}</span>
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
                                 <div class="dropdown-menu-header">Notifications</div>
                                 <div class="list-group">
+                                    <!-- Dynamic Notifications -->
                                     <a href="{% url 'housekeep_dashboard' %}" class="list-group-item">
                                         <div class="row g-0 align-items-center">
                                             <div class="col-2">
-                                                <i class="text-danger" data-feather="alert-circle"></i>
+                                                <i class="fas fa-exclamation-circle text-danger"></i>
                                             </div>
                                             <div class="col-10">
-                                                <div class="text-dark">New Requests <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ new_requests_count }}</span></div>
+                                                <div class="text-dark">New Requests <span class="indicator">{{ new_requests_count }}</span></div>
                                             </div>
                                         </div>
                                     </a>
                                     <a href="{% url 'housekeep_dashboard' %}" class="list-group-item">
                                         <div class="row g-0 align-items-center">
                                             <div class="col-2">
-                                                <i class="text-danger" data-feather="alert-circle"></i>
+                                                <i class="fas fa-box-open text-danger"></i>
                                             </div>
                                             <div class="col-10">
-                                                <div class="text-dark">Low Inventory <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ low_inventory_count }}</span></div>
+                                                <div class="text-dark">Low Inventory <span class="indicator">{{ low_inventory_count }}</span></div>
                                             </div>
                                         </div>
                                     </a>
                                     <a href="{% url 'housekeep_dashboard' %}" class="list-group-item">
                                         <div class="row g-0 align-items-center">
                                             <div class="col-2">
-                                                <i class="text-danger" data-feather="alert-circle"></i>
+                                                <i class="fas fa-tools text-danger"></i>
                                             </div>
                                             <div class="col-10">
-                                                <div class="text-dark">Maintenance Issues <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ maintenance_issues_count }}</span></div>
+                                                <div class="text-dark">Maintenance Issues <span class="indicator">{{ maintenance_issues_count }}</span></div>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
                             </div>
                         </li>
-                        
-                        <!-- Logout button -->
+
+                        <!-- User Profile Dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
                                 <span class="text-dark">{{ request.session.username }}</span>
@@ -120,11 +229,13 @@
                 </div>
             </nav>
 
+            <!-- Main Content Section -->
             {% block content %}
             <main class="content">
                 <div class="container-fluid p-0">
                     <h1 class="h3 mb-3"><strong>Housekeeping Dashboard</strong></h1>
                     <div class="row">
+                        <!-- Rooms Ready for Use -->
                         <div class="col-xl-6 col-xxl-5 d-flex">
                             <div class="w-100">
                                 <div class="row">
@@ -137,7 +248,7 @@
                                                     </div>
                                                     <div class="col-auto">
                                                         <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="check-circle"></i>
+                                                            <i class="fas fa-check-circle"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -145,6 +256,8 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- Inventory Status -->
                                     <div class="col-sm-6">
                                         <div class="card">
                                             <div class="card-body">
@@ -154,7 +267,7 @@
                                                     </div>
                                                     <div class="col-auto">
                                                         <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="box"></i>
+                                                            <i class="fas fa-box"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -165,6 +278,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Guest Requests and Maintenance Issues -->
                         <div class="col-xl-6 col-xxl-5 d-flex">
                             <div class="w-100">
                                 <div class="row">
@@ -177,7 +292,7 @@
                                                     </div>
                                                     <div class="col-auto">
                                                         <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="file-text"></i>
+                                                            <i class="fas fa-file-alt"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -185,6 +300,8 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- Maintenance Issues -->
                                     <div class="col-sm-6">
                                         <div class="card">
                                             <div class="card-body">
@@ -194,7 +311,7 @@
                                                     </div>
                                                     <div class="col-auto">
                                                         <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="tool"></i>
+                                                            <i class="fas fa-tools"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -206,12 +323,33 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Available Rooms Section -->
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="available-rooms">
+                                <h5 class="card-title">Available Rooms</h5>
+                                <h1>{{ available_rooms }}</h1>
+                                <button class="check-rooms-btn" onclick="checkAvailableRooms()">Check Rooms</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </main>
             {% endblock %}
         </div>
     </div>
-    
+
+    <!-- Including the necessary scripts -->
     <script src="{% static 'assets/js/app.js' %}"></script>
+    <script>
+        function checkAvailableRooms() {
+            // Logic to check available rooms can go here
+            alert("Checking available rooms...");
+            // This could also be an AJAX call to your backend
+        }
+    </script>
 </body>
+
 </html>

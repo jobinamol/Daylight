@@ -1,153 +1,51 @@
-{% extends 'userindex.html' %}
-{% block content %}
-{% load static %}
-
-<!-- Hero Section -->
-<div class="hero-wrap" style="background-image: url('{% static 'images/menu.jpg' %}');">
-    <div class="overlay"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Food</title>
+</head>
+<body>
     <div class="container">
-        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
-            <div class="col-md-9 ftco-animate text-center">
-                <div class="text">
-                    <p class="breadcrumbs mb-2">
-                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> 
-                        <span>Menu</span>
-                    </p>
-                    <h1 class="mb-4 bread">Daylight Daycation Resort Menu</h1>
-                </div>
+        <h2>Do you need food?</h2>
+        <form method="POST" action="{% url 'booking' %}">
+            {% csrf_token %}
+            <!-- Keep track of the selected package and room if applicable -->
+            <input type="hidden" name="selected_package" value="{{ selected_package }}">
+            <input type="hidden" name="selected_room" value="{{ selected_room }}">
+            <input type="hidden" name="need_room" value="{{ need_room }}">
+
+            <!-- Ask if food is needed -->
+            <label><input type="radio" name="need_food" value="yes"> Yes</label>
+            <label><input type="radio" name="need_food" value="no"> No</label><br><br>
+
+            <!-- Food selection will appear only if "Yes" is selected -->
+            <div id="food-selection" style="display: none;">
+                <h3>Select Food Items</h3>
+                {% for food in menu_items %}
+                <label>
+                    <input type="checkbox" name="selected_foods" value="{{ food.id }}">
+                    {{ food.name }} - ₹{{ food.price }}
+                </label><br>
+                {% endfor %}
             </div>
-        </div>
+
+            <!-- Button to proceed to booking summary -->
+            <button type="submit">Next</button>
+        </form>
     </div>
-</div>
 
-<!-- Menu Section -->
-<section class="ftco-section">
-    <div class="container">
-        <!-- Breakfast Section -->
-        <div class="row mb-5">
-            <div class="col-md-12 mb-4">
-                <h2 class="mb-4">Breakfast</h2>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="menu-item d-flex align-items-center">
-                            <div class="menu-img" style="background-image: url('{% static 'images/menu1.webp' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
-                            <div class="text pl-3">
-                                <h3>Pancakes with Maple Syrup</h3>
-                                <p>Fluffy pancakes served with fresh fruits and organic maple syrup.</p>
-                                <span class="price">₹350</span>
-                                <button class="btn btn-primary mt-2">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="menu-item d-flex align-items-center">
-                            <div class="menu-img" style="background-image: url('{% static 'images/menu6.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
-                            <div class="text pl-3">
-                                <h3>Avocado Toast</h3>
-                                <p>Crispy sourdough topped with creamy avocado and poached eggs.</p>
-                                <span class="price">₹400</span>
-                                <button class="btn btn-primary mt-2">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Lunch Section -->
-        <div class="row mb-5">
-            <div class="col-md-12 mb-4">
-                <h2 class="mb-4">Lunch</h2>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="menu-item d-flex align-items-center">
-                            <div class="menu-img" style="background-image: url('{% static 'images/menu2.jpg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
-                            <div class="text pl-3">
-                                <h3>Grilled Vegetable Salad</h3>
-                                <p>A fresh mix of grilled seasonal vegetables, topped with a tangy dressing.</p>
-                                <span class="price">₹500</span>
-                                <button class="btn btn-primary mt-2">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="menu-item d-flex align-items-center">
-                            <div class="menu-img" style="background-image: url('{% static 'images/menu.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
-                            <div class="text pl-3">
-                                <h3>Quinoa and Roasted Chicken Bowl</h3>
-                                <p>A healthy bowl of quinoa, roasted chicken, and mixed greens.</p>
-                                <span class="price">₹600</span>
-                                <button class="btn btn-primary mt-2">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Snacks Section -->
-        <div class="row mb-5">
-            <div class="col-md-12 mb-4">
-                <h2 class="mb-4">Snacks</h2>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="menu-item d-flex align-items-center">
-                            <div class="menu-img" style="background-image: url('{% static 'images/menu2.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
-                            <div class="text pl-3">
-                                <h3>Veggie Spring Rolls</h3>
-                                <p>Crunchy spring rolls filled with fresh vegetables, served with a spicy dip.</p>
-                                <span class="price">₹250</span>
-                                <button class="btn btn-primary mt-2">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="menu-item d-flex align-items-center">
-                            <div class="menu-img" style="background-image: url('{% static 'images/menu3.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
-                            <div class="text pl-3">
-                                <h3>Cheese Garlic Bread</h3>
-                                <p>Toasted bread topped with melted cheese and garlic seasoning.</p>
-                                <span class="price">₹300</span>
-                                <button class="btn btn-primary mt-2">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Juices Section -->
-        <div class="row mb-5">
-            <div class="col-md-12 mb-4">
-                <h2 class="mb-4">Juices</h2>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="menu-item d-flex align-items-center">
-                            <div class="menu-img" style="background-image: url('{% static 'images/menu4.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
-                            <div class="text pl-3">
-                                <h3>Fresh Orange Juice</h3>
-                                <p>Freshly squeezed oranges for a refreshing drink.</p>
-                                <span class="price">₹200</span>
-                                <button class="btn btn-primary mt-2">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="menu-item d-flex align-items-center">
-                            <div class="menu-img" style="background-image: url('{% static 'images/menu5.jpeg' %}'); width: 150px; height: 150px; background-size: cover; background-position: center; border-radius: 10px;"></div>
-                            <div class="text pl-3">
-                                <h3>Mango Smoothie</h3>
-                                <p>A rich smoothie made with ripe mangoes and a hint of mint.</p>
-                                <span class="price">₹250</span>
-                                <button class="btn btn-primary mt-2">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-{% endblock %}
+    <script>
+        // Show/Hide food selection based on the "Yes" or "No" choice
+        document.querySelectorAll('input[name="need_food"]').forEach(input => {
+            input.addEventListener('change', function() {
+                if (this.value === 'yes') {
+                    document.getElementById('food-selection').style.display = 'block';
+                } else {
+                    document.getElementById('food-selection').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

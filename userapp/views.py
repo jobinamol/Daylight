@@ -35,7 +35,13 @@ def blog(request):
     return render(request, 'blog.html')
 
 def packages(request):
-    return render(request, 'packages.html')
+    packages = PackageManagement.objects.all()    
+
+    return render(request, 'packages.html', {'packages': packages})
+
+def packs(request):
+    packages = PackageManagement.objects.all()    
+    return render(request, 'packs.html', {'packages': packages})
 
 def contact(request):
     return render(request, 'contact.html')
@@ -336,9 +342,7 @@ def rom(request):
 def cel(request):
     return render(request, 'cel.html')
 
-def packs(request):
-    packages = PackageManagement.objects.all()    
-    return render(request, 'packs.html', {'packages': packages})
+
 def booking(request):
     return render(request, 'booking.html')
     

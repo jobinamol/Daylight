@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .models import *
+from django.http import JsonResponse
+
 
 
 def staffdashboard(request):
@@ -114,6 +116,52 @@ def manage_special_menu(request):
 
     menu_items = MenuItem.objects.all()
     return render(request, 'manage_special_menu.html', {'menu_items': menu_items})
+
+def roommanagement(request):
+    rooms = Room.objects.all()
+    return render(request, 'roommanagement.html', {'rooms': rooms})
+
+# Add a new room
+def add_room(request):
+    if request.method == 'POST':
+        number = request.POST.get('number')
+        room_type = request.POST.get('room_type')
+        status = request.POST.get('status')
+        image = request.FILES.get('image')  # Handling image uploads
+
+        # Create a new Room instance
+        room = Room.objects.create(number=number, room_type=room_type, status=status, image=image)
+        room.save()
+
+        return redirect('roommanagement')
+
+    return render(request, 'add_rooms.html')
+
+# Edit an existing room
+def edit_room(request, room_id):
+    room = get_object_or_404(Room, id=room_id)
+
+    if request.method == 'POST':
+        room.number = request.POST.get('number')
+        room.room_type = request.POST.get('room_type')
+        room.status = request.POST.get('status')
+
+        # Update image if a new one is uploaded
+        if request.FILES.get('image'):
+            room.image = request.FILES['image']
+
+        room.save()
+
+        return redirect('roommanagement')
+
+    return render(request, 'edit_rooms.html', {'room': room})
+
+def delete_room(request, room_id):
+    room = get_object_or_404(Room, id=room_id)
+    if request.method == 'POST':
+        room.delete()
+        return redirect('roommanagement')
+    return render(request, 'confirm_delete.html', {'room': room})
 
 
 

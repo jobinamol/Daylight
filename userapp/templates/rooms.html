@@ -1,52 +1,49 @@
-{% extends 'userindex.html' %}
-{% block content %}
-{% load static %}
-<div class="hero-wrap" style="background-image: url('{% static "images/bg_1.jpg" %}');">
-    <div class="overlay"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Rooms</title>
+</head>
+<body>
     <div class="container">
-        <div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center">
-            <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
-                <div class="text">
-                    <p class="breadcrumbs mb-2"><span class="mr-2"><a href="index.html">Home</a></span> <span>About</span></p>
-                    <h1 class="mb-4 bread">Rooms</h1>
-                </div>
+        <h2>Do you need a room?</h2>
+        <form method="POST" action="{% url 'menu' %}">
+            {% csrf_token %}
+            <!-- Selected package will be sent to the next step -->
+            <input type="hidden" name="selected_package" value="{{ package.id }}">
+
+            <!-- Ask if room is needed -->
+            <label><input type="radio" name="need_room" value="yes"> Yes</label>
+            <label><input type="radio" name="need_room" value="no"> No</label><br><br>
+
+            <!-- Room selection will appear only if "Yes" is selected -->
+            <div id="room-selection" style="display: none;">
+                <h3>Select Room Type</h3>
+                {% for room in rooms %}
+                <label>
+                    <input type="radio" name="selected_room" value="{{ room.id }}">
+                    {{ room.name }} - ₹{{ room.price }}
+                </label><br>
+                {% endfor %}
             </div>
-        </div>
+
+            <!-- Button to proceed -->
+            <button type="submit">Next</button>
+        </form>
     </div>
-</div>
 
-<section class="ftco-section bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-9">
-                <div class="row">
-                    <div class="col-sm col-md-6 col-lg-4 ftco-animate">
-                        <div class="room">
-                            <a href="rooms-single.html" class="img d-flex justify-content-center align-items-center" style="background-image: url('{% static "images/room-1.jpg" %}');">
-                                <div class="icon d-flex justify-content-center align-items-center">
-                                    <span class="icon-search2"></span>
-                                </div>
-                            </a>
-                            <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="rooms-single.html">Suite Room</a></h3>
-                                <p><span class="price mr-2">$120.00</span> <span class="per">per night</span></p>
-                                <ul class="list">
-                                    <li><span>Max:</span> 3 Persons</li>
-                                    <li><span>Size:</span> 45 m2</li>
-                                    <li><span>View:</span> Sea View</li>
-                                    <li><span>Bed:</span> 1</li>
-                                </ul>
-                                <hr>
-                                <p class="pt-1"><a href="room-single.html" class="btn-custom">Book Now <span class="icon-long-arrow-right"></span></a></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Repeat for other room types -->
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-{% endblock %}
+    <script>
+        // Show/Hide room selection based on the "Yes" or "No" choice
+        document.querySelectorAll('input[name="need_room"]').forEach(input => {
+            input.addEventListener('change', function() {
+                if (this.value === 'yes') {
+                    document.getElementById('room-selection').style.display = 'block';
+                } else {
+                    document.getElementById('room-selection').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

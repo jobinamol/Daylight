@@ -22,6 +22,11 @@ urlpatterns = [
     path('edit_menu_item/<int:item_id>/', views.edit_menu_item, name='edit_menu_item'),
     path('delete_menu_item/<int:item_id>/', views.delete_menu_item, name='delete_menu_item'),
     path('manage_special_menu/', views.manage_special_menu, name='manage_special_menu'),
+    path('roommanagement/', views.roommanagement, name='roommanagement'),
+    path('rooms/add/', views.add_room, name='add_room'),
+    path('rooms/edit/<int:room_id>/', views.edit_room, name='edit_room'),
+    path('rooms/delete/<int:room_id>/', views.delete_room, name='delete_room'),
+
 
     
 
