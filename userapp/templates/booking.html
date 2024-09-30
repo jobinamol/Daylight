@@ -1,50 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Confirmation</title>
-</head>
-<body>
-    <div class="container">
-        <h2>Booking Confirmation</h2>
-        <form method="POST" action="{% url 'payment' %}">
-            {% csrf_token %}
-            
-            <!-- Selected Package Details -->
-            <h3>Selected Package</h3>
-            <p><strong>Package:</strong> {{ package.name }}</p>
-            <p><strong>Description:</strong> {{ package.description }}</p>
-            <p><strong>Price:</strong> ₹{{ package.price }}</p>
-            
-            <!-- Room Details (If applicable) -->
-            {% if need_room == 'yes' %}
-            <h3>Room Details</h3>
-            <p><strong>Room:</strong> {{ room.name }}</p>
-            <p><strong>Price:</strong> ₹{{ room.price }}</p>
-            {% else %}
-            <p>No room selected.</p>
-            {% endif %}
-            
-            <!-- Food Items (If applicable) -->
-            {% if need_food == 'yes' %}
-            <h3>Selected Food Items</h3>
-            <ul>
-                {% for food in selected_foods %}
-                <li>{{ food.name }} - ₹{{ food.price }}</li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <p>No food selected.</p>
-            {% endif %}
-            
-            <!-- Total Amount Calculation -->
-            <h3>Total Amount</h3>
-            <p><strong>Total Price:</strong> ₹{{ total_price }}</p>
+<form method="POST" action="{% url 'booking' selected_package.id %}">
+    {% csrf_token %}
+    
+    <h3>Selected Package: {{ selected_package.name }} - ${{ selected_package.price }}</h3>
+    
+    <h3>Select Room:</h3>
+    <select name="room" required>
+        {% for room in rooms %}
+            <option value="{{ room.id }}">{{ room.number }} - {{ room.room_type }} - ${{ room.price }}</option>
+        {% endfor %}
+    </select>
 
-            <!-- Confirm Booking and Proceed to Payment -->
-            <button type="submit">Confirm and Proceed to Payment</button>
-        </form>
-    </div>
-</body>
-</html>
+    <label for="number_of_rooms">Number of Rooms:</label>
+    <input type="number" name="number_of_rooms" id="number_of_rooms" value="1" min="1" required>
+
+    <h3>Select Menu Items:</h3>
+    <ul>
+        {% for item in menu_items %}
+        <li>
+            {{ item.name }} - ${{ item.price }}
+            <label for="menu_item_{{ item.id }}">Quantity:</label>
+            <input type="number" name="menu_item_quantities[{{ item.id }}]" id="menu_item_{{ item.id }}" value="1" min="1" required>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <label for="number_of_people">Number of People:</label>
+    <input type="number" name="number_of_people" id="number_of_people" value="1" min="1" required>
+
+    <label for="number_of_children">Number of Children:</label>
+    <input type="number" name="number_of_children" id="number_of_children" value="0" min="0" required>
+
+    <label for="booking_date">Booking Date:</label>
+    <input type="date" name="booking_date" id="booking_date" required>
+
+    <label for="booking_time">Booking Time:</label>
+    <input type="time" name="booking_time" id="booking_time" required>
+
+    <button type="submit">Confirm Booking</button>
+</form>

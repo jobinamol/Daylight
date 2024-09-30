@@ -16,16 +16,10 @@ from django.utils.encoding import force_bytes
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import Booking, Payment
 from adminpanal.models import*
-from django.contrib.sessions.models import Session
 from staffs.models import*
-
-
-
-
-
-
+from django.http import HttpResponseBadRequest
+from django.contrib.sessions.models import Session
 
 def home(request):
     return render(request, 'home.html')
@@ -345,8 +339,6 @@ def cel(request):
     return render(request, 'cel.html')
 
 
-def booking(request):
-    return render(request, 'booking.html')
 
 
 def Restaurants(request):
@@ -377,11 +369,9 @@ def room_inquiry(request):
             
     return render(request, 'room_inquiry.html')
 def food_inquiry(request):
-    return render(request, 'food_inquiry.html')
-def payment(request):
-    return render(request, 'payment.html')
-
-
-
-def confirmation(request):
-    return render(request, 'confirmation.html')
+    # Assuming the package_id is available in some way, e.g., from session or a query
+    package_id = 1  # You need to dynamically fetch this value
+    
+    return render(request, 'food_inquiry.html', {
+        'package_id': package_id
+    })

@@ -2,7 +2,16 @@
 {% load static %}
 
 {% block content %}
-<!-- END nav -->
+<!-- Back Button -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-left mb-3">
+            <a href="javascript:history.back()" class="btn btn-outline-dark">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+    </div>
+</div>
 
 <section class="ftco-section">
     <div class="container">
@@ -19,7 +28,7 @@
             <button id="submit-selection" class="btn btn-success">Submit Selection</button>
         </div>
         
-        <form id="menu-form" method="post" action="{% url 'booking' %}">
+        <form id="menu-form" method="post" action="{% url 'menu' %}">
             {% csrf_token %}
             <div class="row">
                 {% for item in menu %}
@@ -107,3 +116,4 @@
 </script>
 
 {% endblock %}
+

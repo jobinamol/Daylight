@@ -1,0 +1,34 @@
+{% extends 'userindex.html' %}
+{% load static %}
+
+{% block content %}
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+                <h2>Booking Successful</h2>
+                <p>Thank you, {{ request.user.username }}! Your booking has been successfully confirmed.</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h4>Booking Details</h4>
+                <p><strong>Package:</strong> {{ booking.package.name }}</p>
+                <p><strong>Room:</strong> {{ booking.room.name }}</p>
+
+                <h5>Menu Items:</h5>
+                <ul>
+                    {% for item in booking.menu_items.all %}
+                    <li>{{ item.name }} - ${{ item.price }}</li>
+                    {% endfor %}
+                </ul>
+
+                <p><strong>Total Amount:</strong> ${{ booking.total_amount }}</p>
+
+                <a href="{% url 'home' %}" class="btn btn-primary">Go Home</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
