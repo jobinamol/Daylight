@@ -56,6 +56,26 @@ class UserDB(models.Model):
     def get_email_field_name(self):
         return 'emailid'
 
+class PackageBooking(models.Model):
+    package = models.ForeignKey(PackageManagement, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    menu_items = models.ManyToManyField(MenuItem, through='MenuItemQuantity')
+    num_people = models.PositiveIntegerField()
+    num_rooms = models.PositiveIntegerField()
+    additional_requests = models.TextField(blank=True, null=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    booking_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Booking for {self.num_people} people"
+
+class MenuItemQuantity(models.Model):
+    booking = models.ForeignKey(PackageBooking, on_delete=models.CASCADE)
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.menu_item.name} x {self.quantity}"
 
 
 

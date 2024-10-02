@@ -375,3 +375,64 @@ def food_inquiry(request):
     return render(request, 'food_inquiry.html', {
         'package_id': package_id
     })
+    
+def booking_view(request):
+    packages = PackageManagement.objects.all()
+    rooms = Room.objects.all()
+    menu_items = MenuItem.objects.all()
+
+    return render(request, 'booking.html', {
+        'packages': packages,
+        'rooms': rooms,
+        'menu_items': menu_items,
+    })
+
+def create_booking(request):
+    if request.method == 'POST':
+        package_id = request.POST.get('package_id')
+        room_id = request.POST.get('room_id')
+        num_people = request.POST.get('num_people')
+        num_rooms = request.POST.get('num_rooms')
+        additional_requests = request.POST.get('additional_requests')
+        menu_items = request.POST.get('menu_items')
+
+        # Parsing the menu items (expecting JSON array from the frontend)
+        menu_items = eval(menu_items)
+
+        # Get selected package and room
+        package = PackageManagement.objects.get(id=package_id)
+        room = Room.objects.get(id=room_id)
+
+        # Calculate the total price
+        total_price = calculate_total_price(package, room, menu_items)
+
+        # Create the booking
+        booking = PackageBooking.objects.create(
+            package=package,
+            room=room,
+            num_people=num_people,
+            num_rooms=num_rooms,
+            additional_requests=additional_requests,
+            total_price=total_price
+        )
+
+        # Save menu item quantities
+        for item in menu_items:
+            item_id, quantity = item.split(',')
+            MenuItemQuantity.objects.create(
+                booking=booking,
+                menu_item=MenuItem.objects.get(id=item_id),
+                quantity=quantity
+            )
+
+        return JsonResponse({'status': 'success', 'booking_id': booking.id, 'total_price': booking.total_price})
+
+    return JsonResponse({'status': 'error'}, status=400)
+
+def calculate_total_price(package, room, menu_items):
+    total = package.price + room.price
+    for item in menu_items:
+        item_id, quantity = item.split(',')
+        menu_item = MenuItem.objects.get(id=item_id)
+        total += menu_item.price * int(quantity)
+    return total

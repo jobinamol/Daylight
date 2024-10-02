@@ -1,40 +1,132 @@
-<form method="POST" action="{% url 'booking' selected_package.id %}">
-    {% csrf_token %}
-    
-    <h3>Selected Package: {{ selected_package.name }} - ${{ selected_package.price }}</h3>
-    
-    <h3>Select Room:</h3>
-    <select name="room" required>
-        {% for room in rooms %}
-            <option value="{{ room.id }}">{{ room.number }} - {{ room.room_type }} - ${{ room.price }}</option>
-        {% endfor %}
-    </select>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
 
-    <label for="number_of_rooms">Number of Rooms:</label>
-    <input type="number" name="number_of_rooms" id="number_of_rooms" value="1" min="1" required>
+    <h1>Booking Page</h1>
 
-    <h3>Select Menu Items:</h3>
-    <ul>
-        {% for item in menu_items %}
-        <li>
-            {{ item.name }} - ${{ item.price }}
-            <label for="menu_item_{{ item.id }}">Quantity:</label>
-            <input type="number" name="menu_item_quantities[{{ item.id }}]" id="menu_item_{{ item.id }}" value="1" min="1" required>
-        </li>
-        {% endfor %}
-    </ul>
+    <form id="bookingForm">
+        <label for="package">Select Package:</label>
+        <select name="package_id" id="package" required>
+            <option value="">Select Package</option>
+            {% for package in packages %}
+                <option value="{{ package.id }}">{{ package.name }} - {{ package.price }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
 
-    <label for="number_of_people">Number of People:</label>
-    <input type="number" name="number_of_people" id="number_of_people" value="1" min="1" required>
+        <label for="room">Select Room:</label>
+        <select name="room_id" id="room" required>
+            <option value="">Select Room</option>
+            {% for room in rooms %}
+                <option value="{{ room.id }}">{{ room.name }} - {{ room.price }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
 
-    <label for="number_of_children">Number of Children:</label>
-    <input type="number" name="number_of_children" id="number_of_children" value="0" min="0" required>
+        <label for="num_people">Number of People:</label>
+        <input type="number" name="num_people" id="num_people" min="1" required>
+        <br><br>
 
-    <label for="booking_date">Booking Date:</label>
-    <input type="date" name="booking_date" id="booking_date" required>
+        <label for="num_rooms">Number of Rooms:</label>
+        <input type="number" name="num_rooms" id="num_rooms" min="1" required>
+        <br><br>
 
-    <label for="booking_time">Booking Time:</label>
-    <input type="time" name="booking_time" id="booking_time" required>
+        <label for="menu_items">Select Menu Items:</label>
+        <select name="menu_items[]" id="menu_items" multiple required>
+            {% for item in menu_items %}
+                <option value="{{ item.id }}">{{ item.name }} - {{ item.price }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
 
-    <button type="submit">Confirm Booking</button>
-</form>
+        <div id="menuQuantities">
+            <!-- Quantity inputs for selected menu items will appear here -->
+        </div>
+        <br><br>
+
+        <label for="additional_requests">Additional Requests:</label>
+        <textarea name="additional_requests" id="additional_requests"></textarea>
+        <br><br>
+
+        <button type="submit">Submit Booking</button>
+    </form>
+
+    <script>
+        // Function to update the quantity inputs for the selected menu items
+        document.getElementById('menu_items').addEventListener('change', function() {
+            const selectedItems = Array.from(this.selectedOptions);
+            const menuQuantitiesDiv = document.getElementById('menuQuantities');
+
+            // Clear any existing quantity inputs
+            menuQuantitiesDiv.innerHTML = '';
+
+            // Create input fields for each selected menu item
+            selectedItems.forEach(item => {
+                const itemId = item.value;
+                const itemName = item.textContent;
+
+                const quantityLabel = document.createElement('label');
+                quantityLabel.textContent = `Quantity for ${itemName}:`;
+
+                const quantityInput = document.createElement('input');
+                quantityInput.type = 'number';
+                quantityInput.name = `quantity_${itemId}`;
+                quantityInput.min = 1;
+                quantityInput.value = 1;
+                quantityInput.required = true;
+
+                menuQuantitiesDiv.appendChild(quantityLabel);
+                menuQuantitiesDiv.appendChild(quantityInput);
+                menuQuantitiesDiv.appendChild(document.createElement('br')); // Line break for better spacing
+            });
+        });
+
+        // Form submission logic
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            const formData = new FormData(this); // Capture form data
+            const selectedMenuItems = document.getElementById('menu_items').selectedOptions;
+            let menuItemsData = [];
+
+            // Prepare the menu items data in "item_id,quantity" format
+            selectedMenuItems.forEach(item => {
+                const itemId = item.value;
+                const quantity = document.querySelector(`input[name='quantity_${itemId}']`).value;
+                menuItemsData.push(`${itemId},${quantity}`);
+            });
+
+            // Add the menu items data to the form
+            formData.append('menu_items', JSON.stringify(menuItemsData));
+
+            // AJAX call to submit the form data
+            fetch("{% url 'create_booking' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(`Booking created! Booking ID: ${data.booking_id}, Total Price: ${data.total_price}`);
+                } else {
+                    alert('There was an error creating your booking. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error with the booking process.');
+            });
+        });
+    </script>
+
+</body>
+</html>
