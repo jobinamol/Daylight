@@ -2,8 +2,8 @@
 {% block content %}
 {% load static %}
 
-<!-- Hero Section -->
-<div class="hero-wrap" style="background-image: url('{% static 'images/std.jpg' %}');">
+<!-- Hero Section with Background Image -->
+<div class="hero-wrap" style="background-image: url('{% static 'images/booking.webp' %}'); background-size: cover; background-position: center;">
     <div class="overlay"></div>
     <div class="container">
         <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
@@ -11,147 +11,113 @@
                 <div class="text">
                     <p class="breadcrumbs mb-2">
                         <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> 
-                        <span>Packages</span> 
-                        <span>Student Package</span>
+                        <span>Booking</span>
                     </p>
-                    <h1 class="mb-4 bread">Student Package</h1>
+                    <h1 class="mb-4 bread text-white">Create Your Booking</h1>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Package Details Section -->
-<section class="ftco-section">
+<!-- Booking Section with Optional Food Selection -->
+<section class="ftco-section" style="background-color: rgba(255, 255, 255, 0.9); padding: 60px 0;">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8">
-                <h2 class="mb-4">Student Package</h2>
-                <div class="single-slider owl-carousel">
-                    <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/std.avif' %}');"></div>
-                    </div>
-                    <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/std1.jpg' %}');"></div>
-                    </div>
-                    <div class="item">
-                        <div class="room-img" style="background-image: url('{% static 'images/std2.jpg' %}');"></div>
-                    </div>
-                </div>
-                <p>
-                    The Student Package offers a budget-friendly adventure designed specifically for students. It includes thrilling outdoor activities, group fun, and memories to last a lifetime—all at an affordable price.
-                </p>
-                
-                <!-- Package Features -->
-                <h3>Features</h3>
-                <ul>
-                    <li>Discounted pricing exclusively for students.</li>
-                    <li>Access to adventure sports like zip-lining and kayaking.</li>
-                    <li>Group games and activities such as scavenger hunts.</li>
-                    <li>Free snacks and soft drinks throughout the day.</li>
-                    <li>Group photography and video coverage of the activities.</li>
-                </ul>
+        <form id="bookingForm" method="POST" action="{% url 'create_booking' %}">
+            {% csrf_token %}
+            <div class="row">
 
-                <!-- Booking Button -->
-                <div class="package-booking">
-                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now for ₹2,500</a>
+                <!-- Food Category Filter -->
+                <div class="col-md-12 mb-4">
+                    <h3 class="text-center">Select Your Food Items (Optional)</h3>
+                    <label for="category_filter" class="form-label">Filter by Category:</label>
+                    <select id="category_filter" class="form-select rounded-pill p-2">
+                        <option value="">All Categories</option>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
-            </div>
 
-            <!-- Sidebar Section -->
-            <div class="col-lg-4 sidebar">
-                <h3>Available Menu</h3>
-                <div class="row">
-                    <div class="col-md-12 ftco-animate">
-                        <div class="room">
-                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/bf.jpeg' %}');">
-                                <div class="icon d-flex justify-content-center align-items-center">
-                                    <span class="icon-search2"></span>
+                <!-- Food Items (Filtered by Category) -->
+                <div class="col-md-12">
+                    <div id="foodItemsContainer" class="row">
+                        {% for item in menu_items %}
+                        <div class="col-md-4 food-item" data-category="{{ item.category_id }}">
+                            <div class="card shadow-sm border-0 mb-4">
+                                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="card-img-top" style="width: 100%; height: 200px; object-fit: cover;">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">{{ item.name }}</h5>
+                                    <p class="card-text">₹{{ item.price }}</p>
+                                    <input type="checkbox" name="menu_items[]" value="{{ item.id }}" class="form-check-input food-checkbox">
+                                    <label class="form-check-label" for="menu_item_{{ item.id }}">Select</label>
                                 </div>
-                            </a>
-                            <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="{% url 'menu' %}">Breakfast Menu</a></h3>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-12 ftco-animate">
-                        <div class="room">
-                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/lunch1.jpg' %}');">
-                                <div class="icon d-flex justify-content-center align-items-center">
-                                    <span class="icon-search2"></span>
-                                </div>
-                            </a>
-                            <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="{% url 'menu' %}">Lunch Menu</a></h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 ftco-animate">
-                        <div class="room">
-                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/supper.jpg' %}');">
-                                <div class="icon d-flex justify-content-center align-items-center">
-                                    <span class="icon-search2"></span>
-                                </div>
-                            </a>
-                            <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="{% url 'menu' %}">Dinner Menu</a></h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 ftco-animate">
-                        <div class="room">
-                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/snaks.jpeg' %}');">
-                                <div class="icon d-flex justify-content-center align-items-center">
-                                    <span class="icon-search2"></span>
-                                </div>
-                            </a>
-                            <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="{% url 'menu' %}">Snacks & Beverages</a></h3>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- Available Rooms Section (if any) -->
-        <div class="row">
-            <div class="col-md-12 package-single ftco-animate mb-5 mt-5">
-                <h4 class="mb-4">Available Rooms</h4>
-                <div class="row">
-                    <div class="col-md-6 ftco-animate">
-                        <div class="room">
-                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/room-1.jpg' %}');">
-                                <div class="icon d-flex justify-content-center align-items-center">
-                                    <span class="icon-search2"></span>
-                                </div>
-                            </a>
-                            <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="{% url 'rooms' %}">Dormitory Room</a></h3>
-                                <p><span class="price mr-2">₹1,200/night</span></p>
-                                <hr>
-                                <p class="pt-1"><a href"{% url 'rooms' %}" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 ftco-animate">
-                        <div class="room">
-                            <a href="#" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url('{% static 'images/room-4.jpg' %}');">
-                                <div class="icon d-flex justify-content-center align-items-center">
-                                    <span class="icon-search2"></span>
-                                </div>
-                            </a>
-                            <div class="text p-3 text-center">
-                                <h3 class="mb-3"><a href="{% url 'rooms' %}">Shared Room</a></h3>
-                                <p><span class="price mr-2">₹1,500/night</span></p>
-                                <hr>
-                                <p class="pt-1"><a href="{% url 'rooms' %}" class="btn-custom">View Room Details <span class="icon-long-arrow-right"></span></a></p>
-                            </div>
-                        </div>
+
+                <!-- Quantities for Selected Menu Items -->
+                <div class="col-md-12 mt-4">
+                    <h4>Selected Items and Quantities</h4>
+                    <div id="selectedItemsQuantities" class="row">
+                        <!-- Selected items and their quantity inputs will be dynamically injected here -->
                     </div>
                 </div>
+
+                <!-- Submit Button -->
+                <div class="col-md-12 text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill p-3">Submit Booking</button>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const categoryFilter = document.getElementById('category_filter');
+        const foodItemsContainer = document.getElementById('foodItemsContainer');
+        const selectedItemsQuantities = document.getElementById('selectedItemsQuantities');
+        const foodCheckboxes = document.querySelectorAll('.food-checkbox');
+
+        // Filter food items based on selected category
+        categoryFilter.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            const foodItems = foodItemsContainer.querySelectorAll('.food-item');
+
+            foodItems.forEach(item => {
+                if (selectedCategory === "" || item.dataset.category === selectedCategory) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Update selected items and quantity inputs dynamically
+        foodCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const foodItemCard = this.closest('.card');
+                const foodName = foodItemCard.querySelector('.card-title').textContent;
+                const foodId = this.value;
+
+                if (this.checked) {
+                    const quantityInputHtml = `
+                        <div class="col-md-4" id="selected-item-${foodId}">
+                            <div class="form-group">
+                                <label>${foodName} Quantity:</label>
+                                <input type="number" name="menu_item_quantities[${foodId}]" class="form-control" min="1" value="1">
+                            </div>
+                        </div>`;
+                    selectedItemsQuantities.insertAdjacentHTML('beforeend', quantityInputHtml);
+                } else {
+                    document.getElementById(`selected-item-${foodId}`).remove();
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}

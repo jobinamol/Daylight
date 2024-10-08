@@ -20,6 +20,8 @@ from adminpanal.models import*
 from staffs.models import*
 from django.http import HttpResponseBadRequest
 from django.contrib.sessions.models import Session
+from django.http import JsonResponse
+
 
 def home(request):
     return render(request, 'home.html')
@@ -49,6 +51,12 @@ def userdashboard(request):
 
 def userindex(request):
     return render(request, 'userindex.html', {'user': request.user})
+def check_username(request):
+    username = request.GET.get('username')
+    if UserDB.objects.filter(username=username).exists():
+        return JsonResponse({'message': 'Username is already taken.'})
+    else:
+        return JsonResponse({'message': 'Username is available.'})
 
 def login_view(request):
     if request.method == 'POST':
@@ -378,8 +386,39 @@ def food_inquiry(request):
     
 def booking_view(request):
     packages = PackageManagement.objects.all()
-    rooms = Room.objects.all()
+    rooms = Room.objects.filter(status='available')
     menu_items = MenuItem.objects.all()
+
+    if request.method == 'POST':
+        # Collect data from request.POST
+        package_id = request.POST.get('package_id')
+        room_id = request.POST.get('room_id')
+        num_people = request.POST.get('num_people')
+        num_rooms = request.POST.get('num_rooms')
+        check_in_date = request.POST.get('check_in_date')
+        check_out_date = request.POST.get('check_out_date')
+        additional_requests = request.POST.get('additional_requests')
+
+        # Create booking instance
+        booking = PackageBooking(
+            package_id=package_id,
+            room_id=room_id,
+            num_people=num_people,
+            num_rooms=num_rooms,
+            check_in_date=check_in_date,
+            check_out_date=check_out_date,
+            additional_requests=additional_requests,
+        )
+        booking.save()
+
+        # Handle menu item quantities
+        for key in request.POST:
+            if key.startswith('quantity_'):
+                menu_item_id = key.split('_')[1]
+                quantity = request.POST.get(key)
+                MenuItemQuantity.objects.create(booking=booking, menu_item_id=menu_item_id, quantity=quantity)
+
+        return redirect('booking_success')  # Redirect to success page
 
     return render(request, 'booking.html', {
         'packages': packages,
@@ -387,52 +426,5 @@ def booking_view(request):
         'menu_items': menu_items,
     })
 
-def create_booking(request):
-    if request.method == 'POST':
-        package_id = request.POST.get('package_id')
-        room_id = request.POST.get('room_id')
-        num_people = request.POST.get('num_people')
-        num_rooms = request.POST.get('num_rooms')
-        additional_requests = request.POST.get('additional_requests')
-        menu_items = request.POST.get('menu_items')
-
-        # Parsing the menu items (expecting JSON array from the frontend)
-        menu_items = eval(menu_items)
-
-        # Get selected package and room
-        package = PackageManagement.objects.get(id=package_id)
-        room = Room.objects.get(id=room_id)
-
-        # Calculate the total price
-        total_price = calculate_total_price(package, room, menu_items)
-
-        # Create the booking
-        booking = PackageBooking.objects.create(
-            package=package,
-            room=room,
-            num_people=num_people,
-            num_rooms=num_rooms,
-            additional_requests=additional_requests,
-            total_price=total_price
-        )
-
-        # Save menu item quantities
-        for item in menu_items:
-            item_id, quantity = item.split(',')
-            MenuItemQuantity.objects.create(
-                booking=booking,
-                menu_item=MenuItem.objects.get(id=item_id),
-                quantity=quantity
-            )
-
-        return JsonResponse({'status': 'success', 'booking_id': booking.id, 'total_price': booking.total_price})
-
-    return JsonResponse({'status': 'error'}, status=400)
-
-def calculate_total_price(package, room, menu_items):
-    total = package.price + room.price
-    for item in menu_items:
-        item_id, quantity = item.split(',')
-        menu_item = MenuItem.objects.get(id=item_id)
-        total += menu_item.price * int(quantity)
-    return total
+def booking_success(request):
+    return render(request, 'booking_success.html')

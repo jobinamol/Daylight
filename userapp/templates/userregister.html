@@ -50,6 +50,9 @@
             color: #fff;
             padding: 1rem 0;
         }
+        #username-error, #password-strength {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -96,43 +99,42 @@
                         <form method="POST" action="{% url 'userregister' %}" enctype="multipart/form-data">
                             {% csrf_token %}
                         
-                            <!-- Name -->
                             <div class="form-group">
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                                <span id="name-error" style="color: red;"></span> <!-- Error message span -->
                             </div>
-                        
-                            <!-- Address -->
+                            
                             <div class="form-group">
                                 <label for="address">Address</label>
                                 <input type="text" class="form-control" id="address" name="address" placeholder="Enter your address" required>
+                                <span id="address-error" style="color: red;"></span> <!-- Error message span -->
                             </div>
-                        
-                            <!-- Mobile Number -->
+                            
                             <div class="form-group">
                                 <label for="mobilenumber">Mobile Number</label>
                                 <input type="text" class="form-control" id="mobilenumber" name="mobilenumber" placeholder="Enter your mobile number" required>
+                                <span id="mobilenumber-error" style="color: red;"></span> <!-- Error message span -->
                             </div>
-                        
-                            <!-- Email ID -->
+                            
                             <div class="form-group">
                                 <label for="emailid">Email ID</label>
                                 <input type="email" class="form-control" id="emailid" name="emailid" placeholder="Enter your email ID" required>
+                                <span id="emailid-error" style="color: red;"></span> <!-- Error message span -->
                             </div>
-                        
-                            <!-- District -->
+                            
                             <div class="form-group">
                                 <label for="district">District</label>
                                 <input type="text" class="form-control" id="district" name="district" placeholder="Enter your district" required>
+                                <span id="district-error" style="color: red;"></span> <!-- Error message span -->
                             </div>
-                        
-                            <!-- Age -->
+                            
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="age">Age</label>
                                     <input type="number" class="form-control" id="age" name="age" placeholder="Enter your age" required>
+                                    <span id="age-error" style="color: red;"></span> <!-- Error message span -->
                                 </div>
-                                <!-- Sex -->
                                 <div class="form-group col-md-6">
                                     <label for="sex">Sex</label>
                                     <select class="form-control" id="sex" name="sex" required>
@@ -141,26 +143,27 @@
                                         <option value="female">Female</option>
                                         <option value="other">Other</option>
                                     </select>
+                                    <span id="sex-error" style="color: red;"></span> <!-- Error message span -->
                                 </div>
                             </div>
-                        
-                            <!-- Profile Image -->
+                            
                             <div class="form-group">
                                 <label for="profile_image">Profile Image</label>
                                 <input type="file" class="form-control-file" id="profile_image" name="profile_image" accept="image/*">
+                                <span id="profile_image-error" style="color: red;"></span> <!-- Error message span -->
                             </div>
-                        
-                            <!-- Username -->
+                            
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="username">Username</label>
                                     <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                                    <span id="username-error" style="color: red;"></span> <!-- Error message span -->
                                 </div>
-                        
-                                <!-- Password -->
+                            
                                 <div class="form-group col-md-6">
                                     <label for="password">Password</label>
                                     <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" required>
+                                    <span id="password-strength" style="color: red;"></span> <!-- Password strength message -->
                                 </div>
                             </div>
                         
@@ -183,5 +186,104 @@
     <!-- Include necessary JS files -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <script>
+        function showError(element, message) {
+            element.innerText = message;
+            element.style.color = 'red';
+        }
+    
+        function clearError(element) {
+            element.innerText = '';
+        }
+    
+        function validateField(fieldId, errorId, validationFunction) {
+            const field = document.getElementById(fieldId);
+            const errorElement = document.getElementById(errorId);
+            const isValid = validationFunction(field.value);
+    
+            if (isValid) {
+                clearError(errorElement);
+            } else {
+                showError(errorElement, 'This field is required.');
+            }
+            return isValid;
+        }
+    
+        document.getElementById('username').addEventListener('input', function() {
+            const username = this.value;
+            const errorMessage = document.getElementById('username-error');
+    
+            // Perform an AJAX request to check username validity
+            fetch("{% url 'check_username' %}?username=" + username)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.available) {
+                        showError(errorMessage, data.message);
+                    } else {
+                        clearError(errorMessage);
+                    }
+                })
+                .catch(err => {
+                    console.error('Error checking username:', err);
+                });
+        });
+    
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthMessage = document.getElementById('password-strength');
+    
+            let strength = 0;
+            if (password.length >= 8) strength++; // Minimum length
+            if (/[A-Z]/.test(password)) strength++; // Uppercase letter
+            if (/[a-z]/.test(password)) strength++; // Lowercase letter
+            if (/[0-9]/.test(password)) strength++; // Number
+            if (/[^A-Za-z0-9]/.test(password)) strength++; // Special character
+    
+            // Determine strength message
+            if (strength < 2) {
+                showError(strengthMessage, 'Weak password. Try using a mix of letters, numbers, and special characters.');
+            } else if (strength < 4) {
+                showError(strengthMessage, 'Moderate password. Keep improving!');
+            } else {
+                clearError(strengthMessage);
+                strengthMessage.innerText = 'Strong password!';
+                strengthMessage.style.color = 'green';
+            }
+        });
+    
+        const fieldsToValidate = [
+            { id: 'name', errorId: 'name-error' },
+            { id: 'address', errorId: 'address-error' },
+            { id: 'mobilenumber', errorId: 'mobilenumber-error' },
+            { id: 'emailid', errorId: 'emailid-error' },
+            { id: 'district', errorId: 'district-error' },
+            { id: 'age', errorId: 'age-error' },
+            { id: 'sex', errorId: 'sex-error' },
+            { id: 'username', errorId: 'username-error' },
+            { id: 'password', errorId: 'password-strength' }
+        ];
+    
+        fieldsToValidate.forEach(field => {
+            document.getElementById(field.id).addEventListener('input', function() {
+                validateField(field.id, field.errorId, value => value.trim() !== '');
+            });
+        });
+    
+        // Validate on form submit
+        document.querySelector('form').addEventListener('submit', function(event) {
+            let allValid = true;
+            fieldsToValidate.forEach(field => {
+                if (!validateField(field.id, field.errorId, value => value.trim() !== '')) {
+                    allValid = false;
+                }
+            });
+    
+            if (!allValid) {
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    </script>
+    
 </body>
 </html>

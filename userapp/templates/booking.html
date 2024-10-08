@@ -2,131 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking Page</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-
-    <h1>Booking Page</h1>
-
-    <form id="bookingForm">
-        <label for="package">Select Package:</label>
-        <select name="package_id" id="package" required>
-            <option value="">Select Package</option>
-            {% for package in packages %}
-                <option value="{{ package.id }}">{{ package.name }} - {{ package.price }}</option>
-            {% endfor %}
-        </select>
-        <br><br>
-
-        <label for="room">Select Room:</label>
-        <select name="room_id" id="room" required>
-            <option value="">Select Room</option>
-            {% for room in rooms %}
-                <option value="{{ room.id }}">{{ room.name }} - {{ room.price }}</option>
-            {% endfor %}
-        </select>
-        <br><br>
-
-        <label for="num_people">Number of People:</label>
-        <input type="number" name="num_people" id="num_people" min="1" required>
-        <br><br>
-
-        <label for="num_rooms">Number of Rooms:</label>
-        <input type="number" name="num_rooms" id="num_rooms" min="1" required>
-        <br><br>
-
-        <label for="menu_items">Select Menu Items:</label>
-        <select name="menu_items[]" id="menu_items" multiple required>
-            {% for item in menu_items %}
-                <option value="{{ item.id }}">{{ item.name }} - {{ item.price }}</option>
-            {% endfor %}
-        </select>
-        <br><br>
-
-        <div id="menuQuantities">
-            <!-- Quantity inputs for selected menu items will appear here -->
+<div class="container">
+    <h1>Book Your Stay</h1>
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="package" class="form-label">Select Package:</label>
+            <select name="package_id" id="package" class="form-select" required>
+                <option value="">Select Package</option>
+                {% for package in packages %}
+                    <option value="{{ package.id }}">{{ package.name }} - ₹{{ package.price }}</option>
+                {% endfor %}
+            </select>
         </div>
-        <br><br>
 
-        <label for="additional_requests">Additional Requests:</label>
-        <textarea name="additional_requests" id="additional_requests"></textarea>
-        <br><br>
+        <div class="mb-3">
+            <label for="room" class="form-label">Select Room:</label>
+            <select name="room_id" id="room" class="form-select" required>
+                <option value="">Select Room</option>
+                {% for room in rooms %}
+                    <option value="{{ room.id }}">{{ room.number }} - {{ room.room_type }} - ₹{{ room.price }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <button type="submit">Submit Booking</button>
+        <div class="mb-3">
+            <label for="num_people" class="form-label">Number of People:</label>
+            <input type="number" name="num_people" id="num_people" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="num_rooms" class="form-label">Number of Rooms:</label>
+            <input type="number" name="num_rooms" id="num_rooms" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="check_in_date" class="form-label">Check-in Date:</label>
+            <input type="date" name="check_in_date" id="check_in_date" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="check_out_date" class="form-label">Check-out Date:</label>
+            <input type="date" name="check_out_date" id="check_out_date" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="additional_requests" class="form-label">Additional Requests:</label>
+            <textarea name="additional_requests" id="additional_requests" class="form-control"></textarea>
+        </div>
+
+        <h3>Select Menu Items:</h3>
+        {% for menu_item in menu_items %}
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="menu_item_{{ menu_item.id }}" name="quantity_{{ menu_item.id }}" value="1">
+                <label class="form-check-label" for="menu_item_{{ menu_item.id }}">{{ menu_item.name }} - ₹{{ menu_item.price }}</label>
+                <input type="number" name="quantity_{{ menu_item.id }}" min="1" value="1" class="form-control" style="width: 80px; display: inline-block;">
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary mt-3">Confirm Booking</button>
     </form>
-
-    <script>
-        // Function to update the quantity inputs for the selected menu items
-        document.getElementById('menu_items').addEventListener('change', function() {
-            const selectedItems = Array.from(this.selectedOptions);
-            const menuQuantitiesDiv = document.getElementById('menuQuantities');
-
-            // Clear any existing quantity inputs
-            menuQuantitiesDiv.innerHTML = '';
-
-            // Create input fields for each selected menu item
-            selectedItems.forEach(item => {
-                const itemId = item.value;
-                const itemName = item.textContent;
-
-                const quantityLabel = document.createElement('label');
-                quantityLabel.textContent = `Quantity for ${itemName}:`;
-
-                const quantityInput = document.createElement('input');
-                quantityInput.type = 'number';
-                quantityInput.name = `quantity_${itemId}`;
-                quantityInput.min = 1;
-                quantityInput.value = 1;
-                quantityInput.required = true;
-
-                menuQuantitiesDiv.appendChild(quantityLabel);
-                menuQuantitiesDiv.appendChild(quantityInput);
-                menuQuantitiesDiv.appendChild(document.createElement('br')); // Line break for better spacing
-            });
-        });
-
-        // Form submission logic
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent the default form submission
-
-            const formData = new FormData(this); // Capture form data
-            const selectedMenuItems = document.getElementById('menu_items').selectedOptions;
-            let menuItemsData = [];
-
-            // Prepare the menu items data in "item_id,quantity" format
-            selectedMenuItems.forEach(item => {
-                const itemId = item.value;
-                const quantity = document.querySelector(`input[name='quantity_${itemId}']`).value;
-                menuItemsData.push(`${itemId},${quantity}`);
-            });
-
-            // Add the menu items data to the form
-            formData.append('menu_items', JSON.stringify(menuItemsData));
-
-            // AJAX call to submit the form data
-            fetch("{% url 'create_booking' %}", {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert(`Booking created! Booking ID: ${data.booking_id}, Total Price: ${data.total_price}`);
-                } else {
-                    alert('There was an error creating your booking. Please try again.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error with the booking process.');
-            });
-        });
-    </script>
-
+</div>
 </body>
 </html>

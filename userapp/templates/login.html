@@ -4,9 +4,11 @@
     <title>Login - Daylight Resort</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     {% load static %}
-    
+    {% load socialaccount %}
+
+
     <!-- CSS Stylesheets -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
     
@@ -31,12 +33,12 @@
             position: absolute;
             top: 0;
             width: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
             padding: 10px 20px;
             box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             display: flex;
             align-items: center;
+            background-color: transparent; /* Removed color, now transparent */
         }
 
         .navbar a {
@@ -61,6 +63,7 @@
             box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
             max-width: 400px;
             width: 100%;
+            text-align: center;
         }
 
         /* Header inside the login form */
@@ -76,21 +79,36 @@
             border-radius: 5px;
             border: 1px solid #ccc;
             padding: 10px;
+            width: 100%;
         }
 
-        /* Style the submit button */
+        /* Style the buttons */
         .btn-primary {
             background-color: #007BFF;
             border-color: #007BFF;
             width: 100%;
             padding: 10px;
             font-size: 16px;
+            border-radius: 5px;
+            color: #fff;
         }
 
-        /* Style the links */
-        .btn-link {
-            color: #007BFF;
-            text-decoration: underline;
+        /* Google Login Button */
+        .btn-google {
+            background-color: #db4437;
+            color: #fff;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-google img {
+            margin-right: 10px;
         }
 
         /* Footer styling */
@@ -102,6 +120,13 @@
             color: #fff;
             background-color: rgba(0, 0, 0, 0.5);
             padding: 10px;
+        }
+
+        /* Error message styling */
+        .alert {
+            color: red;
+            font-size: 0.9em;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -116,28 +141,58 @@
         <a href="{% url 'about' %}">About Us</a>
     </nav>
 
-    <!-- Login Form Section -->
-    <div class="login-container">
+    <!-- Main Content -->
+    <main class="login-container">
         <h3>Login to Daylight Resort</h3>
+        
+        <!-- Display error messages -->
+        {% if form.errors %}
+            <div class="alert alert-danger" aria-live="assertive">
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        
         <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username"></label>
                 <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                <span id="username-error"></span> <!-- Error message display -->
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password"></label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
             </div>
             <div class="form-group text-center">
                 <button type="submit" class="btn btn-primary">Login</button>
             </div>
-            <div class="text-center mt-4">
-                <p><a href="{% url 'userregister' %}" class="btn btn-link">Create New Account</a></p>
-                <p><a href="{% url 'forgot_password' %}" class="btn btn-link">Forgot Password?</a></p>
-            </div>
         </form>
-    </div>
+
+        <!-- Google Login Button -->
+        <a href="{% provider_login_url 'google' %}" class="btn-google mt-3">
+            <img src="{% static 'images/google-logo.png' %}" alt="Google" style="width: 20px; height: 20px;">
+            Sign in with Google
+        </a>
+        
+        
+        
+        
+
+        <div class="text-center mt-4">
+            <div class="forgot-password">
+                <a href="{% url 'forgot_password' %}">Forgot your password?</a>
+            </div>
+            <div class="signup">
+                <p>Don't have an account? <a href="{% url 'userregister' %}">Sign Up</a></p>
+            </div>
+        </div>
+    </main>
 
     <!-- Footer -->
     <footer>
@@ -147,5 +202,26 @@
     <!-- JavaScript -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    
+    <!-- AJAX Username Validation -->
+    <script>
+        document.getElementById('username').addEventListener('input', function() {
+            const username = this.value;
+
+            // Clear any previous error messages
+            document.getElementById('username-error').innerText = '';
+
+            // Perform an AJAX request to check username validity
+            fetch(`/check_username/?username=${username}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Display the validation message
+                    document.getElementById('username-error').innerText = data.message;
+                })
+                .catch(error => {
+                    console.error('Error checking username:', error);
+                });
+        });
+    </script>
 </body>
 </html>

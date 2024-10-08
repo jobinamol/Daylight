@@ -56,18 +56,50 @@ class UserDB(models.Model):
     def get_email_field_name(self):
         return 'emailid'
 
+
 class PackageBooking(models.Model):
-    package = models.ForeignKey(PackageManagement, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    menu_items = models.ManyToManyField(MenuItem, through='MenuItemQuantity')
+    package = models.ForeignKey(PackageManagement, on_delete=models.CASCADE, related_name='bookings')
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='bookings')
+    menu_items = models.ManyToManyField(MenuItem, through='MenuItemQuantity', related_name='bookings')
     num_people = models.PositiveIntegerField()
     num_rooms = models.PositiveIntegerField()
+    check_in_date = models.DateField(null=True, blank=True)  # Allow null values
+    check_out_date = models.DateField(null=True, blank=True)  # Allow null values
     additional_requests = models.TextField(blank=True, null=True)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    paid = models.BooleanField(default=False)
     booking_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Booking for {self.num_people} people"
+        return f"Booking for {self.num_people} people from {self.check_in_date} to {self.check_out_date}"
+
+    def calculate_total_price(self):
+        """Calculate total price based on selected package, room, menu items, and duration."""
+        duration = (self.check_out_date - self.check_in_date).days
+        base_price = self.package.price + (self.room.price * self.num_rooms)
+        
+        # Calculate the price based on the number of nights in the package
+        package_duration = self.package.get_duration_in_days()
+        
+        # Determine additional days if check-in and check-out exceed package duration
+        additional_days = max(0, duration - package_duration)
+        
+        # Total price calculation
+        total = base_price + (self.package.additional_day_price * additional_days)
+
+        # Add menu item quantities
+        menu_item_quantities = self.menuitemquantity_set.all()
+        for menu_item_quantity in menu_item_quantities:
+            total += menu_item_quantity.menu_item.price * menu_item_quantity.quantity
+
+        self.total_price = total
+        self.save()
+
+    def save(self, *args, **kwargs):
+        """Override save method to calculate total price before saving."""
+        self.calculate_total_price()
+        super().save(*args, **kwargs)
+
 
 class MenuItemQuantity(models.Model):
     booking = models.ForeignKey(PackageBooking, on_delete=models.CASCADE)

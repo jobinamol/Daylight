@@ -14,11 +14,20 @@ class PackageManagement(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    duration = models.CharField(max_length=100)
+    duration = models.CharField(max_length=100)  # Example: "2 nights"
+    additional_day_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Price for additional days
     image = models.ImageField(upload_to='package_images/', blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+    def get_duration_in_days(self):
+        """Parse duration string to get the number of nights."""
+        # Assume duration is formatted like "X nights"
+        try:
+            return int(self.duration.split()[0])
+        except (ValueError, IndexError):
+            return 0  # Default to 0 if parsing fails
 
     
 class Staff(models.Model):

@@ -10,6 +10,8 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('userdashboard/', views.userdashboard, name='userdashboard'),
     path('userindex/', views.userindex, name='userindex'),
+    path('check_username/', views.check_username, name='check_username'),
+
     path('userregister/', views.userregister, name='userregister'),
     path('viewprofile/', views.viewprofile, name='viewprofile'),  # URL for viewing user profile
     path('editprofile/', views.editprofile, name='editprofile'),
@@ -33,5 +35,4 @@ urlpatterns = [
     path('room_inquiry/', views.room_inquiry, name='room_inquiry'),
     path('food_inquiry/', views.food_inquiry, name='food_inquiry'),
     path('booking/', views.booking_view, name='booking'),  # URL for the booking page
-    path('booking/create/',views. create_booking, name='create_booking'),
 ]
