@@ -6,9 +6,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
 
+    <!-- CSS Dependencies -->
     <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
@@ -23,6 +25,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
   </head>
   <body>
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
       <div class="container">
           <a class="navbar-brand" href="{% url 'home' %}">Daylight</a>
@@ -33,20 +36,24 @@
           <div class="collapse navbar-collapse" id="ftco-nav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><a href="{% url 'userindex' %}" class="nav-link">Home</a></li>
-                <li class="nav-item"><a href="{% url 'packs' %}" class="nav-link">Packages</a></li>
-                <li class="nav-item"><a href="{% url 'Restaurants' %}" class="nav-link">Restaurants</a></li><li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="{% url 'rooms' %}" class="nav-link">Rooms</a></li><li class="nav-item"><a href="{% url 'Restaurants' %}" class="nav-link">Restaurants</a></li>
+                <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
                 <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
+
+
+                <li class="nav-item"><a href="{% url 'packs' %}" class="nav-link">Packages</a></li>
+                <li class="nav-item"><a href="{% url 'menu' %}" class="nav-link">Restaurants</a></li>
+                <li class="nav-item"><a href="{% url 'rooms' %}" class="nav-link">Rooms</a></li>
+                <li class="nav-item"><a href="{% url 'booking' %}" class="nav-link">Book Now</a></li>
+
                 <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-                <li class="nav-item"><a href="{% url 'booking' %}" class="nav-link">BookNow</a></li>
 
                 {% if request.session.username %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {% if request.session.profile_image %}
-                            <img src="{{ request.session.profile_image }}" alt="User Icon" style="width: 50px; height: 50px; margin-right: 15px;" />
+                            <img src="{{ request.session.profile_image }}" alt="User Icon" class="rounded-circle" style="width: 40px; height: 40px;" />
                         {% else %}
-                            <img src="{% static 'icons/userlogin.jpeg' %}" alt="User Icon" style="width: 50px; height: 50px; margin-right: 15px;" />
+                            <img src="{% static 'icons/userlogin.jpeg' %}" alt="User Icon" class="rounded-circle" style="width: 40px; height: 40px;" />
                         {% endif %}
                         {{ request.session.username }}
                     </a>
@@ -58,13 +65,12 @@
                         <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                     </div>
                 </li>
-            {% else %}
+                {% else %}
                 <li class="nav-item">
                     <a href="{% url 'login' %}" class="nav-link">Login</a>
                 </li>
-            {% endif %}
-            
-              </li>                
+                {% endif %}
+              </li>               
             </ul>
         </div>
         
@@ -104,9 +110,7 @@
         </div>
       </div>
     </section>
-
    
-
 
     <section class="ftco-section ftc-no-pb ftc-no-pt">
       <div class="container">
