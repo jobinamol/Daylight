@@ -35,4 +35,6 @@ urlpatterns = [
     path('room_inquiry/', views.room_inquiry, name='room_inquiry'),
     path('food_inquiry/', views.food_inquiry, name='food_inquiry'),
     path('booking/', views.booking_view, name='booking'),  # URL for the booking page
+    path('package/<int:id>/', views.package_details, name='package_details'),
+
 ]

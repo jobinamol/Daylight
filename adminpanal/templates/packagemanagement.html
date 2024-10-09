@@ -7,13 +7,13 @@
 
 <style>
     body {
-        background-image: url('{% static "images/background.jpg" %}'); /* Replace with your background image path */
+        background-image: url('{% static "images/background.jpg" %}');
         background-size: cover;
         background-attachment: fixed;
         color: #333;
     }
     .container {
-        background-color: rgba(255, 255, 255, 0.9); /* White background with transparency */
+        background-color: rgba(255, 255, 255, 0.9);
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -22,31 +22,15 @@
         margin-right: 15px;
     }
     .form-control, .btn {
-        border-radius: 20px; /* Rounded corners for input and buttons */
+        border-radius: 20px;
     }
     .table {
-        background-color: rgba(255, 255, 255, 0.8); /* Table background with transparency */
+        background-color: rgba(255, 255, 255, 0.8);
     }
     .action-icons {
-        font-size: 1.2em;
         display: flex;
         justify-content: center;
-        align-items: center;
         gap: 10px;
-    }
-    .action-icons i {
-        cursor: pointer;
-        transition: color 0.3s ease;
-    }
-    .action-icons i:hover {
-        color: #ff0000; /* Highlight delete icon on hover */
-    }
-    .action-icons .fa-edit:hover {
-        color: #007bff; /* Highlight edit icon on hover */
-    }
-    .icon {
-        padding: 8px;
-        font-size: 1.2em;
     }
 </style>
 
@@ -57,28 +41,51 @@
     <h3>Add Package</h3>
     <form id="packageForm" method="POST" action="{% url 'packagemanagement' %}" enctype="multipart/form-data" class="form-inline">
         {% csrf_token %}
+        
+        <!-- Category Field -->
+        <div class="form-group">
+            <label for="category" class="mr-2">Category:</label>
+            <input type="text" id="category" name="category" class="form-control" required>
+        </div>
+
         <div class="form-group">
             <label for="name" class="mr-2">Name:</label>
             <input type="text" id="name" name="name" class="form-control" required>
-            <span id="nameError" style="color:red;"></span>
         </div>
 
         <div class="form-group">
             <label for="price" class="mr-2">Price:</label>
             <input type="number" id="price" name="price" class="form-control" required>
-            <span id="priceError" style="color:red;"></span>
         </div>
 
         <div class="form-group">
             <label for="description" class="mr-2">Description:</label>
             <textarea id="description" name="description" class="form-control" required></textarea>
-            <span id="descriptionError" style="color:red;"></span>
         </div>
 
         <div class="form-group">
             <label for="duration" class="mr-2">Duration:</label>
             <input type="text" id="duration" name="duration" class="form-control" required>
-            <span id="durationError" style="color:red;"></span>
+        </div>
+
+        <!-- Food Items Field -->
+        <div class="form-group">
+            <label for="food_items" class="mr-2">Food Items:</label>
+            <select multiple id="food_items" name="food_items" class="form-control">
+                {% for item in food_items %}
+                    <option value="{{ item.id }}">{{ item.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Rooms Field -->
+        <div class="form-group">
+            <label for="rooms" class="mr-2">Rooms:</label>
+            <select multiple id="rooms" name="rooms" class="form-control">
+                {% for room in rooms %}
+                    <option value="{{ room.id }}">{{ room.room_type }}</option>
+                {% endfor %}
+            </select>
         </div>
 
         <div class="form-group">
@@ -97,10 +104,13 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>Category</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Price</th>
                     <th>Duration</th>
+                    <th>Food Items</th>
+                    <th>Rooms</th>
                     <th>Image</th>
                     <th>Actions</th>
                 </tr>
@@ -108,10 +118,21 @@
             <tbody>
                 {% for package in packages %}
                 <tr>
+                    <td>{{ package.category }}</td>
                     <td>{{ package.name }}</td>
                     <td>{{ package.description }}</td>
                     <td>₹{{ package.price }}</td>
                     <td>{{ package.duration }}</td>
+                    <td>
+                        {% for item in package.menu_items.all %}
+                            {{ item.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for room in package.rooms.all %}
+                            {{ room.room_type }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
                     <td>
                         {% if package.image %}
                             <img src="{{ package.image.url }}" alt="{{ package.name }}" style="width: 100px; height: auto;">
@@ -120,11 +141,9 @@
                         {% endif %}
                     </td>
                     <td class="action-icons">
-                        <!-- Edit Icon -->
                         <a href="{% url 'edit_package' package.id %}" class="icon" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <!-- Delete Icon -->
                         <a href="{% url 'delete_package' package.id %}" class="icon" title="Delete" onclick="return confirm('Are you sure you want to delete this package?');">
                             <i class="fas fa-trash-alt"></i>
                         </a>
@@ -139,51 +158,5 @@
         <p>No packages available.</p>
     </div>
 {% endif %}
-
-<script>
-    // JavaScript for form validation
-    document.getElementById('packageForm').onsubmit = function(e) {
-        let isValid = true;
-
-        // Clear previous errors
-        document.getElementById('nameError').innerText = '';
-        document.getElementById('priceError').innerText = '';
-        document.getElementById('descriptionError').innerText = '';
-        document.getElementById('durationError').innerText = '';
-
-        // Validate Name
-        const name = document.getElementById('name').value;
-        if (name.trim() === '') {
-            document.getElementById('nameError').innerText = 'Name is required.';
-            isValid = false;
-        }
-
-        // Validate Price
-        const price = document.getElementById('price').value;
-        if (price <= 0) {
-            document.getElementById('priceError').innerText = 'Price must be a positive number.';
-            isValid = false;
-        }
-
-        // Validate Description
-        const description = document.getElementById('description').value;
-        if (description.trim() === '') {
-            document.getElementById('descriptionError').innerText = 'Description is required.';
-            isValid = false;
-        }
-
-        // Validate Duration
-        const duration = document.getElementById('duration').value;
-        if (duration.trim() === '') {
-            document.getElementById('durationError').innerText = 'Duration is required.';
-            isValid = false;
-        }
-
-        // Prevent form submission if invalid
-        if (!isValid) {
-            e.preventDefault();
-        }
-    };
-</script>
 
 {% endblock %}

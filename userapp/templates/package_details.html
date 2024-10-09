@@ -1,0 +1,50 @@
+{% extends 'userindex.html' %}
+{% block content %}
+{% load static %}
+
+<div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <div class="text">
+                    <h1 class="mb-4 bread">{{ package.name }}</h1>
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span>
+                        <span>Package Details</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card shadow-sm border-0 mb-4" style="border-radius: 10px;">
+                    <div class="card-img-top" style="overflow: hidden; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                        <img src="{{ package.image.url }}" alt="{{ package.name }}" class="img-fluid" style="width: 100%; height: 450px; object-fit: cover;">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: #2c3e50; font-weight: bold;">{{ package.name }}</h3>
+                        <p>{{ package.description }}</p>
+                        <p><strong>Price:</strong> ₹{{ package.price }} per day</p>
+                        <p><strong>Duration:</strong> {{ package.duration }} days</p>
+
+                        <!-- Book Now Button -->
+                        <form method="POST" action="{% url 'package_details' package.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="package_id" value="{{ package.id }}">
+                            <input type="hidden" name="price" value="{{ package.price }}">
+                            <button type="submit" class="btn btn-primary py-3 px-4 mt-3">Book Now</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

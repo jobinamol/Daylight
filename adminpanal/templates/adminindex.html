@@ -11,7 +11,7 @@
     <meta name="keywords" content="resort, management, admin, dashboard, template, responsive, css, html, theme, UI, web">
 
     <link rel="shortcut icon" href="{% static 'assets/img/icons/icon-48x48.png' %}" />
-    <title>Welcome Admin | Daycation Resort Admin Dashboard</title>
+    <title>Admin Dashboard | Daycation Resort</title>
     <link href="{% static 'assets/css/app.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
@@ -33,7 +33,12 @@
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{% url 'packagemanagement' %}">
-                            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Package Management</span>
+                            <i class="align-middle" data-feather="package"></i> <span class="align-middle">Package Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'packagemanagement' %}">
+                            <i class="align-middle" data-feather="layers"></i> <span class="align-middle">Category Management</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -43,17 +48,12 @@
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{% url 'staffmanagement' %}">
-                            <i class="align-middle" data-feather="users"></i> <span class="align-middle">Staff Management</span>
+                            <i class="align-middle" data-feather="briefcase"></i> <span class="align-middle">Staff Management</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="{% url 'adminindex' %}">
-                            <i class="align-middle" data-feather="bell"></i> <span class="align-middle">Notifications</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="{% url 'adminindex' %}">
-                            <i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Record Management</span>
+                        <a class="sidebar-link" href="{% url 'packagemanagement' %}">
+                            <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Booking Management</span>
                         </a>
                     </li>
                 </ul>
@@ -79,42 +79,17 @@
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
                                 <div class="dropdown-menu-header">Notifications</div>
                                 <div class="list-group">
-                                    <a href="{% url 'adminindex' %}" class="list-group-item">
+                                    <a href="#" class="list-group-item">
                                         <div class="row g-0 align-items-center">
                                             <div class="col-2">
                                                 <i class="text-danger" data-feather="alert-circle"></i>
                                             </div>
                                             <div class="col-10">
-                                                <div class="text-dark">New Offers 
-                                                    <span class="indicator">{{ new_offers_count }}</span>
-                                                </div>
+                                                <div class="text-dark">New Offers <span class="indicator">{{ new_offers_count }}</span></div>
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="{% url 'adminindex' %}" class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col-2">
-                                                <i class="text-danger" data-feather="alert-circle"></i>
-                                            </div>
-                                            <div class="col-10">
-                                                <div class="text-dark">Event Updates
-                                                    <span class="indicator">{{ event_updates_count }}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="{% url 'adminindex' %}" class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col-2">
-                                                <i class="text-danger" data-feather="alert-circle"></i>
-                                            </div>
-                                            <div class="col-10">
-                                                <div class="text-dark">Pricing Changes
-                                                    <span class="indicator">{{ pricing_changes_count }}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
+                                    <!-- Additional notifications here -->
                                 </div>
                             </div>
                         </li>
@@ -131,84 +106,73 @@
             {% block content %}
             <main class="content">
                 <div class="container-fluid p-0">
-                    <!-- Welcome Message -->
                     <h1 class="h3 mb-3"><strong>Welcome Admin</strong></h1>
-                    
-                    <!-- Dashboard stats -->
                     <div class="row">
-                        <div class="col-xl-6 col-xxl-5 d-flex">
-                            <div class="w-100">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col mt-0">
-                                                        <h5 class="card-title">Total Staff</h5>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <i class="stat text-primary" data-feather="users"></i>
-                                                    </div>
-                                                </div>
-                                                <h1 class="mt-1 mb-3">{{ total_staff }}</h1>
-                                            </div>
+                        <!-- Package Management Card -->
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title">Packages</h5>
+                                            <div class="text-muted">{{ total_packages }} Packages</div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col mt-0">
-                                                        <h5 class="card-title">Total Users</h5>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <i class="stat text-primary" data-feather="user-check"></i>
-                                                    </div>
-                                                </div>
-                                                <h1 class="mt-1 mb-3">{{ total_users }}</h1>
-                                            </div>
+                                        <div class="col-auto">
+                                            <i class="align-middle" data-feather="package"></i>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-xxl-5 d-flex">
-                            <div class="w-100">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col mt-0">
-                                                        <h5 class="card-title">Packages Management</h5>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <i class="stat text-primary" data-feather="bell"></i>
-                                                    </div>
-                                                </div>
-                                                <h1 class="mt-1 mb-3">{{ package_management }}</h1>
-                                            </div>
+                        <!-- Category Management Card -->
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title">Categories</h5>
+                                            <div class="text-muted">{{ total_categories }} Categories</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="align-middle" data-feather="layers"></i>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col mt-0">
-                                                        <h5 class="card-title">Booking Details</h5>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <i class="stat text-primary" data-feather="pie-chart"></i>
-                                                    </div>
-                                                </div>
-                                                <h1 class="mt-1 mb-3">{{ budget_summary }}</h1>
-                                            </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Additional management sections like User, Staff, and Booking -->
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title">Users</h5>
+                                            <div class="text-muted">{{ total_users }} Users</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="align-middle" data-feather="users"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title">Bookings</h5>
+                                            <div class="text-muted">{{ total_bookings }} Bookings</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="align-middle" data-feather="calendar"></i>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- Dynamic Content based on selected section -->
                 </div>
             </main>
             {% endblock %}

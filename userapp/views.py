@@ -428,3 +428,7 @@ def booking_view(request):
 
 def booking_success(request):
     return render(request, 'booking_success.html')
+
+def package_details(request, id):
+    package = get_object_or_404(PackageManagement, id=id)
+    return render(request, 'package_details.html', {'package': package})

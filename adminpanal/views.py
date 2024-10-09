@@ -168,4 +168,8 @@ def delete_package(request, package_id):
 
     return render(request, 'deletepackage.html', {'package': package})
 
+def package_list(request):
+    packageslist = PackageManagement1.objects.all()
+    return render(request, 'project_list.html', {'packages': packageslist})
+
 

@@ -22,6 +22,8 @@ urlpatterns = [
 
     # URL for deleting a specific package
     path('packages/delete/<int:package_id>/',views. delete_package, name='delete_package'),
+    path('package_list/', views.package_list, name='package_list'),  # URL for package list
+
 
     # other URL patterns
 ]

@@ -1,0 +1,83 @@
+{% extends 'adminindex.html' %} <!-- Extend from custom adminindex.html -->
+
+{% load static %} <!-- Load static for CSS and other assets -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>List Package Categories</title>
+    <link rel="stylesheet" href="{% static 'admin/css/style.css' %}"> <!-- Load static styles -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        .package-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .package-item {
+            margin: 15px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            max-width: 300px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        img {
+            border-radius: 8px;
+            max-width: 100%;
+            height: auto;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .add-package-btn {
+            background-color: #007BFF;
+            margin-left: 10px;
+        }
+        .add-package-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    {% block content %}
+    <h1>List Package Categories</h1>
+
+    <div class="package-container">
+        {% for package in packageslist %}
+            <div class="package-item">
+                <a href="{% url 'package_detail' package.pk %}">
+                    <img src="{{ package.image.url }}" alt="{{ package.name }}">
+                    <h2>{{ package.name }}</h2>
+                    <p>Price: ₹{{ package.price }}</p>
+                    <p>Category: {{ package.get_category_display }}</p>
+                    <p>Duration: {{ package.duration }}</p>
+                </a>
+                <!-- Add Package Button for each row -->
+                <a href="{% url 'packagemanagement' %}">
+                    <button type="button" class="add-package-btn">Add Package</button>
+                </a>
+            </div>
+        {% empty %}
+            <p>No packages available.</p>
+        {% endfor %}
+    </div>
+    {% endblock %}
+</body>
+</html>
