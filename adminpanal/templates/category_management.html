@@ -1,0 +1,165 @@
+{% extends 'adminindex.html' %}
+
+{% block head %}
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background for the entire page */
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff; /* White background for the form */
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif; /* Font family for headers */
+            color: #333; /* Dark text color */
+            text-align: center; /* Center align the header */
+            font-size: 2.5rem; /* Larger font size for the main heading */
+            font-weight: bold; /* Bold font */
+        }
+
+        h3 {
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif;
+            color: #007bff; /* Blue color for subheadings */
+            text-align: center; /* Center align the subheading */
+            font-size: 1.75rem; /* Larger font size for subheadings */
+            font-weight: bold; /* Bold font */
+        }
+
+        .label-update {
+            display: block;
+            text-align: center; /* Center align the label */
+            font-size: 1.25rem; /* Large size for the label */
+            font-weight: bold; /* Bold font */
+            color: #495057; /* Dark gray color for the label */
+            margin-bottom: 20px; /* Space below the label */
+        }
+
+        .add-category, .existing-categories {
+            margin-bottom: 30px;
+        }
+
+        .form-inline {
+            display: flex;
+            justify-content: center; /* Center the form items */
+            margin-bottom: 20px; /* Space below the form */
+        }
+
+        .form-group {
+            margin-right: 10px;
+            flex: 1;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px; /* Increased padding for larger input */
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ced4da; /* Bootstrap border color */
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s; /* Smooth transition for border color */
+        }
+
+        .form-control:focus {
+            border-color: #007bff; /* Change border color on focus */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none; /* Remove outline on focus */
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px; /* Rounded buttons */
+            transition: background-color 0.3s, transform 0.3s; /* Smooth transition for button effects */
+            margin: 0 5px; /* Space between buttons */
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* Bootstrap primary color */
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+            transform: translateY(-2px); /* Lift effect */
+        }
+
+        .list-group {
+            list-style: none;
+            padding: 0;
+        }
+
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #dee2e6; /* Bootstrap border color */
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa; /* Light gray background for items */
+            transition: background-color 0.3s; /* Smooth background transition */
+        }
+
+        .list-group-item:hover {
+            background-color: #e2e6ea; /* Darker gray on hover */
+        }
+
+        .edit-btn {
+            background-color: #ffc107; /* Yellow for edit */
+            color: #212529;
+        }
+
+        .delete-btn {
+            background-color: #dc3545; /* Red for delete */
+            color: #fff;
+        }
+
+        .edit-btn:hover, .delete-btn:hover {
+            opacity: 0.9; /* Slightly fade buttons on hover */
+            transform: translateY(-1px); /* Slight lift effect on hover */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Category Management</h2>
+    <span class="label-update">Manage your categories here</span> <!-- Large size label below the heading -->
+
+    <div class="add-category">
+        <h3>Add Category</h3>
+        <form method="post" class="form-inline">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="categoryName" class="sr-only">Category Name</label>
+                <input type="text" id="categoryName" name="name" class="form-control" placeholder="Category Name" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+
+    <div class="existing-categories">
+        <h3>Existing Categories</h3>
+        <ul class="list-group">
+            {% for category in categories %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ category.name }}
+                    <div>
+                        <a href="{% url 'update_category' category.id %}" class="btn edit-btn btn-sm">✏️ Edit</a>
+                        <a href="{% url 'delete_category' category.id %}" class="btn delete-btn btn-sm">🗑️ Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

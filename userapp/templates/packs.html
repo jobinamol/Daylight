@@ -28,9 +28,13 @@
                 <div class="sidebar-wrap bg-white p-4 shadow-sm rounded">
                     <h3 class="heading mb-4">Categories</h3>
                     <ul class="list-unstyled categories">
-                        <li><a href="#">Family <span>(12)</span></a></li>
-                        <li><a href="#">Couple <span>(8)</span></a></li>
-                        <li><a href="#">Group <span>(6)</span></a></li>
+                        {% for category in categories %}
+                            <li>
+                                <a href="{% url 'category_packages' category.id %}">
+                                    {{ category.name }} <span>({{ category.package_set.count }})</span>
+                                </a>
+                            </li>
+                        {% endfor %}
                     </ul>
                 </div>
 

@@ -36,5 +36,7 @@ urlpatterns = [
     path('food_inquiry/', views.food_inquiry, name='food_inquiry'),
     path('booking/', views.booking_view, name='booking'),  # URL for the booking page
     path('package/<int:id>/', views.package_details, name='package_details'),
+    path('packages/category/<int:category_id>/', views.category_packages, name='category_packages'),  # Ensure this line is correct
+
 
 ]

@@ -38,8 +38,22 @@ def packages(request):
     return render(request, 'packages.html', {'packages': packages})
 
 def packs(request):
-    packages = PackageManagement.objects.all()    
-    return render(request, 'packs.html', {'packages': packages})
+    packages = PackageManagement.objects.all()
+    categories = Category.objects.all()
+
+    return render(request, 'packs.html', {
+        'packages': packages,
+        'categories': categories,
+    })
+def category_packages(request, category_id):
+    selected_category = get_object_or_404(Category, id=category_id)
+    packages = PackageManagement.objects.filter(category=selected_category)
+    categories = Category.objects.all()
+    return render(request, 'packs.html', {
+        'packages': packages,
+        'categories': categories,
+        'selected_category': selected_category,
+    })
 
 def contact(request):
     return render(request, 'contact.html')

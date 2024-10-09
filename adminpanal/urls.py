@@ -23,6 +23,14 @@ urlpatterns = [
     # URL for deleting a specific package
     path('packages/delete/<int:package_id>/',views. delete_package, name='delete_package'),
     path('package_list/', views.package_list, name='package_list'),  # URL for package list
+    path('categories/', views.category_list, name='category_list'),
+    path('categories/add/', views.add_category, name='add_category'),
+    path('categories/edit/<int:category_id>/', views.edit_category, name='edit_category'),
+    path('categories/delete/<int:category_id>/', views.delete_category, name='delete_category'),
+    path('category_management/', views.category_management, name='category_management'),
+    path('category_management/update/<int:category_id>/', views.update_category, name='update_category'),
+    path('get_food_items_by_category/<int:category_id>/', views.get_food_items_by_category, name='get_food_items_by_category'),
+
 
 
     # other URL patterns

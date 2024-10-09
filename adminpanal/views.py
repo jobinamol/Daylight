@@ -3,8 +3,12 @@ from .models import*
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from userapp.models import*
+from staffs.models import*
+
 from django.http import HttpResponse
 from django.contrib.auth import logout
+from django.http import JsonResponse
+
 
 
 
@@ -102,6 +106,9 @@ def delete_staff(request, staff_id):
 
 def packagemanagement(request):
     packages = PackageManagement.objects.all()
+    categories = Category.objects.all()  
+    menu_items = MenuItem.objects.all()  
+
 
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -109,26 +116,42 @@ def packagemanagement(request):
         description = request.POST.get('description')
         duration = request.POST.get('duration')
         image = request.FILES.get('image')
+        category_id = request.POST.get('category')  # Get selected category ID
+        selected_menu_items = request.POST.getlist('food_items')  # Get selected menu items
 
-        if not name or not price or float(price) <= 0 or not description or not duration:
+        if not name or not price or float(price) <= 0 or not description or not duration or not category_id:
             messages.error(request, 'Please fill in all fields correctly.')
             return redirect('packagemanagement')
 
         try:
+            category = Category.objects.get(id=category_id)  # Get the category instance
+
             package = PackageManagement(
                 name=name,
                 price=price,
                 description=description,
                 duration=duration,
-                image=image
+                image=image,
+                category=category  # Save the selected category
             )
             package.save()
+            if selected_menu_items:
+                package.menu_items.set(selected_menu_items)
+
+
             messages.success(request, 'Package added successfully.')
+        except Category.DoesNotExist:
+            messages.error(request, 'Selected category does not exist.')
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
+        
         return redirect('packagemanagement')
 
-    return render(request, 'packagemanagement.html', {'packages': packages})
+    return render(request, 'packagemanagement.html', {
+    'packages': packages,
+    'categories': categories,  # Pass categories to the template
+    'menu_items': menu_items  # Pass menu items to the template
+})
 
 def edit_package(request, package_id):
     package = get_object_or_404(PackageManagement, id=package_id)
@@ -169,7 +192,64 @@ def delete_package(request, package_id):
     return render(request, 'deletepackage.html', {'package': package})
 
 def package_list(request):
-    packageslist = PackageManagement1.objects.all()
-    return render(request, 'project_list.html', {'packages': packageslist})
+    categories = Category.objects.all()
+    packages = Package.objects.all()  # Assuming you have a Package model
+
+    context = {
+        'categories': categories,
+        'packages': packages,
+    }
+    return render(request, 'your_template.html', context)
+
+def category_management(request):
+    categories = Category.objects.all()
+
+    if request.method == 'POST':
+        category_name = request.POST.get('name')
+        if category_name:
+            Category.objects.create(name=category_name)
+        return redirect('category_management')
+
+    return render(request, 'category_management.html', {'categories': categories})
+
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'category_list.html', {'categories': categories})
+
+def add_category(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        Category.objects.create(name=name)
+        return redirect('category_list')
+    return render(request, 'add_category.html')
+
+def edit_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    if request.method == 'POST':
+        category.name = request.POST.get('name')
+        category.save()
+        return redirect('category_list')
+    return render(request, 'edit_category.html', {'category': category})
+
+def delete_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    category.delete()
+    return redirect('category_list')
+
+def update_category(request, category_id):
+    category = Category.objects.get(id=category_id)
+    if request.method == 'POST':
+        category_name = request.POST.get('name')
+        if category_name:
+            category.name = category_name
+            category.save()
+        return redirect('category_management')
+
+    return render(request, 'update_category.html', {'category': category})
+
+def get_food_items_by_category(request, category_id):
+    food_items = MenuItem.objects.filter(category_id=category_id)
+    food_items_data = [{'id': item.id, 'name': item.name} for item in food_items]
+    return JsonResponse(food_items_data, safe=False)
 
 
