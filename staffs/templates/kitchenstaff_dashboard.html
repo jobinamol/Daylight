@@ -9,108 +9,74 @@
     <meta name="description" content="Daycation Resort Kitchen Staff Dashboard">
     <meta name="author" content="AdminKit">
     <meta name="keywords" content="kitchen, staff, management, dashboard, template, responsive, css, html, theme, UI, web">
-
-    <link rel="shortcut icon" href="{% static 'assets/img/icons/icon-48x48.png' %}" />
     <title>Kitchen Staff Dashboard</title>
+    
+    <link rel="shortcut icon" href="{% static 'assets/img/icons/icon-48x48.png' %}" />
     <link href="{% static 'assets/css/app.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="bg-light">
     <div class="wrapper">
-        <nav id="sidebar" class="sidebar js-sidebar">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar js-sidebar bg-dark text-light">
             <div class="sidebar-content js-simplebar">
-                <a class="sidebar-brand" href="{% url 'kitchenstaff_dashboard' %}">
-                    <span class="align-middle">Kitchen Staff Dashboard</span>
+                <a class="sidebar-brand text-white" href="{% url 'kitchenstaff_dashboard' %}">
+                    <i class="align-middle" data-feather="home"></i>
+                    <span class="align-middle">Kitchen Dashboard</span>
                 </a>
-
                 <ul class="sidebar-nav">
-                    <li class="sidebar-header">Management</li>
+                    <li class="sidebar-header text-uppercase">Management</li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="{% url 'kitchenstaff_dashboard' %}">
-                            <i class="align-middle" data-feather="home"></i> <span class="align-middle">Dashboard</span>
+                        <a class="sidebar-link text-light" href="{% url 'menu_management' %}">
+                            <i class="align-middle" data-feather="book"></i> <span>Menu Planning</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="{% url 'kitchenstaff_dashboard' %}">
-                            <i class="align-middle" data-feather="list"></i> <span class="align-middle">Order Management</span>
+                        <a class="sidebar-link text-light" href="{% url 'order_management' %}">
+                            <i class="align-middle" data-feather="list"></i> <span>Order Management</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="{% url 'kitchenstaff_dashboard' %}">
-                            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Inventory</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="{% url 'menu_management' %}">
-                            <i class="align-middle" data-feather="book"></i> <span class="align-middle">Menu Planning</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="{% url 'kitchenstaff_dashboard' %}">
-                            <i class="align-middle" data-feather="check-circle"></i> <span class="align-middle">Food Quality</span>
+                        <a class="sidebar-link text-light" href="{% url 'feedback_management' %}">
+                            <i class="align-middle" data-feather="message-circle"></i> <span>Customer Feedback</span>
                         </a>
                     </li>
                 </ul>
             </div>
         </nav>
 
+        <!-- Main Content -->
         <div class="main">
-            <nav class="navbar navbar-expand navbar-light navbar-bg">
+            <nav class="navbar navbar-expand navbar-light bg-white shadow-sm">
                 <a class="sidebar-toggle js-sidebar-toggle">
                     <i class="hamburger align-self-center"></i>
                 </a>
-
                 <div class="navbar-collapse collapse">
-                    <ul class="navbar-nav navbar-align">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown">
-                            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
                                 <div class="position-relative">
                                     <i class="align-middle" data-feather="bell"></i>
-                                    <span class="indicator">{{ countnoti }}</span>
+                                    <span class="badge bg-danger">{{ countnoti }}</span>
                                 </div>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
-                                <div class="dropdown-menu-header">Notifications</div>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <div class="dropdown-menu-header">
+                                    <strong>Notifications</strong>
+                                </div>
                                 <div class="list-group">
-                                    <a href="{% url 'kitchenstaff_dashboard' %}" class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col-2">
-                                                <i class="text-danger" data-feather="alert-circle"></i>
-                                            </div>
-                                            <div class="col-10">
-                                                <div class="text-dark">New Orders <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ new_orders_count }}</span></div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="{% url 'kitchenstaff_dashboard' %}" class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col-2">
-                                                <i class="text-danger" data-feather="alert-circle"></i>
-                                            </div>
-                                            <div class="col-10">
-                                                <div class="text-dark">Low Inventory <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ low_inventory_count }}</span></div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="{% url 'kitchenstaff_dashboard' %}" class="list-group-item">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col-2">
-                                                <i class="text-danger" data-feather="alert-circle"></i>
-                                            </div>
-                                            <div class="col-10">
-                                                <div class="text-dark">Quality Alerts <span style="margin-right: 120px; margin-top: 10px;" class="indicator">{{ quality_alerts_count }}</span></div>
-                                            </div>
-                                        </div>
+                                    <a href="{% url 'order_management' %}" class="list-group-item">
+                                        <i class="text-danger me-3" data-feather="alert-circle"></i>
+                                        <span>New Orders</span>
+                                        <span class="badge bg-primary float-end">{{ new_orders_count }}</span>
                                     </a>
                                 </div>
                             </div>
                         </li>
-
-                        <!-- Add the logout button here -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                                <span class="text-dark">{{ request.session.username }}</span>
+                            <a class="nav-link dropdown-toggle text-dark" href="#" data-bs-toggle="dropdown">
+                                <span>{{ request.session.username }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
@@ -120,95 +86,41 @@
                 </div>
             </nav>
 
-            {% block content %}
-            <main class="content">
-                <div class="container-fluid p-0">
-                    <h1 class="h3 mb-3"><strong>Kitchen Staff Dashboard</strong></h1>
-                    <div class="row">
-                        <div class="col-xl-6 col-xxl-5 d-flex">
-                            <div class="w-100">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col mt-0">
-                                                        <h5 class="card-title">Orders in Progress</h5>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="list"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <h1 class="mt-1 mb-3">{{ orders_in_progress }}</h1>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col mt-0">
-                                                        <h5 class="card-title">Inventory Status</h5>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="box"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <h1 class="mt-1 mb-3">{{ inventory_status }}</h1>
-                                            </div>
-                                        </div>
-                                    </div>
+            <!-- Content Area -->
+            <main class="content p-4">
+                <div class="container-fluid">
+                    <h2 class="mb-4"><strong>Welcome, {{ request.session.username }}</strong></h2>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow">
+                                <div class="card-body text-center">
+                                    <i class="align-middle display-6 text-primary" data-feather="list"></i>
+                                    <h5 class="card-title mt-2">Orders in Progress</h5>
+                                    <h3 class="mt-3 mb-0">{{ orders_in_progress }}</h3>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-xxl-5 d-flex">
-                            <div class="w-100">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col mt-0">
-                                                        <h5 class="card-title">Menu Planning</h5>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="book"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <h1 class="mt-1 mb-3">{{ menu_planning_status }}</h1>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col mt-0">
-                                                        <h5 class="card-title">Food Quality Alerts</h5>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="check-circle"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <h1 class="mt-1 mb-3">{{ food_quality_alerts }}</h1>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow">
+                                <div class="card-body text-center">
+                                    <i class="align-middle display-6 text-primary" data-feather="book"></i>
+                                    <h5 class="card-title mt-2">Menu Planning</h5>
+                                    <h3 class="mt-3 mb-0">{{ menu_planning_status }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow">
+                                <div class="card-body text-center">
+                                    <i class="align-middle display-6 text-primary" data-feather="message-circle"></i>
+                                    <h5 class="card-title mt-2">Customer Feedback</h5>
+                                    <h3 class="mt-3 mb-0">{{ customer_feedback_count }}</h3>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
-            {% endblock %}
         </div>
     </div>
 

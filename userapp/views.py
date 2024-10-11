@@ -18,9 +18,13 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from adminpanal.models import*
 from staffs.models import*
+from bookings.models import*
+
 from django.http import HttpResponseBadRequest
 from django.contrib.sessions.models import Session
 from django.http import JsonResponse
+from django.http import HttpResponse
+
 
 
 def home(request):
@@ -54,6 +58,10 @@ def category_packages(request, category_id):
         'categories': categories,
         'selected_category': selected_category,
     })
+    
+def package_details(request, id):
+    package = get_object_or_404(PackageManagement, id=id)
+    return render(request, 'package_details.html', {'package': package})
 
 def contact(request):
     return render(request, 'contact.html')
@@ -398,51 +406,54 @@ def food_inquiry(request):
         'package_id': package_id
     })
     
-def booking_view(request):
-    packages = PackageManagement.objects.all()
-    rooms = Room.objects.filter(status='available')
-    menu_items = MenuItem.objects.all()
-
+def create_booking(request):
     if request.method == 'POST':
-        # Collect data from request.POST
         package_id = request.POST.get('package_id')
-        room_id = request.POST.get('room_id')
-        num_people = request.POST.get('num_people')
-        num_rooms = request.POST.get('num_rooms')
-        check_in_date = request.POST.get('check_in_date')
-        check_out_date = request.POST.get('check_out_date')
-        additional_requests = request.POST.get('additional_requests')
+        number_of_adults = request.POST.get('number_of_adults')
+        payment_method = request.POST.get('payment_method')
+        
+        # Ensure that required fields are present
+        if not package_id:
+            return HttpResponse("Package ID is required.", status=400)
+        if not number_of_adults:
+            return HttpResponse("Number of Adults is required.", status=400)
+        if not payment_method:
+            return HttpResponse("Payment Method is required.", status=400)
 
-        # Create booking instance
-        booking = PackageBooking(
-            package_id=package_id,
-            room_id=room_id,
-            num_people=num_people,
-            num_rooms=num_rooms,
-            check_in_date=check_in_date,
-            check_out_date=check_out_date,
-            additional_requests=additional_requests,
+        # Check if `number_of_adults` is an integer
+        try:
+            number_of_adults = int(number_of_adults)
+        except ValueError:
+            return HttpResponse("Number of Adults must be a valid integer.", status=400)
+
+        # Fetch the package object
+        package = get_object_or_404(PackageManagement, id=package_id)
+
+        # Save the booking
+        booking = Booking(
+            user=request.user,  # Ensure the user is set correctly
+            package=package,
+            number_of_adults=number_of_adults,
+            payment_method=payment_method
         )
         booking.save()
 
-        # Handle menu item quantities
-        for key in request.POST:
-            if key.startswith('quantity_'):
-                menu_item_id = key.split('_')[1]
-                quantity = request.POST.get(key)
-                MenuItemQuantity.objects.create(booking=booking, menu_item_id=menu_item_id, quantity=quantity)
-
-        return redirect('booking_success')  # Redirect to success page
-
-    return render(request, 'booking.html', {
-        'packages': packages,
-        'rooms': rooms,
-        'menu_items': menu_items,
-    })
+        return redirect('booking_success')
+    
+    packages = PackageManagement.objects.all()
+    return render(request, 'create_booking.html', {'packages': packages})
 
 def booking_success(request):
-    return render(request, 'booking_success.html')
+    return render(request, 'success.html')
 
-def package_details(request, id):
-    package = get_object_or_404(PackageManagement, id=id)
-    return render(request, 'package_details.html', {'package': package})
+@login_required
+def booking_list(request):
+    bookings = Booking.objects.filter(user=request.user)  # Fetch bookings for the logged-in user
+    return render(request, 'booking/booking_list.html', {'bookings': bookings})
+
+@login_required
+def cancel_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    booking.delete()  # Delete the booking
+    return redirect('booking_list')
+

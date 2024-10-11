@@ -54,7 +54,7 @@
             <button id="submit-selection" class="btn btn-success">Submit Selection</button>
         </div>
         
-        <form id="menu-form" method="post" action="{% url 'booking' %}">
+        <form id="menu-form" method="post" action="{% url 'menu' %}">
             {% csrf_token %}
             <div class="row">
                 {% for item in menu %}

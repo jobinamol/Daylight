@@ -32,9 +32,25 @@
                         <p>{{ package.description }}</p>
                         <p><strong>Price:</strong> ₹{{ package.price }} per day</p>
                         <p><strong>Duration:</strong> {{ package.duration }} days</p>
+                        
+                        <!-- Menu Items -->
+                        <h4>Menu Items:</h4>
+                        <ul>
+                            {% for item in package.menu_items.all %}
+                                <li>{{ item.name }} - ₹{{ item.price }}</li>
+                            {% endfor %}
+                        </ul>
+                        
+                        <!-- Rooms -->
+                        <h4>Rooms:</h4>
+                        <ul>
+                            {% for room in package.rooms.all %}
+                                <li>{{ room.room_type }} - ₹{{ room.price_per_day }} (Room {{ room.room_number }})</li>
+                            {% endfor %}
+                        </ul>
 
                         <!-- Book Now Button -->
-                        <form method="POST" action="{% url 'package_details' package.id %}">
+                        <form method="POST" action="{% url 'create_booking' %}">
                             {% csrf_token %}
                             <input type="hidden" name="package_id" value="{{ package.id }}">
                             <input type="hidden" name="price" value="{{ package.price }}">

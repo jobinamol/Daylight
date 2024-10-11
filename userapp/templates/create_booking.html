@@ -1,0 +1,26 @@
+<form method="post" action="{% url 'create_booking' %}">
+    {% csrf_token %}
+    <label for="package_id">Select Package:</label>
+    <select name="package_id" required>
+        {% for package in packages %}
+            <option value="{{ package.id }}">{{ package.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="number_of_adults">Number of Adults:</label>
+    <input type="number" name="number_of_adults" placeholder="Number of Adults" required min="1">
+
+    <label for="number_of_children">Number of Children (optional):</label>
+    <input type="number" name="number_of_children" placeholder="Number of Children" min="0" value="0">
+
+    <label for="payment_method">Payment Method:</label>
+    <input type="number" name="number_of_adults" placeholder="Number of Adults" required min="1">
+<select name="payment_method" required>
+    <option value="credit_card">Credit Card</option>
+    <option value="paypal">PayPal</option>
+    <option value="cash">Cash</option>
+</select>
+
+
+    <button type="submit">Book Now</button>
+</form>

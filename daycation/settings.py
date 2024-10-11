@@ -5,6 +5,7 @@ import pymysql
 from decouple import config
 
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
@@ -32,8 +33,9 @@ INSTALLED_APPS = [
     'staffs',
     'adminpanal',
     'reservations',
-]
+    'bookings',
 
+]
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -42,11 +44,14 @@ SOCIALACCOUNT_PROVIDERS = {
             'secret': config('GOOGLE_CLIENT_SECRET'),
             'key': '',
             'redirect_uris': [
-                'http://localhost:8000/accounts/google/login/callback/'
+                'http://127.0.0.1:8000/oauth/complete/google-oauth2/',
+                'http://127.0.0.1:8000/accounts/google/login/callback/',
             ],
         }
     }
 }
+
+
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
 

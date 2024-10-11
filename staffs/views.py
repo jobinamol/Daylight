@@ -172,3 +172,16 @@ def delete_room(request, room_id):
         return redirect('roommanagement')
     return render(request, 'confirm_delete.html', {'room': room})
 
+def order_management_view(request):
+    # Add context data if needed to display orders, etc.
+    context = {
+        # 'orders': Order.objects.all(), # Example if you have an Order model
+    }
+    return render(request, 'order_management.html', context)
+
+def feedback_management_view(request):
+    # You can add any context data related to feedback if needed
+    context = {
+        # 'feedbacks': Feedback.objects.all(), # Example if you have a Feedback model
+    }
+    return render(request, 'feedback_management.html', context)
