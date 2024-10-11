@@ -406,42 +406,13 @@ def food_inquiry(request):
         'package_id': package_id
     })
     
-def create_booking(request):
-    if request.method == 'POST':
-        package_id = request.POST.get('package_id')
-        number_of_adults = request.POST.get('number_of_adults')
-        payment_method = request.POST.get('payment_method')
-        
-        # Ensure that required fields are present
-        if not package_id:
-            return HttpResponse("Package ID is required.", status=400)
-        if not number_of_adults:
-            return HttpResponse("Number of Adults is required.", status=400)
-        if not payment_method:
-            return HttpResponse("Payment Method is required.", status=400)
 
-        # Check if `number_of_adults` is an integer
-        try:
-            number_of_adults = int(number_of_adults)
-        except ValueError:
-            return HttpResponse("Number of Adults must be a valid integer.", status=400)
 
-        # Fetch the package object
-        package = get_object_or_404(PackageManagement, id=package_id)
-
-        # Save the booking
-        booking = Booking(
-            user=request.user,  # Ensure the user is set correctly
-            package=package,
-            number_of_adults=number_of_adults,
-            payment_method=payment_method
-        )
-        booking.save()
-
-        return redirect('booking_success')
+def create_booking(request,id):
     
-    packages = PackageManagement.objects.all()
-    return render(request, 'create_booking.html', {'packages': packages})
+    package = get_object_or_404(PackageManagement, id=id)
+    return render(request, 'create_booking.html', {'package': package})
+
 
 def booking_success(request):
     return render(request, 'success.html')

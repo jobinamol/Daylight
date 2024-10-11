@@ -1,26 +1,64 @@
-<form method="post" action="{% url 'create_booking' %}">
-    {% csrf_token %}
-    <label for="package_id">Select Package:</label>
-    <select name="package_id" required>
-        {% for package in packages %}
-            <option value="{{ package.id }}">{{ package.name }}</option>
-        {% endfor %}
-    </select>
+{% extends 'userindex.html' %}
+{% block content %}
 
-    <label for="number_of_adults">Number of Adults:</label>
-    <input type="number" name="number_of_adults" placeholder="Number of Adults" required min="1">
+<!-- Hero Section with Package Image -->
+<div class="hero-wrap" style="background-image: url('{{ package.image.url }}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <div class="text">
+                    <h1 class="mb-4 bread">Book Your Package: {{ package.name }}</h1>
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span>
+                        <span>Book Package</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <label for="number_of_children">Number of Children (optional):</label>
-    <input type="number" name="number_of_children" placeholder="Number of Children" min="0" value="0">
+<section class="ftco-section bg-light">
+    <div class="container">
+        <h2>Book Your Package: {{ package.name }}</h2>
 
-    <label for="payment_method">Payment Method:</label>
-    <input type="number" name="number_of_adults" placeholder="Number of Adults" required min="1">
-<select name="payment_method" required>
-    <option value="credit_card">Credit Card</option>
-    <option value="paypal">PayPal</option>
-    <option value="cash">Cash</option>
-</select>
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Display Selected Package Name -->
+            <div class="form-group">
+                <label>Package Name:</label>
+                <input type="text" value="{{ package.name }}" class="form-control" readonly>
+                <input type="hidden" name="package_id" value="{{ package.id }}">
+            </div>
 
+            <!-- Number of Adults -->
+            <div class="form-group">
+                <label for="number_of_adults">Number of Adults:</label>
+                <input type="number" name="number_of_adults" class="form-control" min="1" required>
+            </div>
 
-    <button type="submit">Book Now</button>
-</form>
+            <!-- Number of Children -->
+            <div class="form-group">
+                <label for="number_of_children">Number of Children:</label>
+                <input type="number" name="number_of_children" class="form-control" min="0">
+            </div>
+
+            <!-- Payment Method -->
+            <div class="form-group">
+                <label for="payment_method">Payment Method:</label>
+                <select name="payment_method" class="form-control" required>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="cash">Cash</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">payment now</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

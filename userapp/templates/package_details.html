@@ -50,7 +50,7 @@
                         </ul>
 
                         <!-- Book Now Button -->
-                        <form method="POST" action="{% url 'create_booking' %}">
+                        <form method="POST" action="{% url 'create_booking' package.id %}">
                             {% csrf_token %}
                             <input type="hidden" name="package_id" value="{{ package.id }}">
                             <input type="hidden" name="price" value="{{ package.price }}">
