@@ -1,7 +1,7 @@
 {% extends 'userindex.html' %}
-{% block content %}
 {% load static %}
 
+{% block content %}
 <div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
     <div class="overlay"></div>
     <div class="container">
@@ -32,22 +32,26 @@
                         <p>{{ package.description }}</p>
                         <p><strong>Price:</strong> ₹{{ package.price }} per day</p>
                         <p><strong>Duration:</strong> {{ package.duration }} days</p>
-                        
-                        <!-- Menu Items -->
-                        <h4>Menu Items:</h4>
-                        <ul>
-                            {% for item in package.menu_items.all %}
-                                <li>{{ item.name }} - ₹{{ item.price }}</li>
+
+                        <!-- Available Rooms -->
+                        <h4>Available Rooms:</h4>
+                        <div class="row">
+                            {% for room in available_rooms %}
+                                <div class="col-md-4">
+                                    <div class="card mb-4 shadow-sm">
+                                        <img src="{{ room.image.url }}" alt="{{ room.room_type }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ room.room_type }}</h5>
+                                            <p class="card-text"><strong>Price:</strong> ₹{{ room.price }} per day</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <div class="col-12">
+                                    <p>No rooms available for this package.</p>
+                                </div>
                             {% endfor %}
-                        </ul>
-                        
-                        <!-- Rooms -->
-                        <h4>Rooms:</h4>
-                        <ul>
-                            {% for room in package.rooms.all %}
-                                <li>{{ room.room_type }} - ₹{{ room.price_per_day }} (Room {{ room.room_number }})</li>
-                            {% endfor %}
-                        </ul>
+                        </div>
 
                         <!-- Book Now Button -->
                         <form method="POST" action="{% url 'create_booking' package.id %}">
@@ -62,5 +66,4 @@
         </div>
     </div>
 </section>
-
 {% endblock %}

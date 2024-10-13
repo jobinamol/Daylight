@@ -37,11 +37,10 @@ urlpatterns = [
     path('package/<int:id>/', views.package_details, name='package_details'),
     path('packages/category/<int:category_id>/', views.category_packages, name='category_packages'),  # Ensure this line is correct
     path('create/<int:id>', views.create_booking, name='create_booking'),
-    path('bookings/', views.booking_list, name='booking_list'),
-    path('bookings/success/',views. booking_success, name='booking_success'),
-    path('bookings/cancel/<int:booking_id>/',views. cancel_booking, name='cancel_booking'),
     path('google-login/', views.google_login, name='google_login'),
     path('google-login/callback/', views.google_callback, name='google_callback'),
+    path('booking/<int:package_id>/',views. booking_view, name='booking_view'),
+
 
 
 ]

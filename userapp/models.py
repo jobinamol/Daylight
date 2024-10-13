@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 # Import models from adminindex and staff apps
 from adminpanal.models import* # Import Package from adminindex app
 from staffs.models import*
+from adminpanal.models import PackageManagement  # Adjust the import according to your structure
+
 
 class UserDB(models.Model):
     name = models.CharField(max_length=255)
@@ -72,7 +74,20 @@ class PackageBooking(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.package_name} - {self.booking_date.strftime('%Y-%m-%d %H:%M')}"
 
+class Bookingpackage(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    num_adults = models.IntegerField()
+    num_children = models.IntegerField()
+    package = models.ForeignKey(PackageManagement, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    payment_method = models.CharField(max_length=100)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
 
+    def __str__(self):
+        return f"Booking for {self.first_name} {self.last_name}"
 
 
 

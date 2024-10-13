@@ -32,6 +32,8 @@ class PackageManagement(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     food_categories = models.ManyToManyField(FoodCategory, blank=True)  # New field for food categories
     menu_items = models.ManyToManyField(MenuItem, blank=True)
+    rooms = models.ManyToManyField(Room, related_name='packages')
+
 
     def __str__(self):
         return self.name

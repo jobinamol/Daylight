@@ -31,15 +31,6 @@
         justify-content: center;
         gap: 10px;
     }
-    .scrollable-box {
-        max-height: 150px; /* Set a maximum height */
-        overflow-y: auto; /* Enable vertical scrolling */
-        border: 1px solid #ccc; /* Add a border */
-        padding: 10px; /* Add padding */
-        border-radius: 5px; /* Rounded corners */
-        background-color: rgba(255, 255, 255, 0.8); /* Background color */
-        margin-bottom: 15px; /* Spacing */
-    }
 </style>
 
 <h1 class="text-center my-4">Package Management</h1>
@@ -81,29 +72,6 @@
             <input type="text" id="duration" name="duration" class="form-control" required>
         </div>
 
-        <!-- Food Items Field with Scrollable Box -->
-        <div class="form-group">
-            <label for="food_items" class="mr-2">Food Items:</label>
-            <div id="food-items-container" class="scrollable-box">
-                {% for item in menu_items %}
-                    <div class="food-item">
-                        <input type="checkbox" id="food_item_{{ item.id }}" name="food_items" value="{{ item.id }}">
-                        <label for="food_item_{{ item.id }}">{{ item.name }}</label>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Rooms Field with Multi-select -->
-        <div class="form-group">
-            <label for="rooms" class="mr-2">Rooms:</label>
-            <select multiple id="rooms" name="rooms" class="form-control" required>
-                {% for room in rooms %}
-                    <option value="{{ room.id }}">{{ room.room_type }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
         <div class="form-group">
             <label for="image" class="mr-2">Image:</label>
             <input type="file" id="image" name="image" accept="image/*" class="form-control-file">
@@ -125,8 +93,6 @@
                     <th>Description</th>
                     <th>Price</th>
                     <th>Duration</th>
-                    <th>Food Items</th>
-                    <th>Rooms</th>
                     <th>Image</th>
                     <th>Actions</th>
                 </tr>
@@ -139,16 +105,6 @@
                     <td>{{ package.description }}</td>
                     <td>₹{{ package.price }}</td>
                     <td>{{ package.duration }}</td>
-                    <td>
-                        {% for item in package.menu_items.all %}
-                            {{ item.name }}{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for room in package.rooms.all %}
-                            {{ room.room_type }}{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </td>
                     <td>
                         {% if package.image %}
                             <img src="{{ package.image.url }}" alt="{{ package.name }}" style="width: 100px; height: auto;">

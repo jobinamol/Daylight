@@ -117,9 +117,20 @@ def category_packages(request, category_id):
         'selected_category': selected_category,
     })
     
+# views.py
+
+from django.shortcuts import render, get_object_or_404
+from .models import PackageManagement, Room
+
+# views.py
+
 def package_details(request, id):
     package = get_object_or_404(PackageManagement, id=id)
-    return render(request, 'package_details.html', {'package': package})
+    # Assuming status can be 'available', 'unavailable', etc.
+    available_rooms = Room.objects.filter(status='available')  # Change this as per your actual status values
+    return render(request, 'package_details.html', {'package': package, 'available_rooms': available_rooms})
+
+
 
 def contact(request):
     return render(request, 'contact.html')
@@ -478,18 +489,47 @@ def create_booking(request,id):
     package = get_object_or_404(PackageManagement, id=id)
     return render(request, 'create_booking.html', {'package': package})
 
+def booking_view(request, package_id):
+    package = PackageManagement.objects.get(id=package_id)  # Fetch the selected package
+    rooms = Room.objects.filter(package=package)  # Get rooms associated with the package
 
-def booking_success(request):
-    return render(request, 'success.html')
+    if request.method == 'POST':
+        # Retrieve the form data
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        num_adults = int(request.POST['num_adults'])
+        num_children = int(request.POST['num_children'])
+        package_price = float(request.POST['package_price'])  # Ensure this field is passed in the form
+        room_id = request.POST['room_type']  # Change this to match the form input name
+        room_price = float(request.POST['room_price'])  # Ensure this field is passed in the form
+        num_rooms = int(request.POST['num_rooms'])
+        payment_method = request.POST['payment_method']
+        
+        # Calculate total amount
+        total_amount = ((num_adults + (num_children * 0.5)) * room_price * num_rooms) + package_price
+        
+        # Create a new booking entry
+        booking = Booking(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            phone=phone,
+            num_adults=num_adults,
+            num_children=num_children,
+            package=package,
+            room_id=room_id,  # Assuming room_id relates to the Room model
+            payment_method=payment_method,
+            total_amount=total_amount
+        )
+        booking.save()
 
-@login_required
-def booking_list(request):
-    bookings = Booking.objects.filter(user=request.user)  # Fetch bookings for the logged-in user
-    return render(request, 'booking/booking_list.html', {'bookings': bookings})
+        messages.success(request, 'Booking successful!')
+        return redirect('booking_confirmation')  # Redirect to a confirmation page
 
-@login_required
-def cancel_booking(request, booking_id):
-    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
-    booking.delete()  # Delete the booking
-    return redirect('booking_list')
-
+    context = {
+        'package': package,
+        'rooms': rooms,
+    }
+    return render(request, 'your_template.html', context)
