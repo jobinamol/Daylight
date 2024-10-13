@@ -28,6 +28,10 @@ urlpatterns = [
     path('rooms/delete/<int:room_id>/', views.delete_room, name='delete_room'),
     path('order-management/',views.order_management_view, name='order_management'),
     path('feedback-management/', views.feedback_management_view, name='feedback_management'),
+    path('categories/', views.list_food_categories, name='list_food_categories'),
+    path('categories/add/', views.add_food_category, name='add_food_category'),
+    path('categories/edit/<int:category_id>/', views.edit_food_category, name='edit_food_category'),
+    path('categories/delete/<int:category_id>/', views.delete_food_category, name='delete_food_category'),
 
 
 

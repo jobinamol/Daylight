@@ -1,4 +1,6 @@
 from django.db import models
+from adminpanal.models import*  # Adjust the path according to your project structure
+
 
 class FrontDeskCoordinator(models.Model):
     username = models.CharField(max_length=255, unique=True)
@@ -18,30 +20,7 @@ class Staff(models.Model):
     def __str__(self):
         return self.username
     
-class MenuItem(models.Model):
-    CATEGORY_CHOICES = [
-        ('breakfast', 'Breakfast'),
-        ('lunch', 'Lunch'),
-        ('dinner', 'Dinner'),
-        ('beverages', 'Beverages'),
-        ('snacks', 'Snacks')
-    ]
-    
-    name = models.CharField(max_length=255)
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
-    description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
-    image = models.ImageField(upload_to='menu_images/', blank=True, null=True)  # Image field
 
-    def __str__(self):
-        return self.name
-
-    @property
-    def image_url(self):
-        """Return the URL of the image if it exists."""
-        if self.image:
-            return self.image.url
-        return ''
 
 
 class Room(models.Model):
@@ -57,7 +36,7 @@ class Room(models.Model):
         ('occupied', 'Occupied'),
     ]
 
-    number = models.CharField(max_length=5, unique=True)
+    number = models.CharField(max_length=10)  # Original max_length
     room_type = models.CharField(max_length=10, choices=ROOM_TYPES)
     image = models.ImageField(upload_to='room_images/', blank=True, null=True)  # Room image
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')  # Status choices
@@ -65,3 +44,20 @@ class Room(models.Model):
 
     def __str__(self):
         return f"{self.number} - {self.room_type} - ₹{self.price}"
+    
+class FoodCategory(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class MenuItem(models.Model):
+    name = models.CharField(max_length=255)
+    category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, related_name='menu_items')
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    image = models.ImageField(upload_to='menu_images/', blank=True, null=True)
+
+    def __str__(self):
+        return self.name

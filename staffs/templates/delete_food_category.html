@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Food Category</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url("{% static 'images/kit.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #ff6347;
+            font-size: 2.5em;
+            font-family: 'Lato', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center; /* Center text */
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #dc3545;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            margin-right: 10px; /* Space between buttons */
+        }
+
+        button:hover {
+            background-color: #c82333;
+        }
+
+        .cancel-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1em;
+            margin-top: 10px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Delete Food Category</h1>
+        <p>Are you sure you want to delete the category "<strong>{{ category.name }}</strong>"?</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Yes, Delete</button>
+        </form>
+        
+        <a href="{% url 'list_food_categories' %}" class="cancel-btn">Cancel</a>
+    </div>
+
+</body>
+
+</html>

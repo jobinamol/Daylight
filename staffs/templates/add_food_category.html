@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Menu Item</title>
+    <title>Add Food Category</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -44,12 +44,14 @@
             font-size: 1.2em;
             font-weight: 600;
             color: #333;
+            display: block;
+            margin-bottom: 8px;
         }
 
-        input, select, textarea {
+        input[type="text"] {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
+            margin-bottom: 20px;
             font-size: 1em;
             border-radius: 5px;
             border: 1px solid #ccc;
@@ -65,8 +67,9 @@
             font-size: 1em;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            display: inline-block; /* Aligns with back button */
-            margin-top: 10px; /* Adds space above the button */
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
         }
 
         .submit-btn:hover {
@@ -81,47 +84,28 @@
             text-decoration: none;
             font-size: 1em;
             margin-top: 10px;
-            display: inline-block; /* Aligns with submit button */
+            display: inline-block;
             transition: background-color 0.3s ease;
         }
 
         .back-btn:hover {
             background-color: #5a6268;
         }
-
     </style>
 </head>
 
 <body>
 
     <div class="container">
-        <h1>Add Menu Item</h1>
-        <form method="POST" enctype="multipart/form-data">
+        <h1>Add Food Category</h1>
+        <form method="post">
             {% csrf_token %}
-            
-            <label for="name">Menu Item Name:</label>
-            <input type="text" id="name" name="name" required>
+            <label for="name">Category Name:</label>
+            <input type="text" name="name" required>
 
-            <label for="category">Category:</label>
-            <select id="category" name="category" required>
-                <option value="" disabled selected>Select a category</option> <!-- Placeholder option -->
-                {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option> <!-- Dynamically load categories -->
-                {% endfor %}
-            </select>
-
-            <label for="price">Price:</label>
-            <input type="number" id="price" name="price" required min="0" step="0.01"> <!-- Added min and step for price input -->
-
-            <label for="image">Upload Image:</label>
-            <input type="file" id="image" name="image" accept="image/*">
-
-            <button type="submit" class="submit-btn">Add Item</button>
+            <button type="submit" class="submit-btn">Add Category</button>
         </form>
-
-        <a href="{% url 'menu_management' %}" class="back-btn">
-            <i class="fas fa-arrow-left"></i> Back 
-        </a>
+        <a href="{% url 'list_food_categories' %}" class="back-btn">Back to list</a>
     </div>
 
 </body>

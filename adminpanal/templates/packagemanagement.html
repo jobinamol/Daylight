@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
 
-<!-- Include Font Awesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 <style>
@@ -32,6 +31,15 @@
         justify-content: center;
         gap: 10px;
     }
+    .scrollable-box {
+        max-height: 150px; /* Set a maximum height */
+        overflow-y: auto; /* Enable vertical scrolling */
+        border: 1px solid #ccc; /* Add a border */
+        padding: 10px; /* Add padding */
+        border-radius: 5px; /* Rounded corners */
+        background-color: rgba(255, 255, 255, 0.8); /* Background color */
+        margin-bottom: 15px; /* Spacing */
+    }
 </style>
 
 <h1 class="text-center my-4">Package Management</h1>
@@ -53,8 +61,6 @@
             </select>
         </div>
 
-        <!-- Food Category Field -->
-       
         <div class="form-group">
             <label for="name" class="mr-2">Name:</label>
             <input type="text" id="name" name="name" class="form-control" required>
@@ -75,31 +81,23 @@
             <input type="text" id="duration" name="duration" class="form-control" required>
         </div>
 
-        <div class="form-group">
-            <label for="food_category" class="mr-2">Food Category:</label>
-            <select id="food_category" name="food_category" class="form-control" required>
-                <option value="">Select a food category</option>
-                {% for food_cat in food_categories %}
-                    <option value="{{ food_cat.id }}">{{ food_cat.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-
-        <!-- Food Items Field -->
+        <!-- Food Items Field with Scrollable Box -->
         <div class="form-group">
             <label for="food_items" class="mr-2">Food Items:</label>
-            <select multiple id="food_items" name="food_items" class="form-control">
+            <div id="food-items-container" class="scrollable-box">
                 {% for item in menu_items %}
-                    <option value="{{ item.id }}">{{ item.name }}</option>
+                    <div class="food-item">
+                        <input type="checkbox" id="food_item_{{ item.id }}" name="food_items" value="{{ item.id }}">
+                        <label for="food_item_{{ item.id }}">{{ item.name }}</label>
+                    </div>
                 {% endfor %}
-            </select>
+            </div>
         </div>
 
-        <!-- Rooms Field -->
+        <!-- Rooms Field with Multi-select -->
         <div class="form-group">
             <label for="rooms" class="mr-2">Rooms:</label>
-            <select multiple id="rooms" name="rooms" class="form-control">
+            <select multiple id="rooms" name="rooms" class="form-control" required>
                 {% for room in rooms %}
                     <option value="{{ room.id }}">{{ room.room_type }}</option>
                 {% endfor %}
@@ -123,7 +121,6 @@
             <thead>
                 <tr>
                     <th>Package Category</th>
-                    <th>Food Category</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Price</th>
@@ -138,7 +135,6 @@
                 {% for package in packages %}
                 <tr>
                     <td>{{ package.category.name }}</td>
-                    <td>{{ package.food_category.name }}</td>
                     <td>{{ package.name }}</td>
                     <td>{{ package.description }}</td>
                     <td>₹{{ package.price }}</td>

@@ -20,36 +20,21 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class FoodCategory(models.Model):
-    name = models.CharField(max_length=255)
 
-    def __str__(self):
-        return self.name
 
 #packagemanagement model
-
 class PackageManagement(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    duration = models.CharField(max_length=100)  # Example: "2 nights"
-    additional_day_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Price for additional days
-    image = models.ImageField(upload_to='package_images/', blank=True, null=True)
-
-    # Relationships
-    
-    menu_items = models.ManyToManyField(MenuItem)  # Link multiple menu items to the package
-    rooms = models.ManyToManyField(Room)  # Link multiple rooms to the package
+    duration = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='packages/', null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    food_categories = models.ManyToManyField(FoodCategory, blank=True)  # New field for food categories
+    menu_items = models.ManyToManyField(MenuItem, blank=True)
 
     def __str__(self):
         return self.name
-
-    def get_duration_in_days(self):
-        """Parse duration string to get the number of nights."""
-        try:
-            return int(self.duration.split()[0])
-        except (ValueError, IndexError):
-            return 0 
 #packagesamplemodel     
 class PackageManagement1(models.Model):
     CATEGORY_CHOICES = [

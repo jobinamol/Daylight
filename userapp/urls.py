@@ -40,6 +40,8 @@ urlpatterns = [
     path('bookings/', views.booking_list, name='booking_list'),
     path('bookings/success/',views. booking_success, name='booking_success'),
     path('bookings/cancel/<int:booking_id>/',views. cancel_booking, name='cancel_booking'),
+    path('google-login/', views.google_login, name='google_login'),
+    path('google-login/callback/', views.google_callback, name='google_callback'),
 
 
 ]

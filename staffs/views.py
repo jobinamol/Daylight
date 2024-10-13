@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .models import *
+from adminpanal.models import *
+from django.urls import reverse
+
 from django.http import JsonResponse
 
 
@@ -57,46 +60,67 @@ def evant_dashboard(request):
 
 def guestservice_dashboard(request):
     return render(request,"guestservice_dashboard.html")
-
 def menu_management(request):
-    menu_items = MenuItem.objects.all()
-    return render(request, 'menu_management.html', {'menu_items': menu_items})
-
-
+    # Retrieve all menu items and their categories
+    menu_items = MenuItem.objects.select_related('category').all()
+    categories = FoodCategory.objects.all()
+    return render(request, 'menu_management.html', {'menu_items': menu_items, 'categories': categories})
 
 def add_menu_item(request):
+    # Retrieve all food categories
+    categories = FoodCategory.objects.all()
+
     if request.method == 'POST':
         name = request.POST['name']
-        category = request.POST['category']
+        category_id = request.POST['category']
+        
+        # Ensure the category exists
+        category = get_object_or_404(FoodCategory, id=category_id)
+
         description = request.POST.get('description', '')
         price = request.POST['price']
         image = request.FILES.get('image')
 
-        menu_item = MenuItem(name=name, category=category, description=description, price=price, image=image)
+        # Create and save the new menu item
+        menu_item = MenuItem(
+            name=name, 
+            category=category, 
+            description=description, 
+            price=price, 
+            image=image
+        )
         menu_item.save()
         return redirect('menu_management')
 
-    return render(request, 'add_menu_item.html')
+    return render(request, 'add_menu_item.html', {'categories': categories})
 
 def edit_menu_item(request, item_id):
-    menu_item = MenuItem.objects.get(id=item_id)
+    # Retrieve the menu item or return a 404 if not found
+    menu_item = get_object_or_404(MenuItem, id=item_id)
+    categories = FoodCategory.objects.all()
 
     if request.method == 'POST':
         menu_item.name = request.POST['name']
-        menu_item.category = request.POST['category']
+        category_id = request.POST['category']
+
+        # Ensure the category exists
+        menu_item.category = get_object_or_404(FoodCategory, id=category_id)
+        
         menu_item.description = request.POST.get('description', '')
         menu_item.price = request.POST['price']
 
         if 'image' in request.FILES:
             menu_item.image = request.FILES['image']
 
+        # Save the updated menu item
         menu_item.save()
         return redirect('menu_management')
 
-    return render(request, 'edit_menu_item.html', {'menu_item': menu_item})
+    return render(request, 'edit_menu_item.html', {'menu_item': menu_item, 'categories': categories})
 
 def delete_menu_item(request, item_id):
-    menu_item = MenuItem.objects.get(id=item_id)
+    # Retrieve the menu item or return a 404 if not found
+    menu_item = get_object_or_404(MenuItem, id=item_id)
     menu_item.delete()
     return redirect('menu_management')
 
@@ -130,17 +154,26 @@ def add_room(request):
         price = request.POST.get('price')  # Get price from the request
         image = request.FILES.get('image')  # Handling image uploads
 
-        # Create a new Room instance
-        room = Room.objects.create(
-            number=number,
-            room_type=room_type,
-            status=status,
-            price=price,  # Set the price
-            image=image
-        )
-        room.save()
+        # Validate the length of the room number
+        if len(number) > 20:  # Adjust based on your model's max_length
+            messages.error(request, "Room number is too long. Maximum length is 20 characters.")
+            return render(request, 'add_rooms.html')
 
-        return redirect('roommanagement')
+        try:
+            # Create a new Room instance
+            room = Room.objects.create(
+                number=number,
+                room_type=room_type,
+                status=status,
+                price=price,  # Set the price
+                image=image
+            )
+            room.save()
+            messages.success(request, "Room added successfully!")
+            return redirect('roommanagement')
+        except Exception as e:
+            messages.error(request, f"An error occurred while adding the room: {str(e)}")
+            return render(request, 'add_rooms.html')
 
     return render(request, 'add_rooms.html')
 
@@ -154,13 +187,22 @@ def edit_room(request, room_id):
         room.status = request.POST.get('status')
         room.price = request.POST.get('price')  # Update the price
 
+        # Validate the length of the room number
+        if len(room.number) > 20:  # Adjust based on your model's max_length
+            messages.error(request, "Room number is too long. Maximum length is 20 characters.")
+            return render(request, 'edit_rooms.html', {'room': room})
+
         # Update image if a new one is uploaded
         if request.FILES.get('image'):
             room.image = request.FILES['image']
 
-        room.save()
-
-        return redirect('roommanagement')
+        try:
+            room.save()
+            messages.success(request, "Room updated successfully!")
+            return redirect('roommanagement')
+        except Exception as e:
+            messages.error(request, f"An error occurred while updating the room: {str(e)}")
+            return render(request, 'edit_rooms.html', {'room': room})
 
     return render(request, 'edit_rooms.html', {'room': room})
 
@@ -168,8 +210,13 @@ def edit_room(request, room_id):
 def delete_room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     if request.method == 'POST':
-        room.delete()
-        return redirect('roommanagement')
+        try:
+            room.delete()
+            messages.success(request, "Room deleted successfully!")
+            return redirect('roommanagement')
+        except Exception as e:
+            messages.error(request, f"An error occurred while deleting the room: {str(e)}")
+
     return render(request, 'confirm_delete.html', {'room': room})
 
 def order_management_view(request):
@@ -185,3 +232,39 @@ def feedback_management_view(request):
         # 'feedbacks': Feedback.objects.all(), # Example if you have a Feedback model
     }
     return render(request, 'feedback_management.html', context)
+
+#catagory
+def list_food_categories(request):
+    categories = FoodCategory.objects.all()
+    return render(request, 'list_food_categories.html', {'categories': categories})
+
+# Add Category
+def add_food_category(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name:
+            FoodCategory.objects.create(name=name)
+            messages.success(request, 'Category added successfully!')
+            return redirect(reverse('list_food_categories'))
+    return render(request, 'add_food_category.html')
+
+# Edit Category
+def edit_food_category(request, category_id):
+    category = get_object_or_404(FoodCategory, id=category_id)
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name:
+            category.name = name
+            category.save()
+            messages.success(request, 'Category updated successfully!')
+            return redirect(reverse('list_food_categories'))
+    return render(request, 'edit_food_category.html', {'category': category})
+
+# Delete Category
+def delete_food_category(request, category_id):
+    category = get_object_or_404(FoodCategory, id=category_id)
+    if request.method == 'POST':
+        category.delete()
+        messages.success(request, 'Category deleted successfully!')
+        return redirect(reverse('list_food_categories'))
+    return render(request, 'delete_food_category.html', {'category': category})

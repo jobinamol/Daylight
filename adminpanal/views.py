@@ -106,9 +106,10 @@ def delete_staff(request, staff_id):
 
 def packagemanagement(request):
     packages = PackageManagement.objects.all()
-    categories = Category.objects.all()  
-    menu_items = MenuItem.objects.all()  
-
+    categories = Category.objects.all()
+    food_categories = FoodCategory.objects.all()  # Fetch all food categories
+    menu_items = MenuItem.objects.select_related('category').all()
+    rooms = Room.objects.all()  # Fetch all rooms
 
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -116,42 +117,55 @@ def packagemanagement(request):
         description = request.POST.get('description')
         duration = request.POST.get('duration')
         image = request.FILES.get('image')
-        category_id = request.POST.get('category')  # Get selected category ID
-        selected_menu_items = request.POST.getlist('food_items')  # Get selected menu items
+        category_id = request.POST.get('category')
+        selected_food_categories = request.POST.getlist('food_categories')  # Updated: Retrieve selected food categories
+        selected_menu_items = request.POST.getlist('food_items')  # Updated: Retrieve selected food items
+        selected_rooms = request.POST.getlist('rooms')  # New: Retrieve selected rooms
 
+        # Validate inputs
         if not name or not price or float(price) <= 0 or not description or not duration or not category_id:
             messages.error(request, 'Please fill in all fields correctly.')
             return redirect('packagemanagement')
 
         try:
-            category = Category.objects.get(id=category_id)  # Get the category instance
+            category = Category.objects.get(id=category_id)
 
+            # Create the package
             package = PackageManagement(
                 name=name,
                 price=price,
                 description=description,
                 duration=duration,
                 image=image,
-                category=category  # Save the selected category
+                category=category
             )
             package.save()
+
+            # Save the selected food categories and menu items
+            if selected_food_categories:
+                package.food_categories.set(selected_food_categories)
             if selected_menu_items:
                 package.menu_items.set(selected_menu_items)
 
+            # Save the selected rooms
+            if selected_rooms:
+                package.rooms.set(selected_rooms)  # New: Set selected rooms
 
             messages.success(request, 'Package added successfully.')
         except Category.DoesNotExist:
             messages.error(request, 'Selected category does not exist.')
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
-        
+
         return redirect('packagemanagement')
 
     return render(request, 'packagemanagement.html', {
-    'packages': packages,
-    'categories': categories,  # Pass categories to the template
-    'menu_items': menu_items  # Pass menu items to the template
-})
+        'packages': packages,
+        'categories': categories,
+        'food_categories': food_categories,  # Pass to template
+        'menu_items': menu_items,
+        'rooms': rooms  # Pass rooms to template
+    })
 
 def edit_package(request, package_id):
     package = get_object_or_404(PackageManagement, id=package_id)
@@ -193,7 +207,7 @@ def delete_package(request, package_id):
 
 def package_list(request):
     categories = Category.objects.all()
-    packages = Package.objects.all()  # Assuming you have a Package model
+    packages = packagemanagement.objects.all()  # Assuming you have a Package model
 
     context = {
         'categories': categories,

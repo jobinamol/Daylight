@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Menu Item</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -47,7 +49,7 @@
             margin: 10px 0 5px; /* Adjust margins for spacing */
         }
 
-        input, select, textarea {
+        input, select {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px; /* More space between inputs */
@@ -77,16 +79,14 @@
         .back-btn {
             background-color: #6c757d;
             color: white;
-            padding: 8px; /* Reduced padding for a smaller button */
+            padding: 12px; /* Consistent padding for the back button */
             border-radius: 5px;
             text-decoration: none;
-            font-size: 0.9em; /* Decreased font size */
+            font-size: 1em;
             display: inline-block; /* Ensures block display for alignment */
             text-align: center; /* Center the text */
             margin-top: 10px; /* Space above the button */
             width: calc(100% - 20px); /* Adjust width for margin */
-            margin-left: 10px; /* Center alignment with a slight left margin */
-            margin-right: 10px; /* Center alignment with a slight right margin */
         }
 
         .back-btn:hover {
@@ -94,6 +94,7 @@
         }
     </style>
 </head>
+
 <body>
 
 <div class="form-container">
@@ -105,11 +106,12 @@
 
         <label for="category">Category:</label>
         <select id="category" name="category" required>
-            <option value="starter" {% if menu_item.category == 'starter' %} selected {% endif %}>starter</option>
-            <option value="Main Course" {% if menu_item.category == 'Main Course' %} selected {% endif %}>Main Course</option>
-            <option value="Dessert" {% if menu_item.category == 'Dessert' %} selected {% endif %}>Dessert</option>
-            <option value="Beverage" {% if menu_item.category == 'Beverage' %} selected {% endif %}>Beverage</option>
-            <option value="Snack" {% if menu_item.category == 'Snack' %} selected {% endif %}>Snack</option>
+            <option value="" disabled>Select a category</option> <!-- Placeholder option -->
+            {% for category in categories %}
+            <option value="{{ category.id }}" {% if category.name == menu_item.category %} selected {% endif %}>
+                {{ category.name }}
+            </option>
+            {% endfor %}
         </select>
 
         <label for="price">Price:</label>

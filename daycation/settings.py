@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'adminpanal',
     'reservations',
     'bookings',
+    'social_django',
+
 
 ]
 
@@ -42,14 +44,23 @@ SOCIALACCOUNT_PROVIDERS = {
         'APP': {
             'client_id': config('GOOGLE_CLIENT_ID'),
             'secret': config('GOOGLE_CLIENT_SECRET'),
-            'key': '',
-            'redirect_uris': [
-                'http://127.0.0.1:8000/oauth/complete/google-oauth2/',
-                'http://127.0.0.1:8000/accounts/google/login/callback/',
-            ],
-        }
+            'key': '',  # This can usually be left blank unless you have specific requirements
+        },
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'OAUTH_PKCE_ENABLED': True,  # Enable PKCE (Proof Key for Code Exchange) for security
     }
 }
+REDIRECT_URIS = [
+    'http://127.0.0.1:8000/oauth/complete/google-oauth2/',
+    'http://127.0.0.1:8000/accounts/google/login/callback/',
+]
+
 
 
 

@@ -24,7 +24,65 @@ from django.http import HttpResponseBadRequest
 from django.contrib.sessions.models import Session
 from django.http import JsonResponse
 from django.http import HttpResponse
+from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
+from google_auth_oauthlib.flow import Flow
+import os
 
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import Flow
+import requests
+
+# Helper function to convert credentials to a dictionary
+def credentials_to_dict(credentials):
+    return {
+        'token': credentials.token,
+        'refresh_token': credentials.refresh_token,
+        'token_uri': credentials.token_uri,
+        'client_id': credentials.client_id,
+        'client_secret': credentials.client_secret,
+        'scopes': credentials.scopes
+    }
+
+# Helper function to retrieve Google user info
+def get_google_user_info(credentials):
+    user_info_endpoint = 'https://www.googleapis.com/oauth2/v1/userinfo'
+    params = {'alt': 'json', 'access_token': credentials.token}
+    response = requests.get(user_info_endpoint, params=params)
+    
+    if response.ok:
+        return response.json()
+    return None
+
+# Google login view
+def google_login(request):
+    flow = Flow.from_client_secrets_file(
+        'path/to/your/credentials.json',
+        scopes=['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'],
+        redirect_uri=settings.GOOGLE_REDIRECT_URI
+    )
+    authorization_url, state = flow.authorization_url(prompt='consent')
+    request.session['state'] = state
+    return redirect(authorization_url)
+
+# Google callback view
+def google_callback(request):
+    # Your existing code to fetch user info
+    if user_info:
+        # Setting session variables
+        request.session['username'] = user_info.get('name')
+        request.session['email'] = user_info.get('email')
+        request.session['profile_image'] = user_info.get('picture')
+
+        # Debug print to verify session data
+        print("Username:", request.session.get('username'))
+        print("Email:", request.session.get('email'))
+        print("Profile Image:", request.session.get('profile_image'))
+        
+        return redirect('userindex')
+    else:
+        messages.error(request, 'Google login failed.')
+        return redirect('login')
 
 
 def home(request):
@@ -72,7 +130,14 @@ def userdashboard(request):
     return redirect('login')
 
 def userindex(request):
-    return render(request, 'userindex.html', {'user': request.user})
+    # Pass session data to the template context
+    context = {
+        'username': request.session.get('username'),
+        'email': request.session.get('email'),
+        'profile_image': request.session.get('profile_image')
+    }
+    return render(request, 'userindex.html', context)
+
 def check_username(request):
     username = request.GET.get('username')
     if UserDB.objects.filter(username=username).exists():

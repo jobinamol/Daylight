@@ -46,31 +46,40 @@
 
                 <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
 
-                {% if request.session.username %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {% if request.session.profile_image %}
-                            <img src="{{ request.session.profile_image }}" alt="User Icon" class="rounded-circle" style="width: 40px; height: 40px;" />
-                        {% else %}
-                            <img src="{% static 'icons/userlogin.jpeg' %}" alt="User Icon" class="rounded-circle" style="width: 40px; height: 40px;" />
-                        {% endif %}
-                        {{ request.session.username }}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'viewprofile' %}">View Profile</a>
-                        <a class="dropdown-item" href="{% url 'editprofile' %}">Edit Profile</a>
-                        <a class="dropdown-item" href="{% url 'changepassword' %}">Change Password</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-                    </div>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a href="{% url 'login' %}" class="nav-link">Login</a>
-                </li>
-                {% endif %}
-              </li>               
-            </ul>
+               <div class="collapse navbar-collapse" id="navbarNav">
+                {% load socialaccount %}  <!-- Load the correct social account tags -->
+
+                <ul class="navbar-nav ml-auto">
+                  <!-- Check if the user is logged in -->
+                  {% if request.session.username %}
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {% if request.session.profile_image %}
+                                  <img src="{{ request.session.profile_image }}" alt="User Icon" class="rounded-circle" style="width: 40px; height: 40px;" />
+                              {% else %}
+                                  <img src="{% static 'icons/userlogin.jpeg' %}" alt="User Icon" class="rounded-circle" style="width: 40px; height: 40px;" />
+                              {% endif %}
+                              {{ request.session.username }} ({{ request.session.email }})
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="{% url 'viewprofile' %}">View Profile</a>
+                              <a class="dropdown-item" href="{% url 'editprofile' %}">Edit Profile</a>
+                              <a class="dropdown-item" href="{% url 'changepassword' %}">Change Password</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                          </div>
+                      </li>
+                  {% else %}
+                      <!-- Show login link and Google login if user is not logged in -->
+                      
+                          <!-- Google Login Button -->
+                          <a href="{% url 'logout' %}" class="btn-google mt-3 nav-link">
+                              <img src="{% static 'icons/userlogin.jpeg' %}" alt="Google" style="width: 20px; height: 20px;">
+                              logout
+                          </a>
+                      </li>
+                  {% endif %}
+              </ul>
         </div>
         
       </div>

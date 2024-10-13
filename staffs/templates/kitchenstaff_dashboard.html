@@ -33,6 +33,11 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
+                        <a class="sidebar-link text-light" href="{% url 'list_food_categories' %}">
+                            <i class="align-middle" data-feather="tag"></i> <span>Add Categories</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
                         <a class="sidebar-link text-light" href="{% url 'order_management' %}">
                             <i class="align-middle" data-feather="list"></i> <span>Order Management</span>
                         </a>
@@ -89,7 +94,7 @@
             <!-- Content Area -->
             <main class="content p-4">
                 <div class="container-fluid">
-                    <h2 class="mb-4"><strong>Welcome, {{ request.session.username }}</strong></h2>
+                    <h2 class="mb-4"><strong>Welcome </strong></h2>
                     <div class="row g-4">
                         <div class="col-md-4">
                             <div class="card border-0 shadow">
