@@ -1,0 +1,35 @@
+{% extends 'adminindex.html' %}
+
+{% block content %}
+<h2>Booked Users List</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Package</th>
+            <th>Room</th>
+            <th>Payment Method</th>
+            <th>Total Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.first_name }}</td>
+            <td>{{ booking.last_name }}</td>
+            <td>{{ booking.phone }}</td>
+            <td>{{ booking.email }}</td>
+            <td>{{ booking.package.name }}</td>
+            <td>{{ booking.room.room_type }}</td>
+            <td>{{ booking.payment_method }}</td>
+            <td>₹{{ booking.total_amount }}</td>
+            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

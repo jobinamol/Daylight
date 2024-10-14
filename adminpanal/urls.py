@@ -30,6 +30,7 @@ urlpatterns = [
     path('category_management/', views.category_management, name='category_management'),
     path('category_management/update/<int:category_id>/', views.update_category, name='update_category'),
     path('get_food_items_by_category/<int:category_id>/', views.get_food_items_by_category, name='get_food_items_by_category'),
+    path('bookingmanagament/', views.bookingmanagement, name='bookingmanagement'),
 
 
 

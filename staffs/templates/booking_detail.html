@@ -1,0 +1,16 @@
+{% extends 'frontdesk_dashboard.html' %}
+
+{% block content %}
+<h2>Booking Details</h2>
+<div class="booking-details">
+    <p><strong>First Name:</strong> {{ booking.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ booking.last_name }}</p>
+    <p><strong>Phone:</strong> {{ booking.phone }}</p>
+    <p><strong>Email:</strong> {{ booking.email }}</p>
+    <p><strong>Package:</strong> {{ booking.package.name }}</p>
+    <p><strong>Room:</strong> {{ booking.room.room_type }}</p>
+    <p><strong>Payment Method:</strong> {{ booking.payment_method }}</p>
+    <p><strong>Total Amount:</strong> ₹{{ booking.total_amount }}</p>
+    <a href="{% url 'bookingmanagement' %}" class="btn btn-primary mt-3">Back to Booking List</a>
+</div>
+{% endblock %}

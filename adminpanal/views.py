@@ -266,4 +266,9 @@ def get_food_items_by_category(request, category_id):
     food_items_data = [{'id': item.id, 'name': item.name} for item in food_items]
     return JsonResponse(food_items_data, safe=False)
 
+def bookingmanagement(request):
+    # Fetch all booking records
+    bookings = Bookingpackage.objects.all()
+    # Pass the list of bookings to the template
+    return render(request, 'bookingmanage.html', {'bookings': bookings})
 

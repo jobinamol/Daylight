@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .models import *
 from adminpanal.models import *
+from userapp.models import *
+
 from django.urls import reverse
 
 from django.http import JsonResponse
@@ -268,3 +270,15 @@ def delete_food_category(request, category_id):
         messages.success(request, 'Category deleted successfully!')
         return redirect(reverse('list_food_categories'))
     return render(request, 'delete_food_category.html', {'category': category})
+
+def bookingmanage(request):
+    # Fetch all booking records
+    bookings = Bookingpackage.objects.all()
+    # Pass the list of bookings to the template
+    return render(request, 'bookingmanage.html', {'bookings': bookings})
+
+def booking_detail(request, booking_id):
+    # Fetch the specific booking by ID
+    booking = get_object_or_404(Bookingpackage, id=booking_id)
+    # Render the booking details in a template
+    return render(request, 'booking_detail.html', {'booking': booking})

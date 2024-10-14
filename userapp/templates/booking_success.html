@@ -25,7 +25,13 @@
             <div class="col-md-12 text-center">
                 <h4>Thank you,  Your booking has been successfully confirmed.</h4>
                 <div class="booking-details mt-4 p-4 bg-white shadow-sm rounded">
-                    <h5 class="mb-3">Booking Details</h5>
+                    <h5 class="mb-3">Booking User Details</h5>
+                    <p><strong>Name:</strong> {{ booking.first_name }} {{ booking.last_name }}</p>
+                    <p><strong>Phone:</strong> {{ booking.phone }}</p>
+                    <p><strong>Email:</strong> {{ booking.email }}</p>
+<!-- Existing fields for package, room, and other booking details -->
+                    <h5 class="mb-3">Booking  Details</h5>
+
                     <p><strong>Package:</strong> {{ booking.package.name }}</p>
                     <p><strong>Room:</strong> {{ booking.room.room_type }} Room {{ booking.room.number }}</p>
                     <p><strong>Number of Adults:</strong> {{ booking.num_adults }}</p>
