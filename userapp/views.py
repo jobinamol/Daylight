@@ -497,14 +497,11 @@ def create_booking(request,id):
     })
 
 def booking_view(request, package_id):
-    # Fetch the selected package
     package = get_object_or_404(PackageManagement, id=package_id)
-    
-    # Retrieve all available rooms independently
     rooms = Room.objects.filter(status='available')
-    
+
     if request.method == 'POST':
-        # Get form data
+        # Collect form data
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
@@ -513,16 +510,13 @@ def booking_view(request, package_id):
         num_children = request.POST.get('num_children')
         room_id = request.POST.get('room_type')
         payment_method = request.POST.get('payment_method')
-        
-        # Retrieve room price
+
         selected_room = get_object_or_404(Room, id=room_id)
         room_price = selected_room.price
-        
-        # Calculate total amount using Decimal for precise calculation
         total_amount = (Decimal(num_adults) + (Decimal(num_children) * Decimal('0.5'))) * room_price + package.price
-        
+
         # Create a new booking
-        Bookingpackage.objects.create(
+        booking = Bookingpackage.objects.create(
             first_name=first_name,
             last_name=last_name,
             email=email,
@@ -534,23 +528,12 @@ def booking_view(request, package_id):
             payment_method=payment_method,
             total_amount=total_amount,
         )
-        
-        messages.success(request, 'Booking successfully created!')
-        return redirect('booking_success')
-    
-    # Render the booking view with available rooms and package details
-    return render(request, 'create_booking.html', {
-        'package': package,
-        'rooms': rooms,
-    })
-    
-def booking_success(request):
-    if not request.user.is_authenticated:
-        return redirect('login')  # Redirect to login page if not authenticated
 
-    booking = Bookingpackage.objects.filter(user=request.user).last()
-
-    if booking:
-        return render(request, 'booking_success.html', {'booking': booking})
-    else:
-        return render(request, 'booking_success.html', {'error': 'No booking found.'})
+        # Redirect to booking_success with the booking ID
+        return redirect('booking_success', booking_id=booking.id)
+    
+    return render(request, 'create_booking.html', {'package': package, 'rooms': rooms})
+    
+def booking_success(request, booking_id):
+    booking = get_object_or_404(Bookingpackage, id=booking_id)
+    return render(request, 'booking_success.html', {'booking': booking})

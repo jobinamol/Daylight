@@ -40,7 +40,7 @@ urlpatterns = [
     path('google-login/', views.google_login, name='google_login'),
     path('google-login/callback/', views.google_callback, name='google_callback'),
     path('booking/<int:package_id>/',views. booking_view, name='booking_view'),
-    path('booking/success/', views.booking_success, name='booking_success'),
+    path('booking/success/<int:booking_id>/', views.booking_success, name='booking_success'),
 
 
 

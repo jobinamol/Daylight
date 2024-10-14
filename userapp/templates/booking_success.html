@@ -2,24 +2,40 @@
 {% load static %}
 
 {% block content %}
-<section class="ftco-section">
+<div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="overlay"></div>
     <div class="container">
-        <div class="row justify-content-center mb-5 pb-3">
-            <div class="col-md-7 heading-section text-center ftco-animate">
-                <h2>Booking Successful</h2>
-                <p>Thank you, {{ request.user.username }}! Your booking has been successfully confirmed.</p>
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <div class="text">
+                    <h1 class="mb-4 bread">Booking Successful</h1>
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span>
+                        <span>Booking Success</span>
+                    </p>
+                </div>
             </div>
         </div>
+    </div>
+</div>
 
+<section class="ftco-section bg-light">
+    <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h4>Booking Details</h4>
-                <p><strong>Package:</strong> {{ booking.package.name }}</p>
-                <p><strong>Room:</strong> {{ booking.room.room_type }} Room {{ booking.room.number }}</p>  <!-- Displaying room type and number -->
-
-                <p><strong>Total Amount:</strong> ₹{{ booking.total_amount }}</p>  <!-- Assuming currency is INR -->
-
-                <a href="{% url 'home' %}" class="btn btn-primary">Go Home</a>
+                <h4>Thank you,  Your booking has been successfully confirmed.</h4>
+                <div class="booking-details mt-4 p-4 bg-white shadow-sm rounded">
+                    <h5 class="mb-3">Booking Details</h5>
+                    <p><strong>Package:</strong> {{ booking.package.name }}</p>
+                    <p><strong>Room:</strong> {{ booking.room.room_type }} Room {{ booking.room.number }}</p>
+                    <p><strong>Number of Adults:</strong> {{ booking.num_adults }}</p>
+                    <p><strong>Number of Children:</strong> {{ booking.num_children }}</p>
+                    <p><strong>Total Amount:</strong> ₹{{ booking.total_amount }}</p>
+                </div>
+                <div class="btn-group mt-4">
+                    <a href="{% url 'home' %}" class="btn btn-primary">Go Home</a>
+                    <a href="{% url 'create_booking' booking.package.id %}" class="btn btn-secondary">Book Another Package</a>
+                </div>
             </div>
         </div>
     </div>

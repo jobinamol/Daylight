@@ -87,7 +87,6 @@ class Bookingpackage(models.Model):
     package = models.ForeignKey(PackageManagement, on_delete=models.CASCADE)
     payment_method = models.CharField(max_length=50)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    user = models.ForeignKey(UserDB, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.package}"
