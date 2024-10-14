@@ -489,7 +489,12 @@ def food_inquiry(request):
 def create_booking(request,id):
     
     package = get_object_or_404(PackageManagement, id=id)
-    return render(request, 'create_booking.html', {'package': package})
+    rooms = Room.objects.filter(status='available')
+    
+    return render(request, 'create_booking.html', {
+        'package': package,
+        'rooms': rooms,
+    })
 
 def booking_view(request, package_id):
     # Fetch the selected package
@@ -540,4 +545,12 @@ def booking_view(request, package_id):
     })
     
 def booking_success(request):
-    return render(request, 'booking_success.html')   
+    if not request.user.is_authenticated:
+        return redirect('login')  # Redirect to login page if not authenticated
+
+    booking = Bookingpackage.objects.filter(user=request.user).last()
+
+    if booking:
+        return render(request, 'booking_success.html', {'booking': booking})
+    else:
+        return render(request, 'booking_success.html', {'error': 'No booking found.'})

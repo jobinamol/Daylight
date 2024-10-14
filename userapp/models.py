@@ -9,6 +9,8 @@ from adminpanal.models import PackageManagement  # Adjust the import according t
 
 
 class UserDB(models.Model):
+    id = models.AutoField(primary_key=True)  # or UUIDField
+
     name = models.CharField(max_length=255)
     mobilenumber = models.CharField(
         max_length=15,
@@ -77,17 +79,18 @@ class PackageBooking(models.Model):
 class Bookingpackage(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    email = models.EmailField()
     phone = models.CharField(max_length=15)
+    email = models.EmailField(max_length=255, null=True)  
     num_adults = models.IntegerField()
     num_children = models.IntegerField()
-    package = models.ForeignKey(PackageManagement, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    payment_method = models.CharField(max_length=100)
+    package = models.ForeignKey(PackageManagement, on_delete=models.CASCADE)
+    payment_method = models.CharField(max_length=50)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    user = models.ForeignKey(UserDB, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Booking for {self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name} - {self.package}"
 
 
 

@@ -14,18 +14,11 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <h4>Booking Details</h4>
-                
-                <!-- Package Details -->
                 <p><strong>Package:</strong> {{ booking.package.name }}</p>
-                
-                <!-- Room Details -->
-                <p><strong>Room:</strong> Room {{ booking.room.number }} - {{ booking.room.type }}</p>
-                <p><strong>Room Price:</strong> ₹{{ booking.room.price }}</p>
+                <p><strong>Room:</strong> {{ booking.room.room_type }} Room {{ booking.room.number }}</p>  <!-- Displaying room type and number -->
 
-                <!-- Total Amount -->
-                <p><strong>Total Amount:</strong> ₹{{ booking.total_amount }}</p>
+                <p><strong>Total Amount:</strong> ₹{{ booking.total_amount }}</p>  <!-- Assuming currency is INR -->
 
-                <!-- Back to Home Button -->
                 <a href="{% url 'home' %}" class="btn btn-primary">Go Home</a>
             </div>
         </div>

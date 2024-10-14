@@ -125,19 +125,18 @@
             <input placeholder="Selected Package Name..." oninput="this.className = ''" name="package_name" value="{{ package.name }}" readonly>
             <input type="hidden" name="package_price" value="{{ package.price }}"> <!-- Pass the package price -->
         </div>
-
+        
         <div class="tab">
             <label for="room_type">Select Room:</label>
             <select name="room_type" id="room_type" required onchange="updateRoomPrice()">
                 <option value="">Select a Room</option>
-                <option value="3" data-price="5000">301 - Suite - ₹5000.00</option>
-                <option value="4" data-price="3000">101 - Single - ₹3000.00</option>
-                <option value="5" data-price="4000">201 - Double - ₹4000.00</option>
+                {% for room in rooms %}
+                    <option value="{{ room.id }}" data-price="{{ room.price }}">{{ room.number }} - {{ room.room_type }} - ₹{{ room.price }}</option>
+                {% endfor %}
             </select>
-            <input type="hidden" name="room_price" id="room_price">
+            <input type="hidden" name="room_price" id="room_price"> <!-- This will hold the selected room's price -->
             <input placeholder="Number of Rooms..." oninput="this.className = ''" name="num_rooms" type="number" min="1" required>
         </div>
-
         <div class="tab">Payment Info:
             <select name="payment_method" required>
                 <option value="">Select Payment Method</option>
@@ -229,12 +228,13 @@
         function updateTotalAmount() {
             var numAdults = document.querySelector('input[name="num_adults"]').value;
             var numChildren = document.querySelector('input[name="num_children"]').value || 0;
-            var numRooms = document.querySelector('input[name="num_rooms"]').value || 1;
             var roomPrice = document.getElementById("room_price").value || 0;
+            var numRooms = document.querySelector('input[name="num_rooms"]').value || 0;
             var packagePrice = document.querySelector('input[name="package_price"]').value || 0;
 
-            var totalAmount = (parseFloat(roomPrice) * parseInt(numRooms)) + parseFloat(packagePrice);
-            document.getElementById("total_amount").value = totalAmount; // Update the total amount
+            // Calculate total amount
+            var totalAmount = (numAdults + (numChildren * 0.5)) * roomPrice * numRooms + parseFloat(packagePrice);
+            document.getElementById("total_amount").value = totalAmount.toFixed(2); // Update total amount display
         }
     </script>
 </body>
