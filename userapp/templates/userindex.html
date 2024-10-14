@@ -59,7 +59,7 @@
                               {% else %}
                                   <img src="{% static 'icons/userlogin.jpeg' %}" alt="User Icon" class="rounded-circle" style="width: 40px; height: 40px;" />
                               {% endif %}
-                              {{ request.session.username }} ({{ request.session.email }})
+                              {{ request.session.username }} 
                           </a>
                           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                               <a class="dropdown-item" href="{% url 'viewprofile' %}">View Profile</a>

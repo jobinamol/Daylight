@@ -126,14 +126,15 @@
             <input type="hidden" name="package_price" value="{{ package.price }}"> <!-- Pass the package price -->
         </div>
 
-        <div class="tab">Select Room:
+        <div class="tab">
+            <label for="room_type">Select Room:</label>
             <select name="room_type" id="room_type" required onchange="updateRoomPrice()">
                 <option value="">Select a Room</option>
-                {% for room in rooms %}
-                    <option value="{{ room.id }}" data-price="{{ room.price }}">{{ room.type }} - ${{ room.price }}</option>
-                {% endfor %}
+                <option value="3" data-price="5000">301 - Suite - ₹5000.00</option>
+                <option value="4" data-price="3000">101 - Single - ₹3000.00</option>
+                <option value="5" data-price="4000">201 - Double - ₹4000.00</option>
             </select>
-            <input type="hidden" name="room_price" id="room_price"> <!-- This will hold the selected room's price -->
+            <input type="hidden" name="room_price" id="room_price">
             <input placeholder="Number of Rooms..." oninput="this.className = ''" name="num_rooms" type="number" min="1" required>
         </div>
 
@@ -186,15 +187,14 @@
 
         function nextPrev(n) {
             var x = document.getElementsByClassName("tab");
-            if (n == 1 && !validateForm()) return false; // Validate before moving to the next step
+            if (n == 1 && !validateForm()) return false; // Validate the form before moving forward
             x[currentTab].style.display = "none"; // Hide the current tab
-            currentTab += n; // Move to the next or previous tab
+            currentTab += n; // Increase or decrease the current tab
             if (currentTab >= x.length) {
-                document.getElementById("regForm").submit(); // Submit the form if at the last tab
+                document.getElementById("regForm").submit(); // Submit the form
                 return false;
             }
-            showTab(currentTab); // Show the current tab
-            updateTotalAmount(); // Update total amount on each step
+            showTab(currentTab); // Show the correct tab
         }
 
         function validateForm() {
@@ -202,41 +202,39 @@
             x = document.getElementsByClassName("tab");
             y = x[currentTab].getElementsByTagName("input");
             for (i = 0; i < y.length; i++) {
-                if (y[i].value == "" && y[i].hasAttribute('required')) {
-                    y[i].className += " invalid"; // Mark invalid inputs
-                    valid = false; // Set valid to false
+                if (y[i].value == "") {
+                    y[i].className += " invalid"; // Add an "invalid" class to empty fields
+                    valid = false;
                 }
             }
-            if (valid) {
-                document.getElementsByClassName("step")[currentTab].className += " finish"; // Mark the step as finished if valid
-            }
-            return valid; // Return the validation status
+            return valid; // Return the valid status
         }
 
         function fixStepIndicator(n) {
             var i, x = document.getElementsByClassName("step");
             for (i = 0; i < x.length; i++) {
-                x[i].className = x[i].className.replace(" active", ""); // Remove active class from all steps
+                x[i].className = x[i].className.replace(" active", "");
             }
-            x[n].className += " active"; // Add active class to the current step
+            x[n].className += " active"; // Mark the current step
         }
 
         function updateRoomPrice() {
-            var roomSelect = document.getElementById('room_type');
-            var selectedRoom = roomSelect.options[roomSelect.selectedIndex];
-            var roomPrice = selectedRoom.getAttribute('data-price');
-            document.getElementById('room_price').value = roomPrice; // Set the hidden input to the selected room price
-            updateTotalAmount(); // Update total amount whenever room is selected
+            var roomSelect = document.getElementById("room_type");
+            var selectedOption = roomSelect.options[roomSelect.selectedIndex];
+            var roomPrice = selectedOption.getAttribute("data-price");
+            document.getElementById("room_price").value = roomPrice; // Update hidden input for room price
+            updateTotalAmount(); // Update total amount when room price changes
         }
 
         function updateTotalAmount() {
-            var numAdults = parseInt(document.querySelector('input[name="num_adults"]').value) || 0;
-            var numChildren = parseInt(document.querySelector('input[name="num_children"]').value) || 0;
-            var numRooms = parseInt(document.querySelector('input[name="num_rooms"]').value) || 1; // Default to 1 if empty
-            var packagePrice = parseFloat(document.querySelector('input[name="package_price"]').value) || 0;
-            var roomPrice = parseFloat(document.getElementById('room_price').value) || 0;
-            var totalAmount = (numAdults + (numChildren * 0.5)) * roomPrice * numRooms + packagePrice; // Calculate total amount
-            document.getElementById('total_amount').value = totalAmount.toFixed(2); // Update total amount field
+            var numAdults = document.querySelector('input[name="num_adults"]').value;
+            var numChildren = document.querySelector('input[name="num_children"]').value || 0;
+            var numRooms = document.querySelector('input[name="num_rooms"]').value || 1;
+            var roomPrice = document.getElementById("room_price").value || 0;
+            var packagePrice = document.querySelector('input[name="package_price"]').value || 0;
+
+            var totalAmount = (parseFloat(roomPrice) * parseInt(numRooms)) + parseFloat(packagePrice);
+            document.getElementById("total_amount").value = totalAmount; // Update the total amount
         }
     </script>
 </body>

@@ -28,6 +28,8 @@ from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import Flow
 import os
+from decimal import Decimal
+
 
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
@@ -490,46 +492,52 @@ def create_booking(request,id):
     return render(request, 'create_booking.html', {'package': package})
 
 def booking_view(request, package_id):
-    package = PackageManagement.objects.get(id=package_id)  # Fetch the selected package
-    rooms = Room.objects.filter(package=package)  # Get rooms associated with the package
-
+    # Fetch the selected package
+    package = get_object_or_404(PackageManagement, id=package_id)
+    
+    # Retrieve all available rooms independently
+    rooms = Room.objects.filter(status='available')
+    
     if request.method == 'POST':
-        # Retrieve the form data
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
-        phone = request.POST['phone']
-        num_adults = int(request.POST['num_adults'])
-        num_children = int(request.POST['num_children'])
-        package_price = float(request.POST['package_price'])  # Ensure this field is passed in the form
-        room_id = request.POST['room_type']  # Change this to match the form input name
-        room_price = float(request.POST['room_price'])  # Ensure this field is passed in the form
-        num_rooms = int(request.POST['num_rooms'])
-        payment_method = request.POST['payment_method']
+        # Get form data
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        num_adults = request.POST.get('num_adults')
+        num_children = request.POST.get('num_children')
+        room_id = request.POST.get('room_type')
+        payment_method = request.POST.get('payment_method')
         
-        # Calculate total amount
-        total_amount = ((num_adults + (num_children * 0.5)) * room_price * num_rooms) + package_price
+        # Retrieve room price
+        selected_room = get_object_or_404(Room, id=room_id)
+        room_price = selected_room.price
         
-        # Create a new booking entry
-        booking = Booking(
+        # Calculate total amount using Decimal for precise calculation
+        total_amount = (Decimal(num_adults) + (Decimal(num_children) * Decimal('0.5'))) * room_price + package.price
+        
+        # Create a new booking
+        Bookingpackage.objects.create(
             first_name=first_name,
             last_name=last_name,
             email=email,
             phone=phone,
             num_adults=num_adults,
             num_children=num_children,
+            room=selected_room,
             package=package,
-            room_id=room_id,  # Assuming room_id relates to the Room model
             payment_method=payment_method,
-            total_amount=total_amount
+            total_amount=total_amount,
         )
-        booking.save()
-
-        messages.success(request, 'Booking successful!')
-        return redirect('booking_confirmation')  # Redirect to a confirmation page
-
-    context = {
+        
+        messages.success(request, 'Booking successfully created!')
+        return redirect('booking_success')
+    
+    # Render the booking view with available rooms and package details
+    return render(request, 'create_booking.html', {
         'package': package,
         'rooms': rooms,
-    }
-    return render(request, 'your_template.html', context)
+    })
+    
+def booking_success(request):
+    return render(request, 'booking_success.html')   

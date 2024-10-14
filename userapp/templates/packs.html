@@ -28,6 +28,11 @@
                 <div class="sidebar-wrap bg-white p-4 shadow-sm rounded">
                     <h3 class="heading mb-4">Categories</h3>
                     <ul class="list-unstyled categories">
+                        <li>
+                            <a href="{% url 'packs' %}">
+                                All <span>({{ packages.count }})</span>
+                            </a>
+                        </li>
                         {% for category in categories %}
                             <li>
                                 <a href="{% url 'category_packages' category.id %}">
@@ -110,5 +115,29 @@
     </div>
 </section>
 
-<!-- Modal and Script remain the same as before -->
+<!-- Pagination -->
+<div class="row mt-5">
+    <div class="col text-center">
+        <div class="block-27">
+            {% if is_paginated %}
+                <ul>
+                    {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}">Prev</a></li>
+                    {% endif %}
+                    {% for page in page_obj.paginator.page_range %}
+                        {% if page == page_obj.number %}
+                            <li class="active"><span>{{ page }}</span></li>
+                        {% else %}
+                            <li><a href="?page={{ page }}">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
 {% endblock %}
