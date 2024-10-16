@@ -10,10 +10,12 @@
 
     <!-- CSS Stylesheets -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     
     <style>
-        /* Full-screen background image */
         body {
+            font-family: 'Poppins', sans-serif;
             background-image: url("{% static 'images/home.jpg' %}");
             background-size: cover;
             background-position: center;
@@ -27,99 +29,112 @@
             padding: 0;
         }
 
-        /* Navbar styling */
         .navbar {
             position: absolute;
             top: 0;
             width: 100%;
-            padding: 10px 20px;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             z-index: 1000;
             display: flex;
             align-items: center;
-            background-color: transparent; /* Removed color, now transparent */
         }
 
         .navbar a {
-            color: #007BFF;
+            color: #ffffff;
             text-decoration: none;
             margin: 0 15px;
-            font-weight: bold;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #007BFF;
         }
 
         .back-icon {
             margin-right: auto;
             font-size: 18px;
-            color: #007BFF;
+            color: #ffffff;
             cursor: pointer;
+            transition: color 0.3s ease;
         }
 
-        /* Styling for the login form container */
+        .back-icon:hover {
+            color: #007BFF;
+        }
+
         .login-container {
-            background-color: rgba(255, 255, 255, 0.85);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             max-width: 400px;
             width: 100%;
             text-align: center;
         }
 
-        /* Header inside the login form */
         .login-container h3 {
             color: #007BFF;
-            text-align: center;
-            margin-bottom: 20px;
+            font-weight: 600;
+            margin-bottom: 30px;
         }
 
-        /* Style the input fields */
         .form-control {
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 50px;
+            border: 1px solid #e0e0e0;
+            padding: 15px 20px;
             width: 100%;
+            transition: border-color 0.3s ease;
         }
 
-        /* Style the buttons */
+        .form-control:focus {
+            border-color: #007BFF;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+
         .btn-primary {
             background-color: #007BFF;
-            border-color: #007BFF;
+            border: none;
             width: 100%;
-            padding: 10px;
+            padding: 15px;
             font-size: 16px;
-            border-radius: 5px;
+            border-radius: 50px;
             color: #fff;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        /* Google Login Button */
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
         .btn-google {
-            background-color: #db4437; /* Google Red */
+            background-color: #db4437;
             color: #fff;
             width: 100%;
-            padding: 10px;
+            padding: 15px;
             font-size: 16px;
-            border-radius: 5px;
+            border-radius: 50px;
             border: none;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: background-color 0.3s; /* Add transition for hover effect */
-            margin-top: 10px; /* Space from previous element */
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
         }
 
         .btn-google:hover {
-            background-color: #c13526; /* Darker shade on hover */
+            background-color: #c13526;
         }
 
-        .btn-google img {
+        .btn-google i {
             margin-right: 10px;
-            width: 20px; /* Adjusted for consistent size */
-            height: 20px;
         }
 
-        /* Footer styling */
         footer {
             position: absolute;
             bottom: 0;
@@ -127,31 +142,42 @@
             text-align: center;
             color: #fff;
             background-color: rgba(0, 0, 0, 0.5);
-            padding: 10px;
+            padding: 15px;
         }
 
-        /* Error message styling */
         .alert {
-            color: red;
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .forgot-password a, .signup a {
+            color: #007BFF;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover, .signup a:hover {
+            color: #0056b3;
+        }
+
+        #username-error {
+            color: #dc3545;
             font-size: 0.9em;
+            margin-top: -15px;
             margin-bottom: 15px;
+            display: block;
         }
-        .google {
-            background-color: #dd4b39;
-            color: white;
-        }
-        
-        .google:hover {
-            opacity: 1;
-        }
-        
     </style>
 </head>
 <body>
 
     <!-- Navbar -->
     <nav class="navbar">
-        <span class="back-icon" onclick="window.history.back();">&#9664; Back</span>
+        <span class="back-icon" onclick="window.history.back();"><i class="fas fa-arrow-left"></i> Back</span>
         <a href="{% url 'home' %}">Home</a>
         <a href="{% url 'packs' %}">Packages</a>
         <a href="{% url 'contact' %}">Contact Us</a>
@@ -162,9 +188,8 @@
     <main class="login-container">
         <h3>Welcome to Daylight Resort</h3>
         
-        <!-- Display error messages -->
         {% if form.errors %}
-            <div class="alert alert-danger" aria-live="assertive">
+            <div class="alert" role="alert">
                 <ul>
                     {% for field, errors in form.errors.items %}
                         {% for error in errors %}
@@ -178,23 +203,19 @@
         <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="form-group">
-                <label for="username"></label>
                 <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
-                <span id="username-error"></span> <!-- Error message display -->
+                <span id="username-error"></span>
             </div>
             <div class="form-group">
-                <label for="password"></label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
             </div>
-            <div class="form-group text-center">
+            <div class="form-group">
                 <button type="submit" class="btn btn-primary">Login</button>
             </div>
         </form>
 
-        <!-- Google Login Button -->
         <a href="{% provider_login_url 'google' %}" class="btn-google">
-            <i class="fa fa-google fa-fw"></i>
-            Sign in with Google
+            <i class="fab fa-google"></i> Sign in with Google
         </a>
 
         <div class="text-center mt-4">
@@ -220,15 +241,10 @@
     <script>
         document.getElementById('username').addEventListener('input', function() {
             const username = this.value;
-
-            // Clear any previous error messages
             document.getElementById('username-error').innerText = '';
-
-            // Perform an AJAX request to check username validity
             fetch(`/check_username/?username=${username}`)
                 .then(response => response.json())
                 .then(data => {
-                    // Display the validation message
                     document.getElementById('username-error').innerText = data.message;
                 })
                 .catch(error => {

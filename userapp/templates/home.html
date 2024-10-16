@@ -34,7 +34,7 @@
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
-                  <li class="nav-item"><a href="{% url 'packages' %}" class="nav-link">Packages</a></li>
+                  <li class="nav-item"><a href="{% url 'packs' %}" class="nav-link">Packages</a></li>
                   <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
                   <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
                   <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
@@ -46,31 +46,14 @@
     </nav>
     <!-- END nav -->
      {% block content %} 
-     <section class="home-slider owl-carousel">
-      <div class="slider-item" style="background-image:url('{% static 'images/home.webp' %}');">
-        <div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text align-items-center justify-content-center">
-            <div class="col-md-12 ftco-animate text-center">
-              <div class="text mb-5 pb-3">
-                <h1 class="mb-3">Welcome To Daylight</h1>
-                <h2>Daycation &amp; Resorts</h2>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="slider-item" style="background-image:url('{% static 'images/home.jpg' %}');">
-        <div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text align-items-center justify-content-center">
-            <div class="col-md-12 ftco-animate text-center">
-              <div class="text mb-5 pb-3">
-                <h1 class="mb-3">Enjoy A Luxury Experience</h1>
-                <h2>Join With Us</h2>
-              </div>
-            </div>
+     <section class="hero-wrap js-fullheight" style="background-image: url('{% static 'images/home.webp' %}');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
+          <div class="col-md-9 ftco-animate text-center">
+            <h1 class="mb-3 bread">Welcome to Daylight</h1>
+            <p class="breadcrumbs"><span class="mr-2">Daycation &amp; Resorts</span></p>
+            <a href="{% url 'packs' %}" class="btn btn-primary py-3 px-4 mt-3">Explore Packages</a>
           </div>
         </div>
       </div>
@@ -106,134 +89,65 @@
           </div>
       </div>
       </section>
-
-      <section class="ftco-section bg-light">
+      <section class="ftco-section py-5">
         <div class="container">
             <div class="row justify-content-center mb-5 pb-3">
                 <div class="col-md-7 heading-section text-center ftco-animate">
-                    <h2 class="mb-4">Our Daycation Packages</h2>
+                    <h2>Our Package Categories</h2>
                 </div>
             </div>
-            <div class="row">
-                <!-- Relaxation Package -->
-                <div class="col-sm col-md-6 col-lg-4 ftco-animate">
-                    <div class="package-card">
-                        <a href="relaxation.html">
-                            <img src="{% static 'images/rel.jpeg' %}" alt="Relaxation Package" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="text">
-                                <h3>Relaxation Packages</h3>
-                                <p><span class="price mr-2">₹6,150.00</span> <span class="per">per day</span></p>
+            <div class="row d-flex">
+                {% if categories %}
+                    {% for category in categories %}
+                    <div class="col-md-4 d-flex ftco-animate">
+                        <div class="card shadow-sm border-0 w-100">
+                            {% if category.image %}
+                                <a href="#" class="block-20" style="background-image: url('{{ category.image.url }}');" aria-label="{{ category.name }}">
+                                </a>
+                            {% else %}
+                                <a href="#" class="block-20" style="background-color: #f0f0f0;" aria-label="{{ category.name }}">
+                                    <span>No Image Available</span>
+                                </a>
+                            {% endif %}
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ category.name }}</h5>
                             </div>
-                        </a>
+                        </div>
                     </div>
-                </div>
-    
-                <!-- Family Fun Package -->
-                <div class="col-sm col-md-6 col-lg-4 ftco-animate">
-                    <div class="package-card">
-                        <a href="family-fun.html">
-                            <img src="{% static 'images/fam.jpeg' %}" alt="Family Fun Package" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="text">
-                                <h3>Family Fun Packages</h3>
-                                <p><span class="price mr-2">₹8,200.00</span> <span class="per">per day</span></p>
-                            </div>
-                        </a>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <p class="text-center">No categories available.</p>
                     </div>
-                </div>
-    
-                <!-- Adventure Package -->
-                <div class="col-sm col-md-6 col-lg-4 ftco-animate">
-                    <div class="package-card">
-                        <a href="adventure.html">
-                            <img src="{% static 'images/adv.jpeg' %}" alt="Adventure Package" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="text">
-                                <h3>Adventure Packages</h3>
-                                <p><span class="price mr-2">₹7,380.00</span> <span class="per">per day</span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-    
-                <!-- Luxury Package -->
-                <div class="col-sm col-md-6 col-lg-4 ftco-animate">
-                    <div class="package-card">
-                        <a href="luxury.html">
-                            <img src="{% static 'images/lex.jpeg' %}" alt="Luxury Package" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="text">
-                                <h3>Luxury Packages</h3>
-                                <p><span class="price mr-2">₹16,400.00</span> <span class="per">per day</span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-    
-                <!-- Wellness Package -->
-                <div class="col-sm col-md-6 col-lg-4 ftco-animate">
-                    <div class="package-card">
-                        <a href="wellness.html">
-                            <img src="{% static 'images/Well.jpeg' %}" alt="Wellness Package" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="text">
-                                <h3>Wellness Packages</h3>
-                                <p><span class="price mr-2">₹6,970.00</span> <span class="per">per day</span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-    
-                <!-- Romantic Getaway Package -->
-                <div class="col-sm col-md-6 col-lg-4 ftco-animate">
-                    <div class="package-card">
-                        <a href="romantic-getaway.html">
-                            <img src="{% static 'images/cop.jpeg' %}" alt="Romantic Getaway Package" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="text">
-                                <h3>Romantic Getaway Packages</h3>
-                                <p><span class="price mr-2">₹9,840.00</span> <span class="per">per day</span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-    
-                <!-- Corporate Retreat Package -->
-                <div class="col-sm col-md-6 col-lg-4 ftco-animate">
-                    <div class="package-card">
-                        <a href="corporate-retreat.html">
-                            <img src="{% static 'images/team.jpeg' %}" alt="Corporate Retreat Package" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="text">
-                                <h3>Corporate Retreat Packages</h3>
-                                <p><span class="price mr-2">₹20,500.00</span> <span class="per">per day</span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-    
-                <!-- Student Package -->
-                <div class="col-sm col-md-6 col-lg-4 ftco-animate">
-                    <div class="package-card">
-                        <a href="student-package.html">
-                            <img src="{% static 'images/student.jpeg' %}" alt="Student Package" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="text">
-                                <h3>Student Packages</h3>
-                                <p><span class="price mr-2">₹4,100.00</span> <span class="per">per day</span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-    
-                <!-- Adventure Plus Package -->
-                <div class="col-sm col-md-6 col-lg-4 ftco-animate">
-                    <div class="package-card">
-                        <a href="adventure-plus.html">
-                            <img src="{% static 'images/adven.jpeg' %}" alt="Adventure Plus Package" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="text">
-                                <h3>Adventure Plus Packages</h3>
-                                <p><span class="price mr-2">₹9,840.00</span> <span class="per">per day</span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                {% endif %}
             </div>
         </div>
     </section>
+    
+    <style>
+        .block-20 {
+            height: 200px; /* Adjust the height as needed */
+            background-size: cover;
+            background-position: center;
+            border-radius: 0.5rem;
+        }
+    
+        .card {
+            transition: transform 0.3s;
+        }
+    
+        .card:hover {
+            transform: scale(1.05); /* Slight zoom effect on hover */
+        }
+    
+        .card-title {
+            font-weight: bold;
+            font-size: 1.25rem; /* Adjust the font size as needed */
+        }
+    </style>
+    
+    
+    
     
 
     <section class="ftco-section">
@@ -413,7 +327,16 @@
           </div>
           <div class="row">
             <div class="col-md-12 text-center">
-              
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Subscribe to our Newsletter</h2>
+                <form action="#" class="subscribe-form">
+                  <div class="form-group d-flex">
+                    <input type="text" class="form-control" placeholder="Enter email address">
+                    <input type="submit" value="Subscribe" class="submit px-3">
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

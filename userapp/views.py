@@ -87,8 +87,10 @@ def google_callback(request):
         return redirect('login')
 
 
+
 def home(request):
-    return render(request, 'home.html')
+    categories = Category.objects.all()
+    return render(request, 'home.html', {'categories': categories})
 
 def about(request):
     return render(request, 'about.html')
