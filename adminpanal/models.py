@@ -3,6 +3,9 @@ from django.utils import timezone
 from staffs.models import*
 from adminpanal.models import*
 from .models import *
+from django.apps import apps
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 
 
@@ -28,6 +31,10 @@ class Category(models.Model):
         Room = apps.get_model('staffs', 'Room')
         return Room.objects.filter(category=self)
 
+    @property
+    def package_count(self):
+        return self.packagemanagement_set.count()
+
     class Meta:
         verbose_name_plural = "Categories"
         
@@ -45,6 +52,24 @@ class Activity(models.Model):
     class Meta:
         verbose_name_plural = "Activities"
 
+class FoodCategory(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Food Categories"
+
+class MenuItem(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    food_category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
 class PackageManagement(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -54,8 +79,9 @@ class PackageManagement(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     food_categories = models.ManyToManyField(FoodCategory, blank=True)
     menu_items = models.ManyToManyField(MenuItem, blank=True)
-    rooms = models.ManyToManyField(Room, related_name='packages')
-    activities = models.ManyToManyField(Activity, blank=True)  # Reference to the Activity model
+    rooms = models.ManyToManyField('staffs.Room', related_name='packages')
+    activities = models.ManyToManyField(Activity, blank=True)
+    rating = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -127,3 +153,17 @@ class Staff(models.Model):
     def __str__(self):
         return self.name
 
+
+
+
+
+
+@receiver(post_save, sender=PackageManagement)
+def update_category_count_on_save(sender, instance, **kwargs):
+    if instance.category:
+        instance.category.update_count()
+
+@receiver(post_delete, sender=PackageManagement)
+def update_category_count_on_delete(sender, instance, **kwargs):
+    if instance.category:
+        instance.category.update_count()

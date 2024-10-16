@@ -104,11 +104,72 @@ def packages(request):
 def packs(request):
     packages = PackageManagement.objects.all()
     categories = Category.objects.all()
+    activities = Activity.objects.all()
+    food_categories = FoodCategory.objects.all()
 
-    return render(request, 'packs.html', {
+    # Search
+    search_query = request.GET.get('search')
+    if search_query:
+        packages = packages.filter(
+            Q(name__icontains=search_query) |
+            Q(description__icontains=search_query)
+        )
+
+    # Category filter
+    category_id = request.GET.get('category')
+    if category_id:
+        packages = packages.filter(category_id=category_id)
+
+    # Price range
+    price_range = request.GET.get('price_range')
+    if price_range:
+        min_price, max_price = map(lambda x: int(x) if x else None, price_range.split('-'))
+        if min_price is not None:
+            packages = packages.filter(price__gte=min_price)
+        if max_price is not None:
+            packages = packages.filter(price__lte=max_price)
+
+    # Duration
+    duration = request.GET.get('duration')
+    if duration:
+        packages = packages.filter(duration__icontains=duration)
+
+    # Activity filter
+    activity_id = request.GET.get('activity')
+    if activity_id:
+        packages = packages.filter(activities__id=activity_id)
+
+    # Rating filter
+    rating = request.GET.get('rating')
+    if rating:
+        packages = packages.filter(rating__gte=int(rating))
+
+    # Food category filter
+    food_category_id = request.GET.get('food_category')
+    if food_category_id:
+        packages = packages.filter(food_categories__id=food_category_id)
+
+    context = {
         'packages': packages,
         'categories': categories,
-    })
+        'activities': activities,
+        'food_categories': food_categories,
+        'search_query': search_query,
+        'selected_category': category_id,
+        'price_range': price_range,
+        'duration': duration,
+        'selected_activity': activity_id,
+        'rating': rating,
+        'selected_food_category': food_category_id,
+    }
+    return render(request, 'packs.html', context)
+
+def category_packages(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    request.GET = request.GET.copy()
+    request.GET['category'] = category_id
+    return packs(request)
+
 def category_packages(request, category_id):
     selected_category = get_object_or_404(Category, id=category_id)
     packages = PackageManagement.objects.filter(category=selected_category)
@@ -542,3 +603,4 @@ def booking_view(request, package_id):
 def booking_success(request, booking_id):
     booking = get_object_or_404(Bookingpackage, id=booking_id)
     return render(request, 'booking_success.html', {'booking': booking})
+
