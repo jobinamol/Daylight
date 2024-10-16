@@ -38,7 +38,7 @@
             </div>
         </div>
     </div>
-</section
+</section>
 
 <section class="ftco-section">
     <div class="container">
@@ -60,11 +60,11 @@
                 {% for item in menu %}
                 <div class="col-md-6 mb-4">
                     <div class="pricing-entry d-flex ftco-animate">
-                        <div class="img" style="background-image: url('{{ item.image_url }}');"></div>
+                        <div class="img" style="background-image: url('{{ item.image.url }}');" alt="{{ item.name }}"></div>
                         <div class="desc pl-3">
                             <div class="d-flex text align-items-center">
                                 <h3><span>{{ item.name }}</span></h3>
-                                <span class="price">${{ item.price }}</span>
+                                <span class="price">₹{{ item.price }}</span>
                             </div>
                             <div class="d-block">
                                 <p>{{ item.description }}</p>
@@ -125,25 +125,20 @@
 </section>
 
 <script>
-    // JavaScript for handling select all and deselect all functionality
     document.getElementById('select-all').onclick = function() {
-        const checkboxes = document.querySelectorAll('.item-checkbox');
-        checkboxes.forEach(checkbox => checkbox.checked = true);
+        document.querySelectorAll('.item-checkbox').forEach(checkbox => checkbox.checked = true);
     };
 
     document.getElementById('deselect-all').onclick = function() {
-        const checkboxes = document.querySelectorAll('.item-checkbox');
-        checkboxes.forEach(checkbox => checkbox.checked = false);
+        document.querySelectorAll('.item-checkbox').forEach(checkbox => checkbox.checked = false);
     };
 
     document.getElementById('submit-selection').onclick = function() {
-        const selectedCheckboxes = document.querySelectorAll('.item-checkbox:checked');
-        if (selectedCheckboxes.length === 0) {
+        if (!document.querySelectorAll('.item-checkbox:checked').length) {
             alert('Please select at least one item before submitting.');
         } else {
             document.getElementById('menu-form').submit();
         }
     };
 </script>
-
 {% endblock %}

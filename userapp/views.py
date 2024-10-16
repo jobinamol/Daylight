@@ -456,8 +456,13 @@ def Restaurants(request):
     
 
 def menu(request):
-    menu = MenuItem.objects.all()  # Fetch all menu items
-    return render(request, 'menu.html', {'menu': menu})
+    menu = MenuItem.objects.all()
+    categories = FoodCategory.objects.all()  # Fetch all food categories
+
+    return render(request, 'menu.html', {
+        'menu': menu,
+        'categories': categories,
+    })
 
 def rooms(request):
     # Fetch available rooms

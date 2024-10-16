@@ -1,0 +1,13 @@
+<h1>Available Rooms</h1>
+<ul>
+    {% for room in rooms %}
+        <li>
+            {{ room.room_number }} - {{ room.room_type }} - {{ room.price }}
+            {% if room.status == 'available' %}
+                <a href="{% url 'book_room' room.id %}">Book Now</a>
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>No available rooms at the moment.</li>
+    {% endfor %}
+</ul>

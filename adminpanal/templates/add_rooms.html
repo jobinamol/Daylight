@@ -1,0 +1,56 @@
+{% extends 'adminindex.html' %}
+
+{% block title %}Add Room{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Add New Room</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="number">Room Number:</label>
+            <input type="text" class="form-control" id="number" name="number" required maxlength="10">
+        </div>
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select class="form-control" id="category" name="category" required>
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="type">Room Type:</label>
+            <select class="form-control" id="type" name="type" required>
+                <option value="single">Single</option>
+                <option value="double">Double</option>
+                <option value="suite">Suite</option>
+                <option value="deluxe">Deluxe</option>
+                <option value="family">Family</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select class="form-control" id="status" name="status" required>
+                <option value="available">Available</option>
+                <option value="occupied">Occupied</option>
+                <option value="maintenance">Maintenance</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="capacity">Capacity:</label>
+            <input type="number" class="form-control" id="capacity" name="capacity" min="1" value="1" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Room</button>
+        <a href="{% url 'roommanagement' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

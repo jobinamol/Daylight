@@ -1,16 +1,75 @@
-{% extends 'frontdesk_dashboard.html' %}
+{% extends 'adminindex.html' %}
+{% load static %}
 
 {% block content %}
-<h2>Booking Details</h2>
-<div class="booking-details">
-    <p><strong>First Name:</strong> {{ booking.first_name }}</p>
-    <p><strong>Last Name:</strong> {{ booking.last_name }}</p>
-    <p><strong>Phone:</strong> {{ booking.phone }}</p>
-    <p><strong>Email:</strong> {{ booking.email }}</p>
-    <p><strong>Package:</strong> {{ booking.package.name }}</p>
-    <p><strong>Room:</strong> {{ booking.room.room_type }}</p>
-    <p><strong>Payment Method:</strong> {{ booking.payment_method }}</p>
-    <p><strong>Total Amount:</strong> ₹{{ booking.total_amount }}</p>
-    <a href="{% url 'bookingmanagement' %}" class="btn btn-primary mt-3">Back to Booking List</a>
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Booking Details</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="text-primary mb-4">Guest Information</h4>
+                    <p><strong>First Name:</strong> {{ booking.first_name }}</p>
+                    <p><strong>Last Name:</strong> {{ booking.last_name }}</p>
+                    <p><strong>Phone:</strong> {{ booking.phone }}</p>
+                    <p><strong>Email:</strong> {{ booking.email }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h4 class="text-primary mb-4">Booking Information</h4>
+                    <p><strong>Package:</strong> {{ booking.package.name }}</p>
+                    <p><strong>Room:</strong> {{ booking.room.room_type }}</p>
+                    <p><strong>Check-in Date:</strong> {{ booking.check_in_date|date:"F d, Y" }}</p>
+                    <p><strong>Check-out Date:</strong> {{ booking.check_out_date|date:"F d, Y" }}</p>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h4 class="text-primary mb-4">Payment Details</h4>
+                    <p><strong>Payment Method:</strong> {{ booking.payment_method }}</p>
+                    <p><strong>Total Amount:</strong> <span class="text-success font-weight-bold">₹{{ booking.total_amount }}</span></p>
+                </div>
+                <div class="col-md-6">
+                    <h4 class="text-primary mb-4">Booking Status</h4>
+                    <p><strong>Status:</strong> 
+                        <span class="badge {% if booking.status == 'confirmed' %}bg-success{% elif booking.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                            {{ booking.status|title }}
+                        </span>
+                    </p>
+                    <p><strong>Booking Date:</strong> {{ booking.booking_date|date:"F d, Y H:i" }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'bookingmanagement' %}" class="btn btn-primary">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Booking List
+            </a>
+        </div>
+    </div>
 </div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+    .card-header {
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+    .card-body {
+        padding: 2rem;
+    }
+    .text-primary {
+        color: #007bff !important;
+    }
+    p {
+        margin-bottom: 0.5rem;
+    }
+    .badge {
+        font-size: 0.9rem;
+        padding: 0.5em 1em;
+    }
+</style>
 {% endblock %}

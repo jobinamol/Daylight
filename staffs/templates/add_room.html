@@ -1,0 +1,95 @@
+{% extends 'housekeep_dashboard.html' %}
+
+{% block title %}Add Room{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Room</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ... (keep the existing styles) ... */
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Font Awesome for icons -->
+</head>
+
+<body>
+
+<div class="form-container">
+    <h1>Add New Room</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="number">Room Number:</label>
+            <input type="text" id="number" name="number" required maxlength="10">
+        </div>
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select id="category" name="category" required>
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="type">Room Type:</label>
+            <select id="type" name="type" required>
+                <option value="single">Single</option>
+                <option value="double">Double</option>
+                <option value="suite">Suite</option>
+                <option value="deluxe">Deluxe</option>
+                <option value="family">Family</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select id="status" name="status" required>
+                <option value="available">Available</option>
+                <option value="occupied">Occupied</option>
+                <option value="maintenance">Maintenance</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="capacity">Capacity:</label>
+            <input type="number" id="capacity" name="capacity" min="1" value="1" required>
+        </div>
+        <div class="form-group">
+            <label for="image">Room Image:</label>
+            <input type="file" id="image" name="image" accept="image/*">
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="icon-btn">
+                <i class="fas fa-plus-circle"></i> Add Room
+            </button>
+            <a href="{% url 'roommanagement' %}" class="icon-btn back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Room Management
+            </a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
+{% endblock %}

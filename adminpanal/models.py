@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from staffs.models import*
 from adminpanal.models import*
+from .models import *
 
 
 
@@ -13,16 +14,37 @@ class Admin(models.Model):
     class Meta:
         db_table = 'admin'  # This should match the name of your table in MySQL
         
+from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='category_images/', blank=True, null=True)
 
     def __str__(self):
         return self.name
 
+    @property
+    def rooms(self):
+        Room = apps.get_model('staffs', 'Room')
+        return Room.objects.filter(category=self)
+
+    class Meta:
+        verbose_name_plural = "Categories"
+        
+
+
 
 
 #packagemanagement model
+class Activity(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Activities"
+
 class PackageManagement(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -30,13 +52,14 @@ class PackageManagement(models.Model):
     duration = models.CharField(max_length=50)
     image = models.ImageField(upload_to='packages/', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
-    food_categories = models.ManyToManyField(FoodCategory, blank=True)  # New field for food categories
+    food_categories = models.ManyToManyField(FoodCategory, blank=True)
     menu_items = models.ManyToManyField(MenuItem, blank=True)
     rooms = models.ManyToManyField(Room, related_name='packages')
-
+    activities = models.ManyToManyField(Activity, blank=True)  # Reference to the Activity model
 
     def __str__(self):
         return self.name
+
 #packagesamplemodel     
 class PackageManagement1(models.Model):
     CATEGORY_CHOICES = [
@@ -103,3 +126,4 @@ class Staff(models.Model):
 
     def __str__(self):
         return self.name
+

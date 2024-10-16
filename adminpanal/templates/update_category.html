@@ -1,11 +1,33 @@
 {% extends 'adminindex.html' %}
 
 {% block content %}
-<h2>Update Category</h2>
+<div class="container">
+    <h2>Edit Category</h2>
+    <form method="post" enctype="multipart/form-data" class="form-inline">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="categoryName" class="sr-only">Category Name</label>
+            <input type="text" id="categoryName" name="name" value="{{ category.name }}" class="form-control" placeholder="Category Name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="categoryImage" class="sr-only">Category Image</label>
+            <input type="file" id="categoryImage" name="image" class="form-control" accept="image/*">
+        </div>
 
-<form method="post">
-    {% csrf_token %}
-    <input type="text" name="name" value="{{ category.name }}" required>
-    <button type="submit">Update</button>
-</form>
+        {% if category.image %}
+            <div class="form-group">
+                <img src="{{ category.image.url }}" alt="{{ category.name }}" style="width: 100px; height: 100px; object-fit: cover; margin-top: 10px;">
+                <p>Current Image</p>
+            </div>
+        {% else %}
+            <p>No current image available.</p>
+        {% endif %}
+
+        <p class="note">*Leave the image field empty if you do not want to change the current image.</p>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
 {% endblock %}

@@ -1,4 +1,52 @@
-{% extends 'adminindex.html' %}  <!-- Your main admin template -->
+{% extends 'adminindex.html' %}
+
+{% block head %}
+<style>
+    .user-management-container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+    .user-management-title {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    .user-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .user-table th, .user-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .user-table th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+    }
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .btn-view {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .btn-view:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -6,41 +54,64 @@
 
     {% if users %}
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+            <table class="table table-hover">
                 <thead class="thead-light">
                     <tr>
-                        <th>Name</th>
+                        <th>Profile Image</th>
                         <th>Username</th>
                         <th>Email</th>
                         <th>Mobile Number</th>
-                        <th>Address</th>
-                        <th>District</th>
-                        <th>Age</th>
-                        <th>Sex</th>
-                        <th>Last Login</th>
-                        <th>Profile Image</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
                         <tr>
-                            <td>{{ user.name }}</td>
+                            <td>
+                                {% if user.profile_image %}
+                                    <img src="{{ user.profile_image.url }}" alt="{{ user.name }}" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                {% else %}
+                                    <div style="width: 50px; height: 50px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                {% endif %}
+                            </td>
                             <td>{{ user.username }}</td>
                             <td>{{ user.emailid }}</td>
                             <td>{{ user.mobilenumber }}</td>
-                            <td>{{ user.address }}</td>
-                            <td>{{ user.district }}</td>
-                            <td>{{ user.age }}</td>
-                            <td>{{ user.get_sex_display }}</td>
-                            <td>{{ user.last_login }}</td>
                             <td>
-                                {% if user.profile_image %}
-                                    <img src="{{ user.profile_image.url }}" alt="{{ user.name }}" class="img-thumbnail" style="width: 50px; height: auto;">
-                                {% else %}
-                                    No Image
-                                {% endif %}
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#userModal{{ user.id }}">
+                                    View More
+                                </button>
                             </td>
                         </tr>
+
+                        <!-- Modal for each user -->
+                        <div class="modal fade" id="userModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="userModalLabel{{ user.id }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="userModalLabel{{ user.id }}">User Details: {{ user.username }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Name:</strong> {{ user.name }}</p>
+                                        <p><strong>Email:</strong> {{ user.emailid }}</p>
+                                        <p><strong>Mobile Number:</strong> {{ user.mobilenumber }}</p>
+                                        <p><strong>Address:</strong> {{ user.address }}</p>
+                                        <p><strong>District:</strong> {{ user.district }}</p>
+                                        <p><strong>Age:</strong> {{ user.age }}</p>
+                                        <p><strong>Sex:</strong> {{ user.get_sex_display }}</p>
+                                        <p><strong>Last Login:</strong> {{ user.last_login }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
                 </tbody>
             </table>
@@ -51,4 +122,9 @@
 
     <a href="{% url 'adminindex' %}" class="btn btn-secondary mt-4">Back to Home</a>
 </div>
+
+<!-- Make sure you have Bootstrap JS and jQuery included in your base template or add them here -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}

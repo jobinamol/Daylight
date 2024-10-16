@@ -1,0 +1,32 @@
+{% extends 'adminindex.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Activities</h2>
+    <a href="{% url 'activity_create' %}" class="btn btn-primary mb-3">Add New Activity</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for activity in activities %}
+            <tr>
+                <td>{{ activity.name }}</td>
+                <td>
+                    <a href="{% url 'activity_update' activity.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'activity_delete' activity.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No activities found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

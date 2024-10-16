@@ -14,6 +14,60 @@
     <title>Admin Dashboard | Daycation Resort</title>
     <link href="{% static 'assets/css/app.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7fb;
+        }
+        .sidebar {
+            background-color: #2c3e50;
+        }
+        .sidebar-brand {
+            color: #ecf0f1;
+            font-weight: 600;
+        }
+        .sidebar-nav .sidebar-item .sidebar-link {
+            color: #bdc3c7;
+            transition: all 0.3s ease;
+        }
+        .sidebar-nav .sidebar-item .sidebar-link:hover {
+            background-color: #34495e;
+            color: #ecf0f1;
+        }
+        .main {
+            background-color: #f5f7fb;
+        }
+        .navbar-bg {
+            background-color: #ffffff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .card-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .text-muted {
+            color: #7f8c8d !important;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+    </style>
 </head>
 
 <body>
@@ -22,7 +76,7 @@
         <nav id="sidebar" class="sidebar js-sidebar">
             <div class="sidebar-content js-simplebar">
                 <a class="sidebar-brand" href="{% url 'adminindex' %}">
-                    <span class="align-middle">Daycation Admin Dashboard</span>
+                    <span class="align-middle">Daycation Admin</span>
                 </a>
                 <ul class="sidebar-nav">
                     <li class="sidebar-header">Management</li>
@@ -33,7 +87,22 @@
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{% url 'packagemanagement' %}">
-                            <i class="align-middle" data-feather="package"></i> <span class="align-middle">Package Management</span>
+                            <i class="align-middle" data-feather="package"></i> <span class="align-middle">Daycation  Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'packagemanagement' %}">
+                            <i class="align-middle" data-feather="package"></i> <span class="align-middle">Staycation Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'roommanagement' %}">
+                            <i class="align-middle" data-feather="package"></i> <span class="align-middle">Room Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{% url 'activity_list' %}">
+                            <i class="align-middle" data-feather="activity"></i> <span class="align-middle">Activity Management</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -85,7 +154,7 @@
                                                 <i class="text-danger" data-feather="alert-circle"></i>
                                             </div>
                                             <div class="col-10">
-                                                <div class="text-dark">New Offers <span class="indicator">{{ new_offers_count }}</span></div>
+                                                <div class="text-dark">New Offers <span class="badge bg-primary">{{ new_offers_count }}</span></div>
                                             </div>
                                         </div>
                                     </a>
@@ -109,63 +178,87 @@
                     <h1 class="h3 mb-3"><strong>Welcome Admin</strong></h1>
                     <div class="row">
                         <!-- Package Management Card -->
-                        <div class="col-sm-6 col-xl-3">
+                        <div class="col-sm-6 col-xl-3 mb-4">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <h5 class="card-title">Packages</h5>
-                                            <div class="text-muted">{{ total_packages }} </div>
+                                            <h5 class="card-title mb-4">Packages</h5>
+                                            <h1 class="mt-1 mb-3">{{ total_packages }}</h1>
+                                            <div class="mb-1">
+                                                <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
+                                                <span class="text-muted">Since last week</span>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="align-middle" data-feather="package"></i>
+                                            <div class="stat text-primary">
+                                                <i class="align-middle" data-feather="package"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Category Management Card -->
-                        <div class="col-sm-6 col-xl-3">
+                        <div class="col-sm-6 col-xl-3 mb-4">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <h5 class="card-title">Categories</h5>
-                                            <div class="text-muted">{{ total_categories }} </div>
+                                            <h5 class="card-title mb-4">Categories</h5>
+                                            <h1 class="mt-1 mb-3">{{ total_categories }}</h1>
+                                            <div class="mb-1">
+                                                <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
+                                                <span class="text-muted">Since last week</span>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="align-middle" data-feather="layers"></i>
+                                            <div class="stat text-primary">
+                                                <i class="align-middle" data-feather="layers"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Additional management sections like User, Staff, and Booking -->
-                        <div class="col-sm-6 col-xl-3">
+                        <div class="col-sm-6 col-xl-3 mb-4">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <h5 class="card-title">Users</h5>
-                                            <div class="text-muted">{{ total_users }} </div>
+                                            <h5 class="card-title mb-4">Users</h5>
+                                            <h1 class="mt-1 mb-3">{{ total_users }}</h1>
+                                            <div class="mb-1">
+                                                <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
+                                                <span class="text-muted">Since last week</span>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="align-middle" data-feather="users"></i>
+                                            <div class="stat text-primary">
+                                                <i class="align-middle" data-feather="users"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-xl-3">
+                        <div class="col-sm-6 col-xl-3 mb-4">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <h5 class="card-title"></h5>
-                                            <div class="text-muted">{{ total_bookings }} Bookings</div>
+                                            <h5 class="card-title mb-4">Bookings</h5>
+                                            <h1 class="mt-1 mb-3">{{ total_bookings }}</h1>
+                                            <div class="mb-1">
+                                                <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
+                                                <span class="text-muted">Since last week</span>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="align-middle" data-feather="calendar"></i>
+                                            <div class="stat text-primary">
+                                                <i class="align-middle" data-feather="calendar"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

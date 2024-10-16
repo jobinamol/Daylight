@@ -1,0 +1,81 @@
+<!-- In templates/rooms/booking_confirmation.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            padding: 20px;
+        }
+
+        .confirmation-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .confirmation-details {
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .confirmation-details p {
+            margin: 5px 0;
+        }
+
+        .back-button, .checkout-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 15px;
+            color: #fff;
+            background-color: #007BFF;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .back-button:hover, .checkout-button:hover {
+            background-color: #0056b3;
+        }
+
+        .checkout-button {
+            background-color: #28a745; /* Green color for Check Out */
+        }
+
+        .checkout-button:hover {
+            background-color: #218838; /* Darker green for hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Booking Confirmation</h1>
+
+    <div class="confirmation-container">
+        <h2>Thank You for Your Booking!</h2>
+        <div class="confirmation-details">
+            <p><strong>Guest Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Room Type:</strong> {{ booking.room.room_type }}</p>
+            <p><strong>Room Number:</strong> {{ booking.room.room_number }}</p>
+            <p><strong>Check-in Date:</strong> {{ booking.check_in_date }}</p>
+            <p><strong>Check-out Date:</strong> {{ booking.check_out_date }}</p>
+            <p><strong>Total Price:</strong> ₹{{ booking.total_price }}</p>
+        </div>
+        <a href="{% url 'check_out' booking.id %}" class="checkout-button">Check Out</a>
+        <a href="{% url 'room_list' %}" class="back-button">Back to Room List</a>
+    </div>
+</body>
+</html>

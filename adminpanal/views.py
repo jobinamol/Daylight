@@ -104,93 +104,83 @@ def delete_staff(request, staff_id):
     
     return redirect('staffmanagement')
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import PackageManagement, Category, Room, Activity
+from decimal import Decimal
+
 def packagemanagement(request):
-    packages = PackageManagement.objects.all()
-    categories = Category.objects.all()
-    food_categories = FoodCategory.objects.all()  # Fetch all food categories
-    menu_items = MenuItem.objects.select_related('category').all()
-    rooms = Room.objects.all()  # Fetch all rooms
-
     if request.method == 'POST':
-        name = request.POST.get('name')
-        price = request.POST.get('price')
-        description = request.POST.get('description')
-        duration = request.POST.get('duration')
-        image = request.FILES.get('image')
-        category_id = request.POST.get('category')
-        selected_food_categories = request.POST.getlist('food_categories')  # Updated: Retrieve selected food categories
-        selected_menu_items = request.POST.getlist('food_items')  # Updated: Retrieve selected food items
-        selected_rooms = request.POST.getlist('rooms')  # New: Retrieve selected rooms
-
-        # Validate inputs
-        if not name or not price or float(price) <= 0 or not description or not duration or not category_id:
-            messages.error(request, 'Please fill in all fields correctly.')
-            return redirect('packagemanagement')
-
         try:
-            category = Category.objects.get(id=category_id)
-
-            # Create the package
+            # Extract data from POST request
+            name = request.POST['name']
+            price = Decimal(request.POST['price'])
+            description = request.POST['description']
+            duration = request.POST['duration']
+            category_id = request.POST['category']
+            
+            # Create new package
             package = PackageManagement(
                 name=name,
                 price=price,
                 description=description,
                 duration=duration,
-                image=image,
-                category=category
+                category_id=category_id
             )
+            
+            # Handle image uploads
+            if 'image' in request.FILES:
+                package.image = request.FILES['image']
+            if 'room_image' in request.FILES:
+                package.room_image = request.FILES['room_image']
+            
             package.save()
-
-            # Save the selected food categories and menu items
-            if selected_food_categories:
-                package.food_categories.set(selected_food_categories)
-            if selected_menu_items:
-                package.menu_items.set(selected_menu_items)
-
-            # Save the selected rooms
-            if selected_rooms:
-                package.rooms.set(selected_rooms)  # New: Set selected rooms
-
-            messages.success(request, 'Package added successfully.')
-        except Category.DoesNotExist:
-            messages.error(request, 'Selected category does not exist.')
+            
+            # Handle many-to-many relationships
+            activity_ids = request.POST.getlist('activities')
+            package.activities.set(activity_ids)
+            
+            room_ids = request.POST.getlist('rooms')
+            package.rooms.set(room_ids)
+            
+            messages.success(request, f'Package "{package.name}" has been added successfully.')
+            return redirect('packagemanagement')
         except Exception as e:
-            messages.error(request, f"An error occurred: {str(e)}")
+            messages.error(request, f'Error adding package: {str(e)}')
 
-        return redirect('packagemanagement')
+    # GET request: render the form
+    packages = PackageManagement.objects.all().prefetch_related('rooms', 'activities')
+    categories = Category.objects.all()
+    activities = Activity.objects.all()
+    rooms = Room.objects.all()
 
-    return render(request, 'packagemanagement.html', {
+    context = {
         'packages': packages,
         'categories': categories,
-        'food_categories': food_categories,  # Pass to template
-        'menu_items': menu_items,
-        'rooms': rooms  # Pass rooms to template
-    })
+        'activities': activities,
+        'rooms': rooms,
+    }
+    return render(request, 'packagemanagement.html', context)
 
 def edit_package(request, package_id):
     package = get_object_or_404(PackageManagement, id=package_id)
-
+    
     if request.method == 'POST':
-        package.name = request.POST.get('name')
-        package.price = request.POST.get('price')
-        package.description = request.POST.get('description')
-        package.duration = request.POST.get('duration')
+        # Your existing code for handling POST requests
+        pass
+    else:
+        # Prepare context for GET requests
+        categories = Category.objects.all()
+        activities = Activity.objects.all()
+        rooms = Room.objects.all()
 
-        if request.FILES.get('image'):
-            package.image = request.FILES['image']  # Update the image if a new one is provided
-
-        if not package.name or not package.price or float(package.price) <= 0 or not package.description or not package.duration:
-            messages.error(request, 'Please fill in all fields correctly.')
-            return redirect('edit_package', package_id=package.id)
-
-        try:
-            package.save()
-            messages.success(request, 'Package updated successfully.')
-        except Exception as e:
-            messages.error(request, f"An error occurred: {str(e)}")
-        return redirect('packagemanagement')
-
-    return render(request, 'edit_package.html', {'package': package})
+        context = {
+            'package': package,
+            'categories': categories,
+            'activities': activities,
+            'rooms': rooms,
+        }
+        return render(request, 'edit_package.html', context)
 
 def delete_package(request, package_id):
     package = get_object_or_404(PackageManagement, id=package_id)
@@ -215,25 +205,25 @@ def package_list(request):
     }
     return render(request, 'your_template.html', context)
 
+
 def category_management(request):
     categories = Category.objects.all()
-
     if request.method == 'POST':
         category_name = request.POST.get('name')
+        category_image = request.FILES.get('image')  # Get the image file
         if category_name:
-            Category.objects.create(name=category_name)
+            Category.objects.create(name=category_name, image=category_image)
         return redirect('category_management')
-
     return render(request, 'category_management.html', {'categories': categories})
 
 def category_list(request):
     categories = Category.objects.all()
     return render(request, 'category_list.html', {'categories': categories})
-
 def add_category(request):
     if request.method == 'POST':
         name = request.POST.get('name')
-        Category.objects.create(name=name)
+        image = request.FILES.get('image')  # Handle uploaded image
+        Category.objects.create(name=name, image=image)
         return redirect('category_list')
     return render(request, 'add_category.html')
 
@@ -241,24 +231,29 @@ def edit_category(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     if request.method == 'POST':
         category.name = request.POST.get('name')
+        image = request.FILES.get('image')  # Retrieve image file, if provided
+        if image:
+            category.image = image  # Update image if provided
         category.save()
-        return redirect('category_list')
+        return redirect('category_management')
     return render(request, 'edit_category.html', {'category': category})
 
 def delete_category(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     category.delete()
-    return redirect('category_list')
+    return redirect('category_management')
 
 def update_category(request, category_id):
-    category = Category.objects.get(id=category_id)
+    category = get_object_or_404(Category, id=category_id)
     if request.method == 'POST':
         category_name = request.POST.get('name')
+        category_image = request.FILES.get('image')
         if category_name:
             category.name = category_name
-            category.save()
+        if category_image:
+            category.image = category_image  # Update image if provided
+        category.save()
         return redirect('category_management')
-
     return render(request, 'update_category.html', {'category': category})
 
 def get_food_items_by_category(request, category_id):
@@ -271,4 +266,42 @@ def bookingmanagement(request):
     bookings = Bookingpackage.objects.all()
     # Pass the list of bookings to the template
     return render(request, 'bookingmanage.html', {'bookings': bookings})
+
+
+
+def activity_list(request):
+    activities = Activity.objects.all()
+    return render(request, 'activity_list.html', {'activities': activities})
+
+def activity_create(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name:
+            Activity.objects.create(name=name)
+            messages.success(request, 'Activity created successfully.')
+            return redirect('activity_list')
+        else:
+            messages.error(request, 'Activity name is required.')
+    return render(request, 'activity_form.html')
+
+def activity_update(request, pk):
+    activity = get_object_or_404(Activity, pk=pk)
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name:
+            activity.name = name
+            activity.save()
+            messages.success(request, 'Activity updated successfully.')
+            return redirect('activity_list')
+        else:
+            messages.error(request, 'Activity name is required.')
+    return render(request, 'activity_form.html', {'activity': activity})
+
+def activity_delete(request, pk):
+    activity = get_object_or_404(Activity, pk=pk)
+    if request.method == 'POST':
+        activity.delete()
+        messages.success(request, 'Activity deleted successfully.')
+        return redirect('activity_list')
+    return render(request, 'activity_confirm_delete.html', {'activity': activity})
 

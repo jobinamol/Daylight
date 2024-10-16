@@ -1,0 +1,17 @@
+{% extends 'adminindex.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if activity %}Edit Activity{% else %}Create New Activity{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ activity.name|default:'' }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Save</button>
+        <a href="{% url 'activity_list' %}" class="btn btn-secondary mt-3">Cancel</a>
+    </form>
+</div>
+{% endblock %}
+

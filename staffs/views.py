@@ -144,59 +144,52 @@ def manage_special_menu(request):
     return render(request, 'manage_special_menu.html', {'menu_items': menu_items})
 
 def roommanagement(request):
-    rooms = Room.objects.all()
+    rooms = Room.objects.all().order_by('number')
     return render(request, 'roommanagement.html', {'rooms': rooms})
 
 # Add a new room
 def add_room(request):
     if request.method == 'POST':
-        number = request.POST.get('number')
-        room_type = request.POST.get('room_type')
-        status = request.POST.get('status')
-        price = request.POST.get('price')  # Get price from the request
-        image = request.FILES.get('image')  # Handling image uploads
-
-        # Validate the length of the room number
-        if len(number) > 20:  # Adjust based on your model's max_length
-            messages.error(request, "Room number is too long. Maximum length is 20 characters.")
-            return render(request, 'add_rooms.html')
-
         try:
-            # Create a new Room instance
-            room = Room.objects.create(
-                number=number,
-                room_type=room_type,
-                status=status,
-                price=price,  # Set the price
-                image=image
+            room = Room(
+                number=request.POST['number'],
+                name=request.POST['name'],  # New field
+                category_id=request.POST['category'],
+                type=request.POST['type'],
+                description=request.POST['description'],
+                status=request.POST['status'],
+                price=request.POST['price'],
+                capacity=request.POST['capacity'],
+                available_count=request.POST['available_count'],
             )
+            if 'image' in request.FILES:
+                room.image = request.FILES['image']
             room.save()
-            messages.success(request, "Room added successfully!")
+            messages.success(request, 'Room added successfully!')
             return redirect('roommanagement')
         except Exception as e:
-            messages.error(request, f"An error occurred while adding the room: {str(e)}")
-            return render(request, 'add_rooms.html')
-
-    return render(request, 'add_rooms.html')
+            messages.error(request, f'Error adding room: {str(e)}')
+    
+    categories = Category.objects.all()
+    return render(request, 'add_rooms.html', {'categories': categories})
 
 # Edit an existing room
 def edit_room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
+    categories = Category.objects.all()
 
     if request.method == 'POST':
         room.number = request.POST.get('number')
-        room.room_type = request.POST.get('room_type')
+        room.category_id = request.POST.get('category')
+        room.type = request.POST.get('type')
+        room.description = request.POST.get('description')
         room.status = request.POST.get('status')
-        room.price = request.POST.get('price')  # Update the price
+        room.price = request.POST.get('price')
+        room.capacity = request.POST.get('capacity')
 
-        # Validate the length of the room number
-        if len(room.number) > 20:  # Adjust based on your model's max_length
-            messages.error(request, "Room number is too long. Maximum length is 20 characters.")
-            return render(request, 'edit_rooms.html', {'room': room})
-
-        # Update image if a new one is uploaded
-        if request.FILES.get('image'):
-            room.image = request.FILES['image']
+        if len(room.number) > 10:  # Adjust based on your model's max_length
+            messages.error(request, "Room number is too long. Maximum length is 10 characters.")
+            return render(request, 'edit_rooms.html', {'room': room, 'categories': categories})
 
         try:
             room.save()
@@ -204,9 +197,9 @@ def edit_room(request, room_id):
             return redirect('roommanagement')
         except Exception as e:
             messages.error(request, f"An error occurred while updating the room: {str(e)}")
-            return render(request, 'edit_rooms.html', {'room': room})
+            return render(request, 'edit_rooms.html', {'room': room, 'categories': categories})
 
-    return render(request, 'edit_rooms.html', {'room': room})
+    return render(request, 'edit_rooms.html', {'room': room, 'categories': categories})
 
 # Delete a room
 def delete_room(request, room_id):
