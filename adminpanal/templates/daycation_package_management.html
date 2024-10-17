@@ -1,0 +1,159 @@
+{% extends 'adminindex.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Daycation Package Management</h1>
+
+    <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="create-tab" data-bs-toggle="tab" data-bs-target="#create" type="button" role="tab" aria-controls="create" aria-selected="true">Create Package</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button" role="tab" aria-controls="list" aria-selected="false">Package List</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="create" role="tabpanel" aria-labelledby="create-tab">
+            <form method="post" enctype="multipart/form-data" class="bg-white p-4 rounded shadow">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">Package Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="max_capacity" class="form-label">Max Capacity</label>
+                        <input type="number" class="form-control" id="max_capacity" name="max_capacity" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" name="category" required>
+                            <option value="" selected disabled>Select a category</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Package Image</label>
+                    <input type="file" class="form-control" id="image" name="image">
+                </div>
+                
+                <h3 class="mt-4 mb-3">Features</h3>
+                <div id="features">
+                    <div class="mb-2">
+                        <input type="text" class="form-control" name="features[]" placeholder="Feature">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outline-secondary mb-3" onclick="addFeature()">Add Feature</button>
+
+                <h3 class="mt-4 mb-3">Add-ons</h3>
+                <div id="addons">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <input type="text" class="form-control mb-2" name="addon_name[]" placeholder="Add-on Name">
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">$</span>
+                                <input type="number" step="0.01" class="form-control" name="addon_price[]" placeholder="Add-on Price">
+                            </div>
+                            <textarea class="form-control" name="addon_description[]" placeholder="Add-on Description" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outline-secondary mb-3" onclick="addAddon()">Add Add-on</button>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg mt-4">Create Package</button>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Max Capacity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for package in packages %}
+                        <tr>
+                            <td>{{ package.name }}</td>
+                            <td>{{ package.category.name }}</td>
+                            <td>${{ package.price }}</td>
+                            <td>{{ package.max_capacity }}</td>
+                            <td>
+                                <a href="{% url 'edit_daycation_package' package.id %}" class="btn btn-sm btn-primary">Edit</a>
+                                <a href="{% url 'delete_daycation_package' package.id %}" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No packages available.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function addFeature() {
+    const featuresDiv = document.getElementById('features');
+    const newFeature = document.createElement('div');
+    newFeature.className = 'mb-2';
+    newFeature.innerHTML = '<input type="text" class="form-control" name="features[]" placeholder="Feature">';
+    featuresDiv.appendChild(newFeature);
+}
+
+function addAddon() {
+    const addonsDiv = document.getElementById('addons');
+    const newAddon = document.createElement('div');
+    newAddon.className = 'card mb-3';
+    newAddon.innerHTML = `
+        <div class="card-body">
+            <input type="text" class="form-control mb-2" name="addon_name[]" placeholder="Add-on Name">
+            <div class="input-group mb-2">
+                <span class="input-group-text">$</span>
+                <input type="number" step="0.01" class="form-control" name="addon_price[]" placeholder="Add-on Price">
+            </div>
+            <textarea class="form-control" name="addon_description[]" placeholder="Add-on Description" rows="2"></textarea>
+        </div>
+    `;
+    addonsDiv.appendChild(newAddon);
+}
+
+// Ensure Bootstrap is properly loaded before initializing tabs
+document.addEventListener('DOMContentLoaded', function() {
+    var tabElms = document.querySelectorAll('button[data-bs-toggle="tab"]')
+    tabElms.forEach(function(tabElm) {
+        new bootstrap.Tab(tabElm)
+    })
+})
+</script>
+{% endblock %}

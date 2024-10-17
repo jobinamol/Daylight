@@ -275,3 +275,5 @@ def booking_detail(request, booking_id):
     booking = get_object_or_404(Bookingpackage, id=booking_id)
     # Render the booking details in a template
     return render(request, 'booking_detail.html', {'booking': booking})
+
+

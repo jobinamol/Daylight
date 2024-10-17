@@ -581,19 +581,30 @@ def booking_view(request, package_id):
             'payment_method': request.POST.get('payment_method'),
         }
 
-        # Validate the data
+        # Validate data completeness
         if not all(booking_info.values()):
             messages.error(request, 'Please fill in all required fields.')
-            request.session['booking_info'] = booking_info
+            return render(request, 'create_booking.html', {'package': package})
+
+        num_rooms = int(booking_info['num_rooms'])
+
+        # Check room availability
+        available_rooms = package.rooms.filter(status='available', available_count__gte=num_rooms)
+        if not available_rooms.exists():
+            messages.error(request, 'Insufficient rooms available for the selected package.')
             return render(request, 'create_booking.html', {'package': package})
 
         # Calculate total amount
         num_adults = int(booking_info['num_adults'])
         num_children = int(booking_info['num_children'])
-        num_rooms = int(booking_info['num_rooms'])
-        
-        # Convert all values to Decimal for precise calculation
         total_amount = (Decimal(num_adults) + (Decimal(num_children) * Decimal('0.5'))) * package.price * Decimal(num_rooms)
+
+        # Update room availability
+        room = available_rooms.first()  # Assuming one room type per booking
+        room.available_count -= num_rooms
+        if room.available_count == 0:
+            room.status = 'occupied'
+        room.save()
 
         # Create a new booking
         booking = Bookingpackage.objects.create(
@@ -610,19 +621,12 @@ def booking_view(request, package_id):
             total_amount=total_amount,
         )
 
-        # Clear session data
-        if 'booking_info' in request.session:
-            del request.session['booking_info']
-
-        # Redirect to booking_success with the booking ID
         messages.success(request, 'Booking successful!')
         return redirect('booking_success', booking_id=booking.id)
     
-    # If GET request, show the booking form
+    # Render the booking form if it's a GET request or if there's an error
     return render(request, 'create_booking.html', {'package': package})
 
 def booking_success(request, booking_id):
     booking = get_object_or_404(Bookingpackage, id=booking_id)
     return render(request, 'booking_success.html', {'booking': booking})
-
-

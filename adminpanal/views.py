@@ -305,3 +305,121 @@ def activity_delete(request, pk):
         return redirect('activity_list')
     return render(request, 'activity_confirm_delete.html', {'activity': activity})
 
+
+
+
+
+def daycation_package_management(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        price = request.POST.get('price')
+        duration = request.POST.get('duration')
+        max_capacity = request.POST.get('max_capacity')
+        category_id = request.POST.get('category')
+        image = request.FILES.get('image')
+        features = request.POST.getlist('features[]')
+        addon_names = request.POST.getlist('addon_name[]')
+        addon_prices = request.POST.getlist('addon_price[]')
+        addon_descriptions = request.POST.getlist('addon_description[]')
+        
+        if all([name, description, price, duration, max_capacity, category_id]):
+            try:
+                price = Decimal(price)
+                max_capacity = int(max_capacity)
+                category = Category.objects.get(id=category_id)
+                
+                package = DaycationPackage.objects.create(
+                    name=name,
+                    description=description,
+                    price=price,
+                    duration=duration,
+                    max_capacity=max_capacity,
+                    category=category,
+                    image=image
+                )
+                
+                # Add features
+                for feature in features:
+                    if feature:
+                        PackageFeature.objects.create(package=package, name=feature, description="")
+                
+                # Add add-ons
+                for name, price, description in zip(addon_names, addon_prices, addon_descriptions):
+                    if name and price:
+                        PackageAddon.objects.create(
+                            package=package,
+                            name=name,
+                            price=Decimal(price),
+                            description=description
+                        )
+                
+                messages.success(request, 'Daycation package created successfully.')
+                return redirect('daycation_package_list')
+            except ValueError:
+                messages.error(request, 'Invalid input. Please check your entries.')
+            except Category.DoesNotExist:
+                messages.error(request, 'Selected category does not exist.')
+        else:
+            messages.error(request, 'All fields are required.')
+    
+    categories = Category.objects.all()
+    packages = DaycationPackage.objects.all()  # Fetch all packages
+    return render(request, 'daycation_package_management.html', {'categories': categories, 'packages': packages})
+
+def edit_daycation_package(request, package_id):
+    package = get_object_or_404(DaycationPackage, id=package_id)
+    
+    if request.method == 'POST':
+        package.name = request.POST.get('name')
+        package.description = request.POST.get('description')
+        package.price = Decimal(request.POST.get('price'))
+        package.duration = request.POST.get('duration')
+        package.max_capacity = int(request.POST.get('max_capacity'))
+        package.category_id = request.POST.get('category')
+        
+        if 'image' in request.FILES:
+            package.image = request.FILES['image']
+        
+        package.save()
+
+        # Update features
+        package.features.all().delete()
+        features = request.POST.getlist('features[]')
+        for feature in features:
+            if feature:
+                PackageFeature.objects.create(package=package, name=feature, description="")
+
+        # Update add-ons
+        package.addons.all().delete()
+        addon_names = request.POST.getlist('addon_name[]')
+        addon_prices = request.POST.getlist('addon_price[]')
+        addon_descriptions = request.POST.getlist('addon_description[]')
+        for name, price, description in zip(addon_names, addon_prices, addon_descriptions):
+            if name and price:
+                PackageAddon.objects.create(
+                    package=package,
+                    name=name,
+                    price=Decimal(price),
+                    description=description
+                )
+
+        messages.success(request, 'Daycation package updated successfully.')
+        return redirect('daycation_package_list')
+    
+    categories = Category.objects.all()
+    return render(request, 'edit_daycation_package.html', {'package': package, 'categories': categories})
+
+def delete_daycation_package(request, package_id):
+    package = get_object_or_404(DaycationPackage, id=package_id)
+    
+    if request.method == 'POST':
+        package.delete()
+        messages.success(request, 'Daycation package deleted successfully.')
+        return redirect('daycation_package_list')
+    
+    return render(request, 'delete_daycation_package.html', {'package': package})
+
+def daycation_package_list(request):
+    packages = DaycationPackage.objects.all()
+    return render(request, 'daycation_package_list.html', {'packages': packages})

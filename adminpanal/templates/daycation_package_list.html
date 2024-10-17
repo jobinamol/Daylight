@@ -1,0 +1,33 @@
+{% extends 'adminindex.html' %}
+
+{% block content %}
+<h1>Daycation Packages</h1>
+<a href="{% url 'daycation_package_management' %}" class="btn btn-primary">Add New Package</a>
+
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Duration</th>
+            <th>Max Capacity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for package in packages %}
+        <tr>
+            <td>{{ package.name }}</td>
+            <td>${{ package.price }}</td>
+            <td>{{ package.duration }}</td>
+            <td>{{ package.max_capacity }}</td>
+            <td>
+                <a href="{% url 'edit_daycation_package' package.id %}" class="btn btn-sm btn-info">Edit</a>
+                <a href="{% url 'delete_daycation_package' package.id %}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
