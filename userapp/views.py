@@ -566,43 +566,63 @@ def create_booking(request,id):
 
 def booking_view(request, package_id):
     package = get_object_or_404(PackageManagement, id=package_id)
-    rooms = Room.objects.filter(status='available')
 
     if request.method == 'POST':
         # Collect form data
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        num_adults = request.POST.get('num_adults')
-        num_children = request.POST.get('num_children')
-        room_id = request.POST.get('room_type')
-        payment_method = request.POST.get('payment_method')
+        booking_info = {
+            'first_name': request.POST.get('first_name'),
+            'last_name': request.POST.get('last_name'),
+            'email': request.POST.get('email'),
+            'phone': request.POST.get('phone'),
+            'num_adults': request.POST.get('num_adults'),
+            'num_children': request.POST.get('num_children'),
+            'num_rooms': request.POST.get('num_rooms'),
+            'food_preference': request.POST.get('food_preference'),
+            'payment_method': request.POST.get('payment_method'),
+        }
 
-        selected_room = get_object_or_404(Room, id=room_id)
-        room_price = selected_room.price
-        total_amount = (Decimal(num_adults) + (Decimal(num_children) * Decimal('0.5'))) * room_price + package.price
+        # Validate the data
+        if not all(booking_info.values()):
+            messages.error(request, 'Please fill in all required fields.')
+            request.session['booking_info'] = booking_info
+            return render(request, 'create_booking.html', {'package': package})
+
+        # Calculate total amount
+        num_adults = int(booking_info['num_adults'])
+        num_children = int(booking_info['num_children'])
+        num_rooms = int(booking_info['num_rooms'])
+        
+        # Convert all values to Decimal for precise calculation
+        total_amount = (Decimal(num_adults) + (Decimal(num_children) * Decimal('0.5'))) * package.price * Decimal(num_rooms)
 
         # Create a new booking
         booking = Bookingpackage.objects.create(
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            phone=phone,
+            first_name=booking_info['first_name'],
+            last_name=booking_info['last_name'],
+            email=booking_info['email'],
+            phone=booking_info['phone'],
             num_adults=num_adults,
             num_children=num_children,
-            room=selected_room,
+            num_rooms=num_rooms,
             package=package,
-            payment_method=payment_method,
+            food_preference=booking_info['food_preference'],
+            payment_method=booking_info['payment_method'],
             total_amount=total_amount,
         )
 
+        # Clear session data
+        if 'booking_info' in request.session:
+            del request.session['booking_info']
+
         # Redirect to booking_success with the booking ID
+        messages.success(request, 'Booking successful!')
         return redirect('booking_success', booking_id=booking.id)
     
-    return render(request, 'create_booking.html', {'package': package, 'rooms': rooms})
-    
+    # If GET request, show the booking form
+    return render(request, 'create_booking.html', {'package': package})
+
 def booking_success(request, booking_id):
     booking = get_object_or_404(Bookingpackage, id=booking_id)
     return render(request, 'booking_success.html', {'booking': booking})
+
 

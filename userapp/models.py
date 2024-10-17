@@ -75,21 +75,45 @@ class PackageBooking(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.package_name} - {self.booking_date.strftime('%Y-%m-%d %H:%M')}"
-
+    
 class Bookingpackage(models.Model):
+    PAYMENT_CHOICES = [
+        ('credit_card', 'Credit Card'),
+        ('debit_card', 'Debit Card'),
+        ('net_banking', 'Net Banking'),
+        ('upi', 'UPI'),
+    ]
+    PAYMENT_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('paid', 'Paid'),
+        ('failed', 'Failed'),
+    ]
+
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
     email = models.EmailField(max_length=255, null=True)  
-    num_adults = models.IntegerField()
-    num_children = models.IntegerField()
+    num_adults = models.IntegerField(validators=[MinValueValidator(1)])
+    num_children = models.IntegerField(validators=[MinValueValidator(0)])
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     package = models.ForeignKey(PackageManagement, on_delete=models.CASCADE)
-    payment_method = models.CharField(max_length=50)
+    payment_method = models.CharField(max_length=50, choices=PAYMENT_CHOICES)
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='pending')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    booking_date = models.DateTimeField(default=timezone.now, editable=False)
+    check_in_date = models.DateField(null=True, blank=True)
+    check_out_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.package}"
+
+    class Meta:
+        ordering = ['-booking_date']
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.booking_date = timezone.now()
+        return super(Bookingpackage, self).save(*args, **kwargs)
 
 
 

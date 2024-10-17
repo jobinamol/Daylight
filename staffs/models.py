@@ -38,6 +38,9 @@ TYPE_CHOICES = [
     ('family', 'Family'),
 ]
 
+
+from django.core.exceptions import ValidationError
+
 class Room(models.Model):
     STATUS_CHOICES = [
         ('available', 'Available'),
@@ -45,8 +48,14 @@ class Room(models.Model):
         ('maintenance', 'Maintenance'),
     ]
 
+    TYPE_CHOICES = [
+        ('single', 'Single'),
+        ('double', 'Double'),
+        ('suite', 'Suite'),
+    ]
+
     number = models.CharField(max_length=10, unique=True)
-    name = models.CharField(max_length=100, default="Unnamed Room")  # Added default value
+    name = models.CharField(max_length=100, default="Unnamed Room")
     category = models.ForeignKey(
         'adminpanal.Category',
         on_delete=models.PROTECT,
@@ -66,10 +75,43 @@ class Room(models.Model):
 
     class Meta:
         app_label = 'staffs'
-    
+
     @property
     def is_available(self):
         return self.available_count > 0 and self.status == 'available'
+
+    def book_room(self, count=1):
+        """
+        Decreases the available_count by the specified count when booking.
+        Updates the room status to 'occupied' if no rooms are left.
+        """
+        if count > self.available_count:
+            raise ValidationError("Not enough rooms available to fulfill the booking.")
+        
+        # Decrease the available count
+        self.available_count -= count
+        
+        # Check if room should be marked as occupied
+        if self.available_count == 0:
+            self.status = 'occupied'
+        
+        # Save changes to the database
+        self.save()
+
+    def release_room(self, count=1):
+        """
+        Increases the available_count by the specified count when releasing rooms.
+        Updates the room status to 'available' if rooms are now available.
+        """
+        self.available_count += count
+        
+        # Mark room as available if it was previously occupied
+        if self.available_count > 0:
+            self.status = 'available'
+        
+        # Save changes to the database
+        self.save()
+
 
 class FoodCategory(models.Model):
     name = models.CharField(max_length=255, unique=True)

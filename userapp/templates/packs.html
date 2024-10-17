@@ -1,126 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Packages</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 90%;
-            margin: 0 auto;
-        }
-        .header, .filter-section, .categories-section, .packages-section {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 20px 0;
-        }
-        .header input[type="text"] {
-            padding: 8px;
-            width: 200px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .header button {
-            padding: 8px 15px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .header button:hover {
-            background-color: #0056b3;
-        }
-        .categories-slider {
-            display: flex;
-            overflow-x: auto;
-            padding: 10px 0;
-        }
-        .category-item {
-            margin-right: 15px;
-            text-align: center;
-        }
-        .category-item a {
-            text-decoration: none;
-            color: #333;
-        }
-        .category-item a.active {
-            font-weight: bold;
-            color: #007BFF;
-        }
-        .category-image {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-size: cover;
-            background-position: center;
-            margin-bottom: 8px;
-        }
-        .filter-section input[type="text"] {
-            padding: 8px;
-            width: 150px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .filter-section button {
-            padding: 8px 15px;
-            background-color: #28A745;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .filter-section button:hover {
-            background-color: #218838;
-        }
-        .packages-section {
-            flex-wrap: wrap;
-        }
-        .package-item {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            width: 30%;
-            margin: 15px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .package-item h3 {
-            margin: 0 0 10px;
-        }
-        .package-item p {
-            margin: 5px 0;
-        }
-    </style>
-</head>
-<body>
+{% extends 'home.html' %}
+{% block content %}
+{% load static %}
 
+<style>
+    .hero-wrap {
+        background-attachment: fixed;
+        height: 400px;
+    }
+    .hero-wrap .overlay {
+        opacity: 0.6;
+    }
+    .hero-wrap h1 {
+        font-size: 3rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    .categories-section {
+        margin-top: -50px;
+        position: relative;
+        z-index: 10;
+    }
+    .categories-slider {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding: 20px 0;
+    }
+    .category-item {
+        min-width: 120px;
+        margin-right: 15px;
+        text-align: center;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 15px 10px;
+    }
+    .category-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    .category-image {
+        width: 60px;
+        height: 60px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        border: 3px solid #f8f9fa;
+    }
+    .category-item h5 {
+        font-size: 0.9rem;
+        margin-top: 5px;
+        color: #333;
+    }
+    .sidebar-wrap {
+        position: sticky;
+        top: 20px;
+    }
+    .package-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .package-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .btn-outline-transparent {
+        transition: all 0.3s ease;
+    }
+    .btn-outline-transparent:hover {
+        background-color: #27ae60;
+        color: #fff !important;
+    }
+    .pagination {
+        justify-content: center;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #27ae60;
+        border-color: #27ae60;
+    }
+    .pagination .page-link {
+        color: #27ae60;
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="overlay"></div>
     <div class="container">
-
-        <!-- Header with Search -->
-        <div class="header">
-            <h1>Packages</h1>
-            <form method="GET" action="{% url 'packs' %}" id="searchForm">
-                <input type="text" name="search" value="{{ search_query }}" placeholder="Search packages">
-                <button type="submit">Search</button>
-            </form>
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <div class="text">
+                    <h1 class="mb-4 bread">Discover Our Staycation Packages</h1>
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span>
+                        <span>Packages</span>
+                    </p>
+                </div>
+            </div>
         </div>
+    </div>
+</div>
 
+<!-- Main Content -->
+<section class="ftco-section bg-light">
+    <div class="container">
         <!-- Categories Section -->
         <div class="categories-section">
-            <h2>Categories</h2>
             <div class="categories-slider">
                 <!-- "All" Category -->
                 <div class="category-item">
                     <a href="{% url 'packs' %}" class="{% if not selected_category %}active{% endif %}">
-                        <div class="category-image" style="background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
-                            <span>All</span>
+                        <div class="category-image" style="background-color: #27ae60; display: flex; align-items: center; justify-content: center;">
+                            <i class="fa fa-th" style="color: white; font-size: 24px;"></i>
                         </div>
                         <h5>All</h5>
                     </a>
@@ -143,34 +134,181 @@
                 {% endfor %}
             </div>
         </div>
+        
+        <div class="row mt-5">
+            <!-- Sidebar: Filters -->
+            <div class="col-md-3">
+                <form id="filterForm" method="GET" action="{% url 'packs' %}">
+                    {% if selected_category %}
+                        <input type="hidden" name="category" value="{{ selected_category }}">
+                    {% endif %}
+                    <div class="sidebar-wrap bg-white p-4 shadow-sm rounded">
+                        <h3 class="heading mb-4">Refine Your Search</h3>
+                        
+                        <!-- Search bar -->
+                        <div class="form-group">
+                            <label for="search">Search Packages</label>
+                            <input type="text" name="search" id="search" class="form-control" placeholder="Enter keywords" value="{{ search_query }}">
+                        </div>
+                        
+                        <!-- Filter by Price -->
+                        <div class="form-group">
+                            <label for="price_range">Price Range</label>
+                            <select name="price_range" id="price_range" class="form-control">
+                                <option value="">Any Price</option>
+                                <option value="0-3000" {% if price_range == '0-3000' %}selected{% endif %}>Up to ₹3000</option>
+                                <option value="3000-10000" {% if price_range == '3000-10000' %}selected{% endif %}>₹3000 - ₹10000</option>
+                                <option value="10000-100000" {% if price_range == '10000-100000' %}selected{% endif %}>₹10000 - ₹100000</option>
+                                <option value="100000-" {% if price_range == '100000-' %}selected{% endif %}>₹100000 and above</option>
+                            </select>
+                        </div>
 
-        <!-- Filter Section -->
-        <div class="filter-section">
-            <form method="GET" action="{% url 'packs' %}">
-                <label for="price_range">Price Range:</label>
-                <input type="text" name="price_range" value="{{ price_range }}" placeholder="min-max">
-                <button type="submit">Filter</button>
-            </form>
-        </div>
+                        <!-- Filter by Days -->
+                        <div class="form-group">
+                            <label for="days">Duration (Days)</label>
+                            <select name="days" id="days" class="form-control">
+                                <option value="">Any Duration</option>
+                                <option value="1" {% if days == '1' %}selected{% endif %}>1 Day</option>
+                                <option value="2" {% if days == '2' %}selected{% endif %}>2 Days</option>
+                                <option value="3" {% if days == '3' %}selected{% endif %}>3 Days</option>
+                                <option value="4" {% if days == '4' %}selected{% endif %}>4 Days</option>
+                                <option value="5+" {% if days == '5+' %}selected{% endif %}>5+ Days</option>
+                            </select>
+                        </div>
 
-        <!-- Packages Section -->
-        <div class="packages-section">
-            {% if packages %}
-                {% for package in packages %}
-                    <div class="package-item">
-                        <h3>{{ package.name }}</h3>
-                        <p>{{ package.description }}</p>
-                        <p>Price: ₹{{ package.price }}</p>
-                        <p>Duration: {{ package.duration }}</p>
-                        <p>Rating: {{ package.rating }}</p>
+                        <!-- Filter by Rating -->
+                        <div class="form-group">
+                            <label for="rating">Minimum Rating</label>
+                            <select name="rating" id="rating" class="form-control">
+                                <option value="">Any Rating</option>
+                                <option value="5" {% if rating == '5' %}selected{% endif %}>5 Stars</option>
+                                <option value="4" {% if rating == '4' %}selected{% endif %}>4 Stars & Up</option>
+                                <option value="3" {% if rating == '3' %}selected{% endif %}>3 Stars & Up</option>
+                                <option value="2" {% if rating == '2' %}selected{% endif %}>2 Stars & Up</option>
+                                <option value="1" {% if rating == '1' %}selected{% endif %}>1 Star & Up</option>
+                            </select>
+                        </div>
+
+                        <!-- Filter by Activity (if you want to keep this) -->
+                        <div class="form-group">
+                            <label for="activity">Activity</label>
+                            <select name="activity" id="activity" class="form-control">
+                                <option value="">Any Activity</option>
+                                {% for activity in activities %}
+                                    <option value="{{ activity.id }}" {% if selected_activity == activity.id|stringformat:'s' %}selected{% endif %}>{{ activity.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary py-3 px-4 w-100">
+                                <i class="fa fa-filter mr-2"></i>Apply Filters
+                            </button>
+                        </div>
                     </div>
-                {% endfor %}
-            {% else %}
-                <p>No packages found.</p>
-            {% endif %}
+                </form>
+            </div>
+
+            <!-- Packages Section -->
+            <div class="col-md-9">
+                {% if no_results %}
+                    <div class="alert alert-info" role="alert">
+                        <i class="fa fa-info-circle mr-2"></i>No packages found matching your criteria. Please try different filters.
+                    </div>
+                {% elif not packages %}
+                    <div class="alert alert-info" role="alert">
+                        <i class="fa fa-info-circle mr-2"></i>No packages available at the moment.
+                    </div>
+                {% else %}
+                    <div class="row">
+                        {% for package in packages %}
+                        <div class="col-md-4 ftco-animate">
+                            <div class="package-card card shadow-sm border-0 mb-4" style="border-radius: 15px;">
+                                <div class="card-img-top" style="overflow: hidden; border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                                    {% if package.image %}
+                                        <img src="{{ package.image.url }}" alt="{{ package.name }}" class="img-fluid" style="width: 100%; height: 200px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="placeholder-image" style="width: 100%; height: 200px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                                            <span>No Image Available</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body text-center">
+                                    <h3 class="card-title" style="color: #2c3e50; font-weight: bold;">{{ package.name }}</h3>
+                                    <p class="mb-2">
+                                        <strong class="price" style="color: #27ae60; font-size: 1.2rem;">₹{{ package.price }}</strong>
+                                        <small>per package</small>
+                                    </p>
+                                    <p class="text-muted mb-0">
+                                        <i class="fa fa-calendar mr-2"></i>{{ package.duration }}
+                                    </p>
+                                    <p class="text-muted mb-0">
+                                        <i class="fa fa-star mr-2" style="color: #f1c40f;"></i>{{ package.rating }} / 5
+                                    </p>
+                                    <p class="text-muted mb-3">
+                                        <i class="fa fa-bed mr-2"></i>{{ package.rooms.all|join:", " }}
+                                    </p>
+                                    <a href="{% url 'package_details' package.id %}" class="btn btn-outline-transparent py-2 px-4">
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
         </div>
-
     </div>
+</section>
 
-</body>
-</html>
+<!-- Pagination -->
+<div class="row mt-5">
+    <div class="col text-center">
+        <nav aria-label="Page navigation">
+            {% if is_paginated %}
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for page in page_obj.paginator.page_range %}
+                        {% if page == page_obj.number %}
+                            <li class="page-item active"><span class="page-link">{{ page }}</span></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </nav>
+    </div>
+</div>
+
+<script>
+document.getElementById('filterForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var form = this;
+    var url = new URL(form.action);
+    var formData = new FormData(form);
+    for (var pair of formData.entries()) {
+        if (pair[1]) {
+            url.searchParams.append(pair[0], pair[1]);
+        }
+    }
+    window.location.href = url.toString();
+});
+</script>
+
+{% endblock %}
