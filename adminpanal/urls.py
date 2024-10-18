@@ -40,8 +40,13 @@ urlpatterns = [
     path('activities/<int:pk>/update/', views.activity_update, name='activity_update'),
     path('activities/<int:pk>/delete/', views.activity_delete, name='activity_delete'),
     
-    path('daycation-packages/', views.daycation_package_management, name='daycation_package_management'),
+    path('admindaycation-packages/', views.daycation_package_management, name='daycation_package_management'),
     path('daycation-packages/edit/<int:package_id>/', views.edit_daycation_package, name='edit_daycation_package'),
     path('daycation-packages/delete/<int:package_id>/', views.delete_daycation_package, name='delete_daycation_package'),
     path('daycation-packages/list/', views.daycation_package_list, name='daycation_package_list'),
+    
+    path('daycation-packages/', views.daycation_packages, name='daycation_packages'),
+    path('daycation-packages/category/<int:category_id>/', views.daycation_category_packages, name='daycation_category_packages'),
+    path('daycation-package/<int:package_id>/', views.daycation_package_details, name='daycation_package_details'),
+
 ]

@@ -8,6 +8,8 @@ from staffs.models import*
 from django.http import HttpResponse
 from django.contrib.auth import logout
 from django.http import JsonResponse
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 
@@ -435,3 +437,85 @@ def delete_daycation_package(request, package_id):
 def daycation_package_list(request):
     packages = DaycationPackage.objects.all()
     return render(request, 'daycation_package_list.html', {'packages': packages})
+
+def daycation_packages(request):
+    packages = DaycationPackage.objects.all()
+    categories = Category.objects.all()
+    activities = Activity.objects.all()
+
+    # Get filter parameters
+    category_id = request.GET.get('category')
+    search_query = request.GET.get('search')
+    price_range = request.GET.get('price_range')
+    days = request.GET.get('days')
+    rating = request.GET.get('rating')
+    activity_id = request.GET.get('activity')
+
+    # Apply filters
+    if category_id:
+        packages = packages.filter(category_id=category_id)
+    
+    if search_query:
+        packages = packages.filter(
+            Q(name__icontains=search_query) |
+            Q(description__icontains=search_query)
+        )
+    
+    if price_range:
+        min_price, max_price = map(int, price_range.split('-'))
+        if max_price:
+            packages = packages.filter(price__gte=min_price, price__lte=max_price)
+        else:
+            packages = packages.filter(price__gte=min_price)
+    
+    if days:
+        if days == '5+':
+            packages = packages.filter(duration__gte=5)
+        else:
+            packages = packages.filter(duration=int(days))
+    
+    if rating:
+        packages = packages.filter(rating__gte=int(rating))
+    
+    if activity_id:
+        packages = packages.filter(activities__id=activity_id)
+
+    # Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(packages, 9)  # 9 packages per page
+    try:
+        packages = paginator.page(page)
+    except PageNotAnInteger:
+        packages = paginator.page(1)
+    except EmptyPage:
+        packages = paginator.page(paginator.num_pages)
+
+    context = {
+        'packages': packages,
+        'categories': categories,
+        'activities': activities,
+        'selected_category': category_id,
+        'search_query': search_query,
+        'price_range': price_range,
+        'days': days,
+        'rating': rating,
+        'selected_activity': activity_id,
+        'is_paginated': packages.has_other_pages(),
+        'page_obj': packages,
+    }
+
+    return render(request, 'daycation_packages.html', context)
+
+def daycation_category_packages(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    request.GET = request.GET.copy()
+    request.GET['category'] = category_id
+    return daycation_packages(request)
+
+def daycation_package_details(request, package_id):
+    package = get_object_or_404(DaycationPackage, id=package_id)
+    return render(request, 'daycation_package_details.html', {'package': package})
+
+
+
+

@@ -630,3 +630,5 @@ def booking_view(request, package_id):
 def booking_success(request, booking_id):
     booking = get_object_or_404(Bookingpackage, id=booking_id)
     return render(request, 'booking_success.html', {'booking': booking})
+
+
