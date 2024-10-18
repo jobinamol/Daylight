@@ -1,33 +1,96 @@
 {% extends 'adminindex.html' %}
+{% load static %}
 
 {% block content %}
-<h1>Daycation Packages</h1>
-<a href="{% url 'daycation_package_management' %}" class="btn btn-primary">Add New Package</a>
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Daycation Packages</h1>
 
-<table class="table mt-4">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Duration</th>
-            <th>Max Capacity</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for package in packages %}
-        <tr>
-            <td>{{ package.name }}</td>
-            <td>${{ package.price }}</td>
-            <td>{{ package.duration }}</td>
-            <td>{{ package.max_capacity }}</td>
-            <td>
-                <a href="{% url 'edit_daycation_package' package.id %}" class="btn btn-sm btn-info">Edit</a>
-                <a href="{% url 'delete_daycation_package' package.id %}" class="btn btn-sm btn-danger">Delete</a>
-            </td>
-        </tr>
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         {% endfor %}
-    </tbody>
-</table>
-{% endblock %}
+    </div>
+    {% endif %}
 
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{% url 'daycation_package_management' %}" class="btn btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>Create New Package
+        </a>
+        <div class="form-group mb-0">
+            <input type="text" id="packageSearch" class="form-control" placeholder="Search packages...">
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for package in packages %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                {% if package.image %}
+                <img src="{{ package.image.url }}" class="card-img-top" alt="{{ package.name }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-image fa-3x text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ package.name }}</h5>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="fas fa-tag me-2"></i>{{ package.category.name }}
+                        </small>
+                    </p>
+                    <p class="card-text">
+                        <strong><i class="fas fa-rupee-sign me-2"></i>{{ package.price|floatformat:2 }}</strong>
+                    </p>
+                    <p class="card-text">
+                        <i class="fas fa-clock me-2"></i>{{ package.duration }}
+                    </p>
+                    <p class="card-text">
+                        <i class="fas fa-users me-2"></i>Max Capacity: {{ package.max_capacity }}
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'edit_daycation_package' package.id %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-edit me-2"></i>Edit
+                        </a>
+                        <a href="{% url 'delete_daycation_package' package.id %}" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-trash-alt me-2"></i>Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center" role="alert">
+                <i class="fas fa-info-circle me-2"></i>No packages available.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
+<script>
+document.getElementById('packageSearch').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let cards = document.getElementsByClassName('col');
+
+    for (let i = 0; i < cards.length; i++) {
+        let card = cards[i];
+        let cardContent = card.textContent || card.innerText;
+        if (cardContent.toLowerCase().indexOf(filter) > -1) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
+    }
+});
+</script>
+{% endblock %}

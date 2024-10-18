@@ -163,17 +163,9 @@
                         <label for="image">Package Image:</label>
                         <div class="file-input-wrapper">
                             <button class="btn-file-input" type="button">Choose Package Image</button>
-                            <input type="file" id="image" name="image" accept="image/*" class="form-control-file">
+                            <input type="file" id="image" name="image" accept="image/*" class="form-control-file" required>
                         </div>
                         <span class="file-name" id="package-image-name"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="room_image">Room Image:</label>
-                        <div class="file-input-wrapper">
-                            <button class="btn-file-input" type="button">Choose Room Image</button>
-                            <input type="file" id="room_image" name="room_image" accept="image/*" class="form-control-file">
-                        </div>
-                        <span class="file-name" id="room-image-name"></span>
                     </div>
                 </div>
             </div>
@@ -195,12 +187,20 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="rooms">Rooms:</label>
-                        <select id="rooms" name="rooms" class="form-control" multiple>
-                            {% for room in rooms %}
-                                <option value="{{ room.id }}">{{ room.name }} - ₹{{ room.price }}</option>
-                            {% endfor %}
-                        </select>
+                        <label for="room_name">Room Name:</label>
+                        <input type="text" id="room_name" name="room_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="room_price">Room Price:</label>
+                        <input type="number" id="room_price" name="room_price" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="room_image">Room Image:</label>
+                        <div class="file-input-wrapper">
+                            <button class="btn-file-input" type="button">Choose Room Image</button>
+                            <input type="file" id="room_image" name="room_image" accept="image/*" class="form-control-file" required>
+                        </div>
+                        <span class="file-name" id="room-image-name"></span>
                     </div>
                 </div>
             </div>
@@ -221,8 +221,7 @@
                         <th>Price</th>
                         <th>Duration</th>
                         <th>Package Image</th>
-                        <th>Room Image</th>
-                        <th>Rooms</th>
+                        <th>Room Details</th>
                         <th>Activities</th>
                         <th>Actions</th>
                     </tr>
@@ -243,18 +242,13 @@
                             {% endif %}
                         </td>
                         <td>
+                            <strong>{{ package.room_name }}</strong><br>
+                            Price: ₹{{ package.room_price }}<br>
                             {% if package.room_image %}
                                 <img src="{{ package.room_image.url }}" alt="Room for {{ package.name }}" class="package-image">
                             {% else %}
                                 No Room Image
                             {% endif %}
-                        </td>
-                        <td>
-                            {% for room in package.rooms.all %}
-                                {{ room.name }} (₹{{ room.price }})<br>
-                            {% empty %}
-                                No rooms assigned
-                            {% endfor %}
                         </td>
                         <td>
                             {% for activity in package.activities.all %}

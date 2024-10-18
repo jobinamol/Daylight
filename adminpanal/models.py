@@ -2,9 +2,7 @@ from django.db import models
 from django.utils import timezone
 from staffs.models import*
 from userapp.models import*
-
-from adminpanal.models import*
-from .models import *
+from .models import*
 from django.apps import apps
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
@@ -21,7 +19,6 @@ class Admin(models.Model):
     class Meta:
         db_table = 'admin'  # This should match the name of your table in MySQL
         
-from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -30,48 +27,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    @classmethod
-    def get_default_pk(cls):
-        category, created = cls.objects.get_or_create(name='Uncategorized')
-        return category.pk
 
-class DaycationPackage(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration = models.CharField(max_length=50, default="1 day")
-    max_capacity = models.IntegerField()
-    category = models.ForeignKey(
-        Category, 
-        on_delete=models.SET_DEFAULT, 
-        related_name='packages', 
-        default=Category.get_default_pk
-    )
-
-    def __str__(self):
-        return self.name
-
-    def get_duration_in_days(self):
-        """Parse duration string to get the number of nights."""
-        try:
-            return int(self.duration.split()[0])
-        except (ValueError, IndexError):
-            return 0
-
-    def calculate_total_price(self, additional_days=0):
-        """Calculate total price including additional days if any."""
-        total_price = self.price
-        if additional_days > 0:
-            total_price += additional_days * self.additional_day_price
-        return total_price
-
-    def get_rooms(self):
-        """Return all rooms associated with this package."""
-        return self.rooms.all()  # Using the reverse relationship
-
-    def get_menu_items(self):
-        """Return all menu items associated with this package."""
-        return self.menu_items.all()  # Using the reverse relationship
 
 
 #packagemanagement model
@@ -202,24 +158,33 @@ def update_category_count_on_delete(sender, instance, **kwargs):
         
 
 
+from decimal import Decimal
 
 class DaycationPackage(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration = models.CharField(max_length=50)
-    max_capacity = models.IntegerField()
+    name = models.CharField(max_length=100)  # Name of the package
+    description = models.TextField()  # Detailed description of the package
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Price of the package
+    max_capacity = models.IntegerField()  # Maximum capacity (e.g., number of guests)
+    duration = models.CharField(max_length=100, blank=True, null=True)  # Duration (e.g., '2 hours', '1 day')
+    category = models.ForeignKey(
+        'Category', on_delete=models.SET_NULL, null=True, blank=True, related_name='packages'
+    )  # Link to Category model
+    image = models.ImageField(upload_to='package_images/', blank=True, null=True)  # Optional image for the package
 
     def __str__(self):
         return self.name
 
 class PackageFeature(models.Model):
-    package = models.ForeignKey(DaycationPackage, related_name='features', on_delete=models.CASCADE)
+    package = models.ForeignKey('DaycationPackage', related_name='features', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    description = models.TextField()
 
     def __str__(self):
         return f"{self.package.name} - {self.name}"
+
+    class Meta:
+        verbose_name = 'Package Feature'
+        verbose_name_plural = 'Package Features'
+        ordering = ['package', 'name']
 
 class PackageAddon(models.Model):
     package = models.ForeignKey(DaycationPackage, related_name='addons', on_delete=models.CASCADE)

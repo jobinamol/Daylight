@@ -311,6 +311,7 @@ def activity_delete(request, pk):
 
 def daycation_package_management(request):
     if request.method == 'POST':
+        # Retrieve form data
         name = request.POST.get('name')
         description = request.POST.get('description')
         price = request.POST.get('price')
@@ -322,13 +323,18 @@ def daycation_package_management(request):
         addon_names = request.POST.getlist('addon_name[]')
         addon_prices = request.POST.getlist('addon_price[]')
         addon_descriptions = request.POST.getlist('addon_description[]')
-        
+
+        # Ensure required fields are not empty
         if all([name, description, price, duration, max_capacity, category_id]):
             try:
+                # Validate and parse fields
                 price = Decimal(price)
                 max_capacity = int(max_capacity)
+
+                # Get the related category
                 category = Category.objects.get(id=category_id)
                 
+                # Create the Daycation Package
                 package = DaycationPackage.objects.create(
                     name=name,
                     description=description,
@@ -339,23 +345,28 @@ def daycation_package_management(request):
                     image=image
                 )
                 
-                # Add features
+                # Add features to the package
                 for feature in features:
-                    if feature:
-                        PackageFeature.objects.create(package=package, name=feature, description="")
-                
-                # Add add-ons
-                for name, price, description in zip(addon_names, addon_prices, addon_descriptions):
-                    if name and price:
-                        PackageAddon.objects.create(
+                    if feature:  # Ensure non-empty feature names
+                        PackageFeature.objects.create(
                             package=package,
-                            name=name,
-                            price=Decimal(price),
-                            description=description
+                            name=feature,
                         )
                 
+                # Add add-ons to the package
+                for addon_name, addon_price, addon_description in zip(addon_names, addon_prices, addon_descriptions):
+                    if addon_name and addon_price:  # Ensure non-empty add-on names and prices
+                        PackageAddon.objects.create(
+                            package=package,
+                            name=addon_name,
+                            price=Decimal(addon_price),  # Convert to Decimal
+                            description=addon_description or ""  # Add default empty description if none
+                        )
+                
+                # Success message
                 messages.success(request, 'Daycation package created successfully.')
                 return redirect('daycation_package_list')
+
             except ValueError:
                 messages.error(request, 'Invalid input. Please check your entries.')
             except Category.DoesNotExist:
@@ -363,8 +374,9 @@ def daycation_package_management(request):
         else:
             messages.error(request, 'All fields are required.')
     
+    # Fetch categories and packages to display on the form
     categories = Category.objects.all()
-    packages = DaycationPackage.objects.all()  # Fetch all packages
+    packages = DaycationPackage.objects.all()  # Fetch all packages for listing
     return render(request, 'daycation_package_management.html', {'categories': categories, 'packages': packages})
 
 def edit_daycation_package(request, package_id):
