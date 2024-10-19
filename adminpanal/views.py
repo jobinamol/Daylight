@@ -10,6 +10,7 @@ from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -514,8 +515,60 @@ def daycation_category_packages(request, category_id):
 
 def daycation_package_details(request, package_id):
     package = get_object_or_404(DaycationPackage, id=package_id)
-    return render(request, 'daycation_package_details.html', {'package': package})
+    features = package.features.all()
+    addons = package.addons.all()
+    
+    context = {
+        'package': package,
+        'features': features,
+        'addons': addons,
+    }
+    return render(request, 'daycation_package_details.html', context)
 
+@login_required
+def book_package(request, package_id):
+    if request.method == 'POST':
+        package = get_object_or_404(DaycationPackage, id=package_id)
+        date = request.POST.get('date')
+        guests = int(request.POST.get('guests'))
+        addon_ids = request.POST.getlist('addons')
+        
+        # Calculate total price
+        total_price = package.price * Decimal(guests)
+        addons = PackageAddon.objects.filter(id__in=addon_ids)
+        for addon in addons:
+            total_price += addon.price
+        
+        # Create booking
+        booking = DaycationBooking.objects.create(
+            user=request.user,
+            package=package,
+            date=date,
+            guests=guests,
+            total_price=total_price
+        )
+        booking.addons.set(addons)
+        
+        # Redirect to payment page
+        return redirect('payment', booking_id=booking.id)
+    
+    return redirect('package_details', package_id=package_id)
 
+@login_required
+def payment(request, booking_id):
+    booking = get_object_or_404(DaycationBooking, id=booking_id, user=request.user)
+    
+    if request.method == 'POST':
+        # Process payment (dummy)
+        booking.status = 'confirmed'
+        booking.save()
+        messages.success(request, 'Your booking has been confirmed!')
+        return redirect('booking_history')
+    
+    return render(request, 'payment.html', {'booking': booking})
 
+@login_required
+def booking_history(request):
+    bookings = DaycationBooking.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'booking_history.html', {'bookings': bookings})
 

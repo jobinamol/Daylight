@@ -1,0 +1,23 @@
+<!-- booking_history.html -->
+{% extends 'userindex.html' %}
+{% block content %}
+<h1>Your Booking History</h1>
+{% for booking in bookings %}
+    <div class="booking">
+        <h2>{{ booking.package.name }}</h2>
+        <p>Date: {{ booking.date }}</p>
+        <p>Guests: {{ booking.guests }}</p>
+        <p>Total Price: ${{ booking.total_price }}</p>
+        <p>Status: {{ booking.get_status_display }}</p>
+        <h3>Add-ons:</h3>
+        <ul>
+        {% for addon in booking.addons.all %}
+            <li>{{ addon.name }} - ${{ addon.price }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+{% empty %}
+    <p>You have no bookings yet.</p>
+{% endfor %}
+{% endblock %}
+

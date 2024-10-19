@@ -1,0 +1,17 @@
+<!-- payment.html -->
+{% extends 'userindex.html' %}
+{% block content %}
+<h1>Payment for {{ booking.package.name }}</h1>
+<p>Total Amount: ${{ booking.total_price }}</p>
+<form method="post">
+    {% csrf_token %}
+    <label for="card_number">Card Number:</label>
+    <input type="text" id="card_number" name="card_number" required>
+    <label for="expiry">Expiry Date:</label>
+    <input type="text" id="expiry" name="expiry" required>
+    <label for="cvv">CVV:</label>
+    <input type="text" id="cvv" name="cvv" required>
+    <button type="submit">Pay Now</button>
+</form>
+{% endblock %}
+

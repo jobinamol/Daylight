@@ -160,6 +160,7 @@ def update_category_count_on_delete(sender, instance, **kwargs):
 
 from decimal import Decimal
 
+# Main DaycationPackage model
 class DaycationPackage(models.Model):
     name = models.CharField(max_length=100)  # Name of the package
     description = models.TextField()  # Detailed description of the package
@@ -174,9 +175,11 @@ class DaycationPackage(models.Model):
     def __str__(self):
         return self.name
 
+
+# PackageFeature model, linked to DaycationPackage
 class PackageFeature(models.Model):
-    package = models.ForeignKey('DaycationPackage', related_name='features', on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    package = models.ForeignKey(DaycationPackage, related_name='features', on_delete=models.CASCADE)  # Package relation
+    name = models.CharField(max_length=100)  # Name of the feature (e.g., Free Wi-Fi, Pool Access)
 
     def __str__(self):
         return f"{self.package.name} - {self.name}"
@@ -186,28 +189,33 @@ class PackageFeature(models.Model):
         verbose_name_plural = 'Package Features'
         ordering = ['package', 'name']
 
+
+# PackageAddon model, linked to DaycationPackage
 class PackageAddon(models.Model):
-    package = models.ForeignKey(DaycationPackage, related_name='addons', on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    package = models.ForeignKey(DaycationPackage, related_name='addons', on_delete=models.CASCADE)  # Package relation
+    name = models.CharField(max_length=100)  # Name of the addon (e.g., Spa Access)
+    description = models.TextField()  # Description of the addon
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Price of the addon
 
     def __str__(self):
         return f"{self.package.name} - {self.name}"
 
+
+# DaycationBooking model, connects to DaycationPackage and selected PackageAddon(s)
 class DaycationBooking(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    package = models.ForeignKey(DaycationPackage, on_delete=models.CASCADE)
-    date = models.DateField()
-    guests = models.IntegerField()
-    addons = models.ManyToManyField(PackageAddon, blank=True)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to the user
+    package = models.ForeignKey(DaycationPackage, on_delete=models.CASCADE)  # Link to the selected daycation package
+    date = models.DateField()  # Date of the booking
+    guests = models.IntegerField()  # Number of guests
+    addons = models.ManyToManyField(PackageAddon, blank=True)  # Multiple addons can be selected
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)  # Total price including addons
+    created_at = models.DateTimeField(auto_now_add=True)  # Timestamp for booking creation
     status = models.CharField(max_length=20, choices=[
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
         ('cancelled', 'Cancelled')
-    ], default='pending')
+    ], default='pending')  # Status of the booking (default: pending)
 
     def __str__(self):
         return f"{self.user.username} - {self.package.name} on {self.date}"
+

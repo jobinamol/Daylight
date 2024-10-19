@@ -47,6 +47,9 @@ urlpatterns = [
     
     path('daycation-packages/', views.daycation_packages, name='daycation_packages'),
     path('daycation-packages/category/<int:category_id>/', views.daycation_category_packages, name='daycation_category_packages'),
-    path('daycation-package/<int:package_id>/', views.daycation_package_details, name='daycation_package_details'),
 
+    path('daycationpackage/<int:package_id>/', views.daycation_package_details, name='daycation_package_details'),
+    path('book/<int:package_id>/', views.book_package, name='book_package'),
+    path('payment/<int:booking_id>/', views.payment, name='payment'),
+    path('booking-history/', views.booking_history, name='booking_history'),
 ]
