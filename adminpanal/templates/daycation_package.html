@@ -1,0 +1,98 @@
+{% extends 'userindex.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .hero-wrap {
+        background-image: url('{% static "images/daycation-hero.jpg" %}');
+        background-size: cover;
+        background-position: center center;
+        height: 50vh;
+        position: relative;
+    }
+    .hero-wrap .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+    }
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        color: white;
+    }
+    .package-card {
+        transition: transform 0.3s ease-in-out;
+        height: 100%;
+    }
+    .package-card:hover {
+        transform: translateY(-5px);
+    }
+    .package-image {
+        height: 200px;
+        object-fit: cover;
+    }
+    .package-features {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .package-features li {
+        margin-bottom: 5px;
+    }
+    .package-features i {
+        margin-right: 5px;
+        color: #28a745;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-wrap d-flex align-items-center">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center hero-content">
+                <h1 class="mb-4">Daycation Packages</h1>
+                <p class="lead">Discover our amazing daycation experiences</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Packages Section -->
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            {% for package in packages %}
+            <div class="col-md-4 mb-4">
+                <div class="card package-card">
+                    <img src="{{ package.image.url }}" class="card-img-top package-image" alt="{{ package.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ package.name }}</h5>
+                        <p class="card-text">{{ package.description|truncatewords:20 }}</p>
+                        <ul class="package-features">
+                            <li><i class="fas fa-clock"></i> {{ package.duration }}</li>
+                            <li><i class="fas fa-user-friends"></i> Max {{ package.max_capacity }} guests</li>
+                            <li><i class="fas fa-rupee-sign"></i> {{ package.price }}</li>
+                        </ul>
+                        <a href="{% url 'daycation_package_details' package.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p>No daycation packages available at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+{% endblock %}
+

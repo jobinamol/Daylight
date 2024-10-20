@@ -1,0 +1,290 @@
+{% extends 'userindex.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    .hero-wrap {
+        background-size: cover;
+        background-position: center center;
+        height: 50vh;
+        position: relative;
+    }
+    .hero-wrap .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+    }
+    .hero-wrap h1 {
+        font-size: 3.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        color: #fff;
+    }
+    .package-details {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        padding: 30px;
+        margin-top: -50px;
+        position: relative;
+        z-index: 10;
+    }
+    .feature-icon {
+        font-size: 2rem;
+        color: #27ae60;
+    }
+    .included-list, .not-allowed-list {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .included-list li:before {
+        content: "\f00c";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        margin-right: 10px;
+        color: #27ae60;
+    }
+    .not-allowed-list li:before {
+        content: "\f00d";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        margin-right: 10px;
+        color: #e74c3c;
+    }
+    .highlight {
+        background-color: #f1c40f;
+        color: #2c3e50;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    .booking-form {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    #bookingStatus {
+        display: none;
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    #bookingStatus.success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    #bookingStatus.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-wrap" style="background-image: url('{{ package.image.url }}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <h1 class="mb-0 bread">{{ package.name }}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Package Details Section -->
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 package-details">
+                <h2>{{ package.name }}</h2>
+                <p>{{ package.description }}</p>
+                <p><strong>Price:</strong> ₹{{ package.price }}</p>
+                <p><strong>Duration:</strong> {{ package.duration }}</p>
+                <p><strong>Max Capacity:</strong> {{ package.max_capacity }} guests</p>
+
+                <h3 class="mt-5 mb-4">Features</h3>
+                <div class="row">
+                    {% for feature in package.features.all %}
+                    <div class="col-md-4 mb-4">
+                        <div class="text-center">
+                            <i class="{{ feature.icon }} feature-icon mb-3"></i>
+                            <h5>{{ feature.name }}</h5>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <h3 class="mt-5 mb-4">What's Included</h3>
+                <ul class="included-list">
+                    <li>Free Wi-Fi throughout the resort</li>
+                    <li>Breakfast and lunch (buffet style)</li>
+                    <li>Access to swimming pool</li>
+                    <li>Access to game facilities</li>
+                    <li>Participation in resort activities</li>
+                </ul>
+
+                <h3 class="mt-5 mb-4">Not Included</h3>
+                <ul class="not-allowed-list">
+                    <li>Overnight accommodation</li>
+                    <li>Dinner</li>
+                    <li>Outside food and beverages</li>
+                    <li>Smoking in non-designated areas</li>
+                    <li>Alcohol consumption (unless specified in the package)</li>
+                </ul>
+
+                <h3 class="mt-5 mb-4">Food & Menu</h3>
+                <p>Enjoy our delicious buffet-style breakfast and lunch included in your daycation package.</p>
+                <a href="{% url 'menu' %}" class="btn btn-primary mb-4">View Our Menu</a>
+
+                <h3 class="mt-5 mb-4">Highlights</h3>
+                <p><span class="highlight">Special offer!</span> Book now and get a complimentary welcome drink.</p>
+                <p><span class="highlight">Limited time!</span> 20% off on all water activities.</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="booking-form">
+                    <h3 class="heading mb-4">Instant Booking</h3>
+                    <form id="bookingForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="date" id="bookingDate" placeholder="Select Date" required>
+                            <small class="form-text text-muted">Booking available for the next 30 days</small>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" class="form-control" name="guests" id="guestsInput" placeholder="Number of guests" min="1" max="{{ package.max_capacity }}" required>
+                            <small class="form-text text-muted">Available capacity: <span id="availableCapacity">{{ package.max_capacity }}</span></small>
+                        </div>
+                        <div class="food-preference">
+                            <h5>Food Preference</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="food_preference" id="vegPreference" value="veg" required>
+                                <label class="form-check-label" for="vegPreference">Vegetarian</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="food_preference" id="nonVegPreference" value="non-veg" required>
+                                <label class="form-check-label" for="nonVegPreference">Non-Vegetarian</label>
+                            </div>
+                        </div>
+                        <h4 class="mt-4 mb-3">Add-ons</h4>
+                        {% for addon in package.addons.all %}
+                            <div class="form-check">
+                                <input class="form-check-input addon-checkbox" type="checkbox" name="addons" value="{{ addon.id }}" id="addon{{ addon.id }}" data-price="{{ addon.price }}">
+                                <label class="form-check-label" for="addon{{ addon.id }}">
+                                    {{ addon.name }} - ₹{{ addon.price }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                        <div class="total-price mt-4">
+                            Total Price: ₹<span id="totalPrice">{{ package.price }}</span>
+                        </div>
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary btn-block py-3">Book Now</button>
+                        </div>
+                    </form>
+                    <div id="bookingStatus"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const bookingForm = document.getElementById('bookingForm');
+    const dateInput = document.getElementById('bookingDate');
+    const guestsInput = document.getElementById('guestsInput');
+    const availableCapacitySpan = document.getElementById('availableCapacity');
+    const totalPriceSpan = document.getElementById('totalPrice');
+    const addonCheckboxes = document.querySelectorAll('.addon-checkbox');
+    const bookingStatus = document.getElementById('bookingStatus');
+    
+    let availableCapacity = {{ package.max_capacity }};
+    let basePrice = {{ package.price }};
+
+    // Initialize Flatpickr
+    const fp = flatpickr(dateInput, {
+        minDate: "today",
+        maxDate: new Date().fp_incr(30), // Allow booking up to 30 days in advance
+        onChange: function(selectedDates, dateStr, instance) {
+            updateAvailableCapacity(dateStr);
+        }
+    });
+
+    function updateAvailableCapacity(date) {
+        fetch(`/api/check-availability/?date=${date}&package_id={{ package.id }}`)
+            .then(response => response.json())
+            .then(data => {
+                availableCapacity = data.available_capacity;
+                availableCapacitySpan.textContent = availableCapacity;
+                guestsInput.max = availableCapacity;
+            });
+    }
+
+    function updateTotalPrice() {
+        let total = basePrice * parseInt(guestsInput.value || 1);
+        addonCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                total += parseFloat(checkbox.dataset.price);
+            }
+        });
+        totalPriceSpan.textContent = total.toFixed(2);
+    }
+
+    guestsInput.addEventListener('input', updateTotalPrice);
+    addonCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateTotalPrice);
+    });
+
+    bookingForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        if (parseInt(guestsInput.value) > availableCapacity) {
+            showBookingStatus('error', `The number of guests cannot exceed the available capacity of ${availableCapacity}.`);
+            return;
+        }
+
+        const formData = new FormData(bookingForm);
+        formData.append('package_id', '{{ package.id }}');
+
+        fetch('/api/instant-booking/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showBookingStatus('success', 'Booking confirmed! Redirecting to payment...');
+                setTimeout(() => {
+                    window.location.href = data.payment_url;
+                }, 2000);
+            } else {
+                showBookingStatus('error', data.message || 'Booking failed. Please try again.');
+            }
+        })
+        .catch(error => {
+            showBookingStatus('error', 'An error occurred. Please try again.');
+        });
+    });
+
+    function showBookingStatus(type, message) {
+        bookingStatus.textContent = message;
+        bookingStatus.className = type;
+        bookingStatus.style.display = 'block';
+    }
+});
+</script>
+{% endblock %}
+

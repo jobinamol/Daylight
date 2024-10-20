@@ -11,10 +11,31 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from datetime import timedelta
+from django.views.decorators.http import require_GET, require_POST
+from django.db import transaction
+from django.db.models import Sum
+from django.urls import reverse
 
+import razorpay
+from django.conf import settings
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST, require_GET
+from django.db import transaction
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from .models import DaycationPackage, PackageAddon, DaycationBooking
+from decimal import Decimal
+import traceback
+import sys
+from django.utils.dateparse import parse_date
+import logging
+logger = logging.getLogger(__name__)
 
-
-
+client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
 def admin_login(request):
     if request.method == 'POST':
@@ -206,7 +227,7 @@ def package_list(request):
         'categories': categories,
         'packages': packages,
     }
-    return render(request, 'your_template.html', context)
+    return render(request, 'daycation_package_list.html', context)
 
 
 def category_management(request):
@@ -515,60 +536,218 @@ def daycation_category_packages(request, category_id):
 
 def daycation_package_details(request, package_id):
     package = get_object_or_404(DaycationPackage, id=package_id)
-    features = package.features.all()
-    addons = package.addons.all()
     
+    future_bookings = DaycationBooking.objects.filter(
+        package=package,
+        date__gte=timezone.now().date()
+    ).values('date').annotate(total_guests=Sum('num_adults') + Sum('num_children'))
+
     context = {
         'package': package,
-        'features': features,
+        'future_bookings': list(future_bookings),
+    }
+    return render(request, 'day_packs_details.html', context)
+
+def book_package(request, package_id):
+    package = get_object_or_404(DaycationPackage, id=package_id)
+    addons = PackageAddon.objects.filter(package=package)
+    context = {
+        'package': package,
         'addons': addons,
     }
-    return render(request, 'daycation_package_details.html', context)
+    return render(request, 'book_package.html', context)
 
-@login_required
-def book_package(request, package_id):
+def process_booking(request, package_id):
+    """Process booking for a selected package"""
     if request.method == 'POST':
-        package = get_object_or_404(DaycationPackage, id=package_id)
-        date = request.POST.get('date')
-        guests = int(request.POST.get('guests'))
-        addon_ids = request.POST.getlist('addons')
-        
-        # Calculate total price
-        total_price = package.price * Decimal(guests)
-        addons = PackageAddon.objects.filter(id__in=addon_ids)
-        for addon in addons:
-            total_price += addon.price
-        
-        # Create booking
-        booking = DaycationBooking.objects.create(
-            user=request.user,
-            package=package,
-            date=date,
-            guests=guests,
-            total_price=total_price
-        )
-        booking.addons.set(addons)
-        
-        # Redirect to payment page
-        return redirect('payment', booking_id=booking.id)
+        try:
+            logger.info(f"Processing booking for package {package_id}")
+            package = get_object_or_404(DaycationPackage, id=package_id)
+            
+            # Parse and validate the booking date
+            booking_date_str = request.POST.get('date')
+            booking_date = parse_date(booking_date_str)
+            if not booking_date or booking_date < timezone.now().date():
+                return JsonResponse({'error': 'Invalid or past booking date'}, status=400)
+            
+            # Calculate the total price based on adults and children
+            num_adults = int(request.POST.get('num_adults', 0))
+            num_children = int(request.POST.get('num_children', 0))
+            total_price = Decimal(package.price) * (num_adults + (num_children * Decimal('0.5')))
+            
+            # Handle package addons
+            addon_ids = request.POST.getlist('addons')
+            addons = PackageAddon.objects.filter(id__in=addon_ids)
+            for addon in addons:
+                total_price += Decimal(addon.price)
+            
+            # Create booking
+            booking = DaycationBooking.objects.create(
+                package=package,
+                user=request.user if request.user.is_authenticated else None,
+                full_name=request.POST.get('full_name'),
+                email=request.POST.get('email'),
+                phone=request.POST.get('phone'),
+                address=request.POST.get('address'),
+                date=booking_date,
+                num_adults=num_adults,
+                num_children=num_children,
+                food_preference=request.POST.get('food_preference'),
+                total_price=total_price,
+                status='pending',
+                payment_status='unpaid'
+            )
+            booking.addons.set(addons)
+            
+            # Create Razorpay order
+            razorpay_order = client.order.create({
+                'amount': int(total_price * 100),
+                'currency': 'INR',
+                'payment_capture': '1'
+            })
+            booking.razorpay_order_id = razorpay_order['id']
+            booking.save()
+            
+            return JsonResponse({
+                'id': booking.id,
+                'order_id': razorpay_order['id'],
+                'amount': int(total_price * 100),
+                'currency': 'INR',
+                'key': settings.RAZORPAY_KEY_ID,
+            })
+        except Exception as e:
+            logger.error(f"Error processing booking: {str(e)}")
+            logger.error(traceback.format_exc())
+            return JsonResponse({'error': str(e)}, status=500)
     
-    return redirect('package_details', package_id=package_id)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-@login_required
-def payment(request, booking_id):
+@csrf_exempt
+def payment_callback(request):
+    """Handle payment callback from Razorpay"""
+    if request.method == "POST":
+        payment_id = request.POST.get('razorpay_payment_id', '')
+        order_id = request.POST.get('razorpay_order_id', '')
+        signature = request.POST.get('razorpay_signature', '')
+
+        params_dict = {
+            'razorpay_payment_id': payment_id,
+            'razorpay_order_id': order_id,
+            'razorpay_signature': signature
+        }
+
+        try:
+            booking = DaycationBooking.objects.get(razorpay_order_id=order_id)
+            client.utility.verify_payment_signature(params_dict)
+            booking.razorpay_payment_id = payment_id
+            booking.razorpay_signature = signature
+            booking.status = 'confirmed'
+            booking.payment_status = 'paid'
+            booking.save()
+            return JsonResponse({'status': 'success', 'booking_id': booking.id})
+        except Exception as e:
+            logger.error(f"Payment verification failed: {str(e)}")
+            return JsonResponse({'status': 'failure'}, status=400)
+
+    return JsonResponse({'status': 'invalid request'}, status=400)
+
+@require_GET
+def check_availability(request):
+    """Check availability of package on a specific date"""
+    date = request.GET.get('date')
+    package_id = request.GET.get('package_id')
+    guests = int(request.GET.get('guests', 0))
+
+    package = get_object_or_404(DaycationPackage, id=package_id)
+    bookings = DaycationBooking.objects.filter(date=date, package_id=package_id, status__in=['confirmed', 'pending'])
+    booked_capacity = bookings.aggregate(total=Sum('num_adults') + Sum('num_children'))['total'] or 0
+    available_capacity = package.max_capacity - booked_capacity
+
+    return JsonResponse({'available_capacity': available_capacity, 'is_available': available_capacity >= guests})
+
+@require_POST
+def cancel_booking(request, booking_id):
+    """Cancel a booking if allowed"""
     booking = get_object_or_404(DaycationBooking, id=booking_id, user=request.user)
     
-    if request.method == 'POST':
-        # Process payment (dummy)
-        booking.status = 'confirmed'
+    if booking.can_be_cancelled:
+        booking.status = 'cancelled'
         booking.save()
-        messages.success(request, 'Your booking has been confirmed!')
-        return redirect('booking_history')
-    
-    return render(request, 'payment.html', {'booking': booking})
+        messages.success(request, 'Booking successfully cancelled.')
+    else:
+        messages.error(request, 'Booking cannot be cancelled.')
 
-@login_required
+    return redirect('booking_history')
+
+def booking_view(request, package_id):
+    """Render booking page with package details and addons"""
+    package = get_object_or_404(DaycationPackage, id=package_id)
+    addons = PackageAddon.objects.filter(package=package)
+
+    user_info = {
+        'name': '',
+        'mobilenumber': '',
+        'emailid': '',
+        'address': '',
+    }
+
+    if request.user.is_authenticated:
+        try:
+            user = UserDB.objects.get(username=request.user.username)
+            user_info = {
+                'name': user.name,
+                'mobilenumber': user.mobilenumber,
+                'emailid': user.emailid,
+                'address': user.address,
+            }
+        except UserDB.DoesNotExist:
+            pass
+
+    context = {
+        'package': package,
+        'addons': addons,
+        'razorpay_key': settings.RAZORPAY_KEY_ID,
+        'user_info': user_info,
+        'is_authenticated': request.user.is_authenticated,
+    }
+
+    return render(request, 'book_package.html', context)
+
 def booking_history(request):
-    bookings = DaycationBooking.objects.filter(user=request.user).order_by('-created_at')
+    """Display booking history for authenticated users"""
+    if request.user.is_authenticated:
+        bookings = DaycationBooking.objects.filter(user=request.user).order_by('-created_at')
+    else:
+        bookings = []
+
     return render(request, 'booking_history.html', {'bookings': bookings})
+
+def booking_confirmation(request, booking_id):
+    """Display booking confirmation details"""
+    booking = get_object_or_404(DaycationBooking, id=booking_id)
+    return render(request, 'booking_confirmation.html', {'booking': booking})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

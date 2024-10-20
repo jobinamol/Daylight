@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 # Import models from adminindex and staff apps
 from adminpanal.models import* # Import Package from adminindex app
 from staffs.models import*
-from adminpanal.models import PackageManagement  # Adjust the import according to your structure
+ # Adjust the import according to your structure
 
 
 class UserDB(models.Model):
@@ -114,7 +114,6 @@ class Bookingpackage(models.Model):
         if not self.id:
             self.booking_date = timezone.now()
         return super(Bookingpackage, self).save(*args, **kwargs)
-
 
 
 

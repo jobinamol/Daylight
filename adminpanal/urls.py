@@ -48,8 +48,12 @@ urlpatterns = [
     path('daycation-packages/', views.daycation_packages, name='daycation_packages'),
     path('daycation-packages/category/<int:category_id>/', views.daycation_category_packages, name='daycation_category_packages'),
 
-    path('daycationpackage/<int:package_id>/', views.daycation_package_details, name='daycation_package_details'),
+    path('daycation/<int:package_id>/', views.daycation_package_details, name='daycation_package_details'),
     path('book/<int:package_id>/', views.book_package, name='book_package'),
-    path('payment/<int:booking_id>/', views.payment, name='payment'),
+    path('booking-confirmation/<int:booking_id>/', views.booking_confirmation, name='booking_confirmation'),
     path('booking-history/', views.booking_history, name='booking_history'),
+    path('package/<int:package_id>/book/', views.book_package, name='book_package'),
+    path('package/<int:package_id>/process_booking/', views.process_booking, name='process_booking'),
+    path('payment_callback/', views.payment_callback, name='payment_callback'),
+    path('cancel_booking/<int:booking_id>/', views.cancel_booking, name='cancel_booking'),
 ]

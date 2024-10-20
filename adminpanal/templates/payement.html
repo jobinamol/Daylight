@@ -1,0 +1,104 @@
+{% extends 'userindex.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .payment-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .payment-step {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .payment-step h3 {
+        margin-bottom: 10px;
+        color: #007bff;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .btn-next {
+        float: right;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="payment-container">
+        <h2 class="mb-4">Complete Your Payment</h2>
+        <form id="paymentForm" method="post" action="{% url 'process_payment' booking.id %}">
+            {% csrf_token %}
+            <div id="step1" class="payment-step">
+                <h3>Step 1: Confirm Booking Details</h3>
+                <p><strong>Package:</strong> {{ booking.package.name }}</p>
+                <p><strong>Date:</strong> {{ booking.date }}</p>
+                <p><strong>Guests:</strong> {{ booking.guests }}</p>
+                <p><strong>Total Amount:</strong> ₹{{ booking.total_price }}</p>
+                <button type="button" class="btn btn-primary btn-next" onclick="nextStep(2)">Next</button>
+            </div>
+
+            <div id="step2" class="payment-step" style="display: none;">
+                <h3>Step 2: Select Payment Method</h3>
+                <div class="form-group">
+                    <select class="form-control" name="payment_method" required>
+                        <option value="">Select a payment method</option>
+                        <option value="credit_card">Credit Card</option>
+                        <option value="debit_card">Debit Card</option>
+                        <option value="net_banking">Net Banking</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="prevStep(1)">Previous</button>
+                <button type="button" class="btn btn-primary btn-next" onclick="nextStep(3)">Next</button>
+            </div>
+
+            <div id="step3" class="payment-step" style="display: none;">
+                <h3>Step 3: Enter Payment Details</h3>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="card_number" placeholder="Card Number" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="expiry_date" placeholder="MM/YY" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="cvv" placeholder="CVV" required>
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Previous</button>
+                <button type="submit" class="btn btn-success btn-next">Complete Payment</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function nextStep(step) {
+    document.getElementById(`step${step-1}`).style.display = 'none';
+    document.getElementById(`step${step}`).style.display = 'block';
+}
+
+function prevStep(step) {
+    document.getElementById(`step${step+1}`).style.display = 'none';
+    document.getElementById(`step${step}`).style.display = 'block';
+}
+
+document.getElementById('paymentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Simulate payment processing
+    setTimeout(function() {
+        alert('Payment processed successfully!');
+        window.location.href = "{% url 'booking_confirmation' booking.id %}";
+    }, 2000);
+});
+</script>
+{% endblock %}
+

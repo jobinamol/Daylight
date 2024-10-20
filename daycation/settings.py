@@ -13,6 +13,14 @@ SECRET_KEY = config('DJANGO_SECRET_KEY', default=get_random_secret_key())
 DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
 
+
+# Razorpay API credentials
+# settings.py
+RAZORPAY_KEY_ID = 'rzp_test_ytgER5FBenREL4'
+RAZORPAY_KEY_SECRET = 'ilRUH3geduJ1rCt15An3DKY7'
+
+
+
 SITE_ID = 2
 
 INSTALLED_APPS = [
@@ -167,3 +175,22 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'jobinamoljaimon2025@mca.ajce.in')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'Jaimon@123*')  # Store in .env file for security
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'jobinamoljaimon2025@mca.ajce.in')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'DEBUG',
+    },
+}

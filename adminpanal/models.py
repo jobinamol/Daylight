@@ -8,6 +8,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
 
@@ -203,19 +204,44 @@ class PackageAddon(models.Model):
 
 # DaycationBooking model, connects to DaycationPackage and selected PackageAddon(s)
 class DaycationBooking(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to the user
-    package = models.ForeignKey(DaycationPackage, on_delete=models.CASCADE)  # Link to the selected daycation package
-    date = models.DateField()  # Date of the booking
-    guests = models.IntegerField()  # Number of guests
-    addons = models.ManyToManyField(PackageAddon, blank=True)  # Multiple addons can be selected
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)  # Total price including addons
-    created_at = models.DateTimeField(auto_now_add=True)  # Timestamp for booking creation
+    package = models.ForeignKey(DaycationPackage, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    address = models.TextField(blank=True)
+    date = models.DateField()
+    num_adults = models.PositiveIntegerField()
+    num_children = models.PositiveIntegerField(default=0)
+    food_preference = models.CharField(
+        max_length=10, 
+        choices=[('veg', 'Vegetarian'), ('non-veg', 'Non-Vegetarian')],
+        default='non-veg'  # Add this line to set a default value
+    )
+    addons = models.ManyToManyField(PackageAddon, blank=True)
+    special_requests = models.TextField(blank=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=[
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
         ('cancelled', 'Cancelled')
-    ], default='pending')  # Status of the booking (default: pending)
+    ], default='pending')
+    payment_status = models.CharField(max_length=20, choices=[
+        ('unpaid', 'Unpaid'),
+        ('paid', 'Paid')
+    ], default='unpaid')
+    created_at = models.DateTimeField(auto_now_add=True)
+    razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)
+    razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)
+    razorpay_signature = models.CharField(max_length=200, blank=True, null=True)
+
+    @property
+    def can_be_cancelled(self):
+        return self.status in ['pending', 'confirmed']
 
     def __str__(self):
-        return f"{self.user.username} - {self.package.name} on {self.date}"
+        return f"{self.full_name} - {self.package.name} on {self.date}"
+
+
+
 

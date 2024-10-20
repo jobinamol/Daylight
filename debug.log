@@ -1,0 +1,321 @@
+Watching for file changes with StatReloader
+Session data corrupted
+Session data corrupted
+Internal Server Error: /package/5/process_booking/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 772, in process_booking
+    total_price = package.price * (num_adults + (num_children * 0.5))
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+/home/jobina/Documents/minproject/DRMS/daycation/daycation/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/daycation/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/daycation/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Starting new HTTPS connection (1): oauth2.googleapis.com:443
+https://oauth2.googleapis.com:443 "POST /token HTTP/11" 200 None
+Internal Server Error: /daycation/5/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 537, in daycation_package_details
+    future_bookings = DaycationBooking.objects.filter(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/db/models/query.py", line 1630, in annotate
+    return self._annotate(args, kwargs, select=True)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/db/models/query.py", line 1680, in _annotate
+    clone.query.add_annotation(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1194, in add_annotation
+    annotation = annotation.resolve_expression(self, allow_joins=True, reuse=None)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/db/models/aggregates.py", line 63, in resolve_expression
+    c = super().resolve_expression(query, allow_joins, reuse, summarize)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/db/models/expressions.py", line 1073, in resolve_expression
+    c.source_expressions[pos] = arg.resolve_expression(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/db/models/expressions.py", line 895, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/db/models/sql/query.py", line 2010, in resolve_ref
+    join_info = self.setup_joins(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1863, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1768, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'guests' into field. Choices are: addons, address, created_at, date, email, food_preference, full_name, id, num_adults, num_children, package, package_id, payment_status, phone, razorpay_order_id, razorpay_payment_id, razorpay_signature, special_requests, status, total_price, user, user_id
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Internal Server Error: /package/5/process_booking/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 773, in process_booking
+    total_price = package.price * (num_adults + (num_children * 0.5))
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+Session data corrupted
+Internal Server Error: /package/5/process_booking/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 773, in process_booking
+    total_price = package.price * (num_adults + (num_children * 0.5))
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Session data corrupted
+Internal Server Error: /package/5/process_booking/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 773, in process_booking
+    total_price = package.price * (num_adults + (num_children * 0.5))
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+/home/jobina/Documents/minproject/DRMS/daycation/daycation/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/daycation/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Session data corrupted
+Internal Server Error: /package/5/process_booking/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 778, in process_booking
+    total_price = package.price * (num_adults + (num_children * 0.5))
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+Session data corrupted
+Session data corrupted
+Internal Server Error: /package/5/process_booking/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 778, in process_booking
+    total_price = package.price * (num_adults + (num_children * 0.5))
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+/home/jobina/Documents/minproject/DRMS/daycation/daycation/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/daycation/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/daycation/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Session data corrupted
+Internal Server Error: /package/5/process_booking/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 778, in process_booking
+    total_price = package.price * (num_adults + (num_children * 0.5))
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Internal Server Error: /package/5/process_booking/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 781, in process_booking
+    total_price = package.price * (num_adults + (num_children * 0.5))
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Internal Server Error: /package/5/process_booking/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 781, in process_booking
+    total_price = package.price * (num_adults + (num_children * 0.5))
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Processing booking for package 5
+Error processing booking: fromisoformat: argument must be str
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 569, in process_booking
+    booking_date = parse_date(booking_date_str)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+TypeError: fromisoformat: argument must be str
+
+Internal Server Error: /package/5/process_booking/
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Processing booking for package 5
+Error processing booking: fromisoformat: argument must be str
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 569, in process_booking
+    booking_date = parse_date(booking_date_str)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+TypeError: fromisoformat: argument must be str
+
+Internal Server Error: /package/5/process_booking/
+Session data corrupted
+Session data corrupted
+Processing booking for package 5
+Error processing booking: fromisoformat: argument must be str
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 569, in process_booking
+    booking_date = parse_date(booking_date_str)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+TypeError: fromisoformat: argument must be str
+
+Internal Server Error: /package/5/process_booking/
+Session data corrupted
+Processing booking for package 5
+Error processing booking: fromisoformat: argument must be str
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 569, in process_booking
+    booking_date = parse_date(booking_date_str)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+TypeError: fromisoformat: argument must be str
+
+Internal Server Error: /package/5/process_booking/
+Session data corrupted
+Session data corrupted
+Processing booking for package 5
+Error processing booking: fromisoformat: argument must be str
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 569, in process_booking
+    booking_date = parse_date(booking_date_str)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+TypeError: fromisoformat: argument must be str
+
+Internal Server Error: /package/5/process_booking/
+Session data corrupted
+Processing booking for package 5
+Error processing booking: fromisoformat: argument must be str
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 569, in process_booking
+    booking_date = parse_date(booking_date_str)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+TypeError: fromisoformat: argument must be str
+
+Internal Server Error: /package/5/process_booking/
+Session data corrupted
+Session data corrupted
+Processing booking for package 5
+Error processing booking: fromisoformat: argument must be str
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 569, in process_booking
+    booking_date = parse_date(booking_date_str)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+TypeError: fromisoformat: argument must be str
+
+Internal Server Error: /package/5/process_booking/

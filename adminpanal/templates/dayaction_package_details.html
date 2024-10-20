@@ -1,0 +1,134 @@
+{% extends 'userindex.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+    /* ... (keep existing styles) ... */
+    .availability-info {
+        background-color: #e8f5e9;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    .food-preference {
+        margin-top: 20px;
+    }
+    .total-price {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+    /* Flatpickr custom styles */
+    .flatpickr-day.available {
+        background-color: #e8f5e9;
+        border-color: #4caf50;
+    }
+    .flatpickr-day.available:hover {
+        background-color: #4caf50;
+        color: white;
+    }
+</style>
+
+<!-- Add Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- ... (keep existing HTML structure) ... -->
+
+<div class="col-lg-4">
+    <div class="booking-form">
+        <h3 class="heading mb-4">Book This Package</h3>
+        <form action="{% url 'book_package' package.id %}" method="post" id="bookingForm">
+            {% csrf_token %}
+            <!-- ... (keep other form fields) ... -->
+            <div class="form-group">
+                <input type="text" class="form-control" name="date" id="bookingDate" placeholder="Select Date" required>
+                <small class="form-text text-muted">Booking available for the next 7 days</small>
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control" name="guests" id="guestsInput" placeholder="Number of guests" min="1" max="{{ package.max_capacity }}" required>
+                <small class="form-text text-muted">Available capacity: <span id="availableCapacity">{{ package.max_capacity }}</span></small>
+            </div>
+            <!-- ... (keep other form fields) ... -->
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- Add Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const bookingForm = document.getElementById('bookingForm');
+    const dateInput = document.getElementById('bookingDate');
+    const guestsInput = document.getElementById('guestsInput');
+    const availableCapacitySpan = document.getElementById('availableCapacity');
+    const totalPriceSpan = document.getElementById('totalPrice');
+    const addonCheckboxes = document.querySelectorAll('.addon-checkbox');
+    
+    let availableCapacity = {{ package.max_capacity }};
+    let basePrice = {{ package.price }};
+
+    // Initialize Flatpickr
+    const fp = flatpickr(dateInput, {
+        minDate: "today",
+        maxDate: new Date().fp_incr(7), // Allow booking up to 7 days in advance
+        disable: [
+            function(date) {
+                // Disable dates in the past
+                return date < new Date().fp_incr(1);
+            }
+        ],
+        onChange: function(selectedDates, dateStr, instance) {
+            // Update available capacity based on the selected date
+            updateAvailableCapacity(dateStr);
+        }
+    });
+
+    function updateAvailableCapacity(date) {
+        // In a real application, you would make an AJAX call to your server
+        // to get the actual availability for the selected date.
+        // For this example, we'll just use a random number.
+        availableCapacity = Math.floor(Math.random() * {{ package.max_capacity }}) + 1;
+        availableCapacitySpan.textContent = availableCapacity;
+        guestsInput.max = availableCapacity;
+    }
+
+    function updateTotalPrice() {
+        let total = basePrice * parseInt(guestsInput.value || 1);
+        addonCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                total += parseFloat(checkbox.dataset.price);
+            }
+        });
+        totalPriceSpan.textContent = total.toFixed(2);
+    }
+
+    guestsInput.addEventListener('input', updateTotalPrice);
+    addonCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateTotalPrice);
+    });
+
+    bookingForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        if (parseInt(guestsInput.value) > availableCapacity) {
+            alert(`The number of guests cannot exceed the available capacity of ${availableCapacity}.`);
+            return;
+        }
+
+        // Here you would typically send the form data to your server
+        // and then redirect to a payment page. For this example, we'll
+        // just simulate that with an alert.
+        alert('Redirecting to payment page...');
+        
+        // In a real application, you would decrease the available capacity here
+        // by making an AJAX call to your server.
+        availableCapacity -= parseInt(guestsInput.value);
+        availableCapacitySpan.textContent = availableCapacity;
+    });
+});
+</script>
+{% endblock %}
+
