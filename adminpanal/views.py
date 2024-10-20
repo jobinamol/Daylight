@@ -565,10 +565,13 @@ def process_booking(request, package_id):
             package = get_object_or_404(DaycationPackage, id=package_id)
             
             # Parse and validate the booking date
-            booking_date_str = request.POST.get('date')
-            booking_date = parse_date(booking_date_str)
-            if not booking_date or booking_date < timezone.now().date():
-                return JsonResponse({'error': 'Invalid or past booking date'}, status=400)
+            booking_date_str = request.POST.get('booking_date')
+            try:
+                booking_date = parse_date(booking_date_str)
+                if not booking_date:
+                    raise ValueError("Invalid date format")
+            except ValueError:
+                return JsonResponse({'error': 'Invalid booking date format'}, status=400)
             
             # Calculate the total price based on adults and children
             num_adults = int(request.POST.get('num_adults', 0))
@@ -726,6 +729,27 @@ def booking_confirmation(request, booking_id):
     """Display booking confirmation details"""
     booking = get_object_or_404(DaycationBooking, id=booking_id)
     return render(request, 'booking_confirmation.html', {'booking': booking})
+
+@require_POST
+def verify_payment(request):
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+    
+    payment_data = json.loads(request.body)
+    try:
+        client.utility.verify_payment_signature(payment_data)
+        
+        # Update booking status
+        booking = get_object_or_404(Booking, id=payment_data['booking_id'])
+        booking.payment_status = 'paid'
+        booking.save()
+        
+        return JsonResponse({'status': 'success'})
+    except:
+        return JsonResponse({'status': 'failed'}, status=400)
+
+
+
+
 
 
 

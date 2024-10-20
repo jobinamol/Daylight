@@ -319,3 +319,72 @@ Traceback (most recent call last):
 TypeError: fromisoformat: argument must be str
 
 Internal Server Error: /package/5/process_booking/
+Watching for file changes with StatReloader
+Session data corrupted
+Session data corrupted
+Processing booking for package 5
+Error processing booking: fromisoformat: argument must be str
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 569, in process_booking
+    booking_date = parse_date(booking_date_str)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+TypeError: fromisoformat: argument must be str
+
+Internal Server Error: /package/5/process_booking/
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Processing booking for package 5
+Session data corrupted
+Starting new HTTPS connection (1): api.razorpay.com:443
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Processing booking for package 5
+Session data corrupted
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Payment verification failed: DaycationBooking matching query does not exist.
+Bad Request: /payment_callback/
+Processing booking for package 5
+Session data corrupted
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Session data corrupted
+Processing booking for package 5
+Session data corrupted
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Payment verification failed: DaycationBooking matching query does not exist.
+Bad Request: /payment_callback/
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Processing booking for package 5
+Session data corrupted
+Starting new HTTPS connection (1): api.razorpay.com:443
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 213
+Processing booking for package 5
+Session data corrupted
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 213
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/urls.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Processing booking for package 5
+Session data corrupted
+Starting new HTTPS connection (1): api.razorpay.com:443
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Session data corrupted
+Internal Server Error: /verify-payment/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 737, in verify_payment
+    payment_data = json.loads(request.body)
+NameError: name 'json' is not defined

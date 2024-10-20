@@ -56,4 +56,6 @@ urlpatterns = [
     path('package/<int:package_id>/process_booking/', views.process_booking, name='process_booking'),
     path('payment_callback/', views.payment_callback, name='payment_callback'),
     path('cancel_booking/<int:booking_id>/', views.cancel_booking, name='cancel_booking'),
+    path('verify-payment/', views.verify_payment, name='verify_payment'),
 ]
+
