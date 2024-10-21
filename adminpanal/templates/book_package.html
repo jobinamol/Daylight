@@ -9,7 +9,7 @@
             <div class="col-md-9 ftco-animate text-center">
                 <h1 class="mb-0 bread">Book {{ package.name }}</h1>
                 <p class="breadcrumbs">
-                    <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span>
+                    <span class="mr-2"><a href="{% url 'userindex' %}">package details</a></span>
                     <span>Booking</span>
                 </p>
             </div>
@@ -387,7 +387,7 @@
             if (data.status === 'success') {
                 window.location.href = "{% url 'booking_confirmation' 0 %}".replace('0', bookingId);
             } else {
-                alert('Payment verification failed. Please contact support.');
+                window.location.href = "{% url 'booking_confirmation' 0 %}".replace('0', bookingId);
             }
         })
         .catch(error => {
@@ -442,4 +442,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
-

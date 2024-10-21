@@ -3,8 +3,9 @@ import os
 from django.core.management.utils import get_random_secret_key
 import pymysql
 from decouple import config
+from dotenv import load_dotenv
 
-
+load_dotenv()  # This loads the variables from a .env file
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,8 +17,14 @@ ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='127.0.0.1,localhost').sp
 
 # Razorpay API credentials
 # settings.py
-RAZORPAY_KEY_ID = 'rzp_test_ytgER5FBenREL4'
-RAZORPAY_KEY_SECRET = 'ilRUH3geduJ1rCt15An3DKY7'
+RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
+RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
+
+print("Razorpay Key ID:", RAZORPAY_KEY_ID)
+print("Razorpay Key Secret:", RAZORPAY_KEY_SECRET)
+
+
+
 
 
 

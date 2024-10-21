@@ -18,6 +18,7 @@ from django.db import transaction
 from django.db.models import Sum
 from django.urls import reverse
 
+
 import razorpay
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
@@ -730,23 +731,40 @@ def booking_confirmation(request, booking_id):
     booking = get_object_or_404(DaycationBooking, id=booking_id)
     return render(request, 'booking_confirmation.html', {'booking': booking})
 
-@require_POST
+@csrf_exempt
 def verify_payment(request):
-    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-    
-    payment_data = json.loads(request.body)
-    try:
-        client.utility.verify_payment_signature(payment_data)
-        
-        # Update booking status
-        booking = get_object_or_404(Booking, id=payment_data['booking_id'])
-        booking.payment_status = 'paid'
-        booking.save()
-        
-        return JsonResponse({'status': 'success'})
-    except:
-        return JsonResponse({'status': 'failed'}, status=400)
+    if request.method == "POST":
+        try:
+            # Retrieve the payment data
+            payment_id = request.POST.get('razorpay_payment_id', '')
+            order_id = request.POST.get('razorpay_order_id', '')
+            signature = request.POST.get('razorpay_signature', '')
 
+            # Verify the payment signature
+            params_dict = {
+                'razorpay_order_id': order_id,
+                'razorpay_payment_id': payment_id,
+                'razorpay_signature': signature
+            }
+            
+            # Verify the payment signature
+            try:
+                client.utility.verify_payment_signature(params_dict)
+            except:
+                return JsonResponse({'status': 'fail', 'message': 'Payment verification failed'}, status=400)
+
+            # If verification is successful, update the booking
+            booking = DaycationBooking.objects.get(razorpay_order_id=order_id)
+            booking.razorpay_payment_id = payment_id
+            booking.razorpay_signature = signature
+            booking.payment_status = 'paid'
+            booking.status = 'confirmed'
+            booking.save()
+
+            return JsonResponse({'status': 'success', 'message': 'Payment verified successfully'})
+        except Exception as e:
+            return JsonResponse({'status': 'fail', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'fail', 'message': 'Invalid request method'}, status=405)
 
 
 

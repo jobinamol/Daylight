@@ -204,8 +204,23 @@ class PackageAddon(models.Model):
 
 # DaycationBooking model, connects to DaycationPackage and selected PackageAddon(s)
 class DaycationBooking(models.Model):
-    package = models.ForeignKey(DaycationPackage, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    FOOD_CHOICES = [
+        ('veg', 'Vegetarian'),
+        ('non-veg', 'Non-Vegetarian')
+    ]
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled')
+    ]
+    PAYMENT_STATUS_CHOICES = [
+        ('unpaid', 'Unpaid'),
+        ('paid', 'Paid'),
+        ('refunded', 'Refunded')
+    ]
+
+    package = models.ForeignKey(DaycationPackage, on_delete=models.CASCADE, related_name='bookings')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='daycation_bookings')
     full_name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
@@ -213,34 +228,34 @@ class DaycationBooking(models.Model):
     date = models.DateField()
     num_adults = models.PositiveIntegerField()
     num_children = models.PositiveIntegerField(default=0)
-    food_preference = models.CharField(
-        max_length=10, 
-        choices=[('veg', 'Vegetarian'), ('non-veg', 'Non-Vegetarian')],
-        default='non-veg'  # Add this line to set a default value
-    )
-    addons = models.ManyToManyField(PackageAddon, blank=True)
+    food_preference = models.CharField(max_length=10, choices=FOOD_CHOICES, default='non-veg')
+    addons = models.ManyToManyField(PackageAddon, blank=True, related_name='bookings')
     special_requests = models.TextField(blank=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20, choices=[
-        ('pending', 'Pending'),
-        ('confirmed', 'Confirmed'),
-        ('cancelled', 'Cancelled')
-    ], default='pending')
-    payment_status = models.CharField(max_length=20, choices=[
-        ('unpaid', 'Unpaid'),
-        ('paid', 'Paid')
-    ], default='unpaid')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='unpaid')
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)
     razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)
     razorpay_signature = models.CharField(max_length=200, blank=True, null=True)
 
+    class Meta:
+        ordering = ['-created_at']
+
     @property
     def can_be_cancelled(self):
-        return self.status in ['pending', 'confirmed']
+        return self.status in ['pending', 'confirmed'] and self.date > timezone.now().date()
 
     def __str__(self):
         return f"{self.full_name} - {self.package.name} on {self.date}"
+
+    def save(self, *args, **kwargs):
+        if not self.pk:  # If this is a new booking
+            self.status = 'pending'
+            self.payment_status = 'unpaid'
+        super().save(*args, **kwargs)
+
 
 
 

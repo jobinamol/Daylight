@@ -1,0 +1,154 @@
+{% extends 'userindex.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    .hero-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% static "images/resort-hero.jpg" %}') no-repeat center center;
+        background-size: cover;
+        height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+    }
+
+    .hero-content {
+        max-width: 800px;
+        padding: 20px;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero-subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .cta-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .cta-button:hover {
+        background-color: #45a049;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .package-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        padding: 50px 0;
+    }
+
+    .package-card {
+        background-color: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .package-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .package-image {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .package-content {
+        padding: 20px;
+    }
+
+    .package-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .package-description {
+        color: #666;
+        margin-bottom: 15px;
+    }
+
+    .package-price {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #4CAF50;
+    }
+
+    .package-button {
+        display: block;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 15px;
+        transition: background-color 0.3s ease;
+    }
+
+    .package-button:hover {
+        background-color: #45a049;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">Discover Your Perfect Getaway</h1>
+        <p class="hero-subtitle">Explore our curated collection of daycation packages designed for ultimate relaxation and adventure.</p>
+        <a href="#packages" class="cta-button">View Packages</a>
+    </div>
+</section>
+
+<div class="container" id="packages">
+    <div class="package-grid">
+        {% for package in packages %}
+        <div class="package-card">
+            <div class="package-image" style="background-image: url('{{ package.image.url }}');"></div>
+            <div class="package-content">
+                <h3 class="package-title">{{ package.name }}</h3>
+                <p class="package-description">{{ package.description|truncatewords:20 }}</p>
+                <p class="package-price">₹{{ package.price }}</p>
+                <a href="{% url 'package_detail' package.id %}" class="package-button">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Smooth scroll to packages section
+    document.querySelector('.cta-button').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector('#packages').scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+</script>
+{% endblock %}
