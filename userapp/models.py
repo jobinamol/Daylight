@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 # Import models from adminindex and staff apps
 from adminpanal.models import* # Import Package from adminindex app
 from staffs.models import*
@@ -52,6 +53,7 @@ class UserDB(models.Model):
     password = models.CharField(max_length=128)  # Ensure hashed password
     last_login = models.DateTimeField(default=timezone.now)  # Add last_login field
     reset_token = models.CharField(max_length=100, blank=True, null=True)
+    is_email_verified = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'users'
@@ -59,6 +61,9 @@ class UserDB(models.Model):
 
     def get_email_field_name(self):
         return 'emailid'
+
+    def generate_otp(self):
+        return ''.join(random.choices(string.digits, k=6))
 
 
 class PackageBooking(models.Model):
@@ -118,3 +123,12 @@ class Bookingpackage(models.Model):
 
 
 
+
+class EmailVerification(models.Model):
+    user = models.ForeignKey(UserDB, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    def is_valid(self):
+        return timezone.now() <= self.expires_at

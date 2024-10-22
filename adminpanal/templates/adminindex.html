@@ -130,6 +130,12 @@
                                 <i class="fas fa-calendar-alt me-2"></i>Booking Management
                             </a>
                         </li>
+                        <!-- Add this new item for Menu Management -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'menu_management' %}">
+                                <i class="fas fa-utensils me-2"></i>Menu Management
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -287,6 +293,22 @@
                                 </div>
                                 <p class="text-muted mt-2 mb-0">
                                     <span class="text-success me-2"><i class="fas fa-arrow-up"></i> 12.5%</span>
+                                    <span>Since last week</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add a new card for Menu Items in the dashboard -->
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Menu Items</h5>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h2 class="mb-0">{{ total_menu_items }}</h2>
+                                    <i class="fas fa-utensils stat-icon"></i>
+                                </div>
+                                <p class="text-muted mt-2 mb-0">
+                                    <span class="text-success me-2"><i class="fas fa-arrow-up"></i> 4.5%</span>
                                     <span>Since last week</span>
                                 </p>
                             </div>

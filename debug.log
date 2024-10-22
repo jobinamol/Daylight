@@ -1320,3 +1320,945 @@ Session data corrupted
 Session data corrupted
 Session data corrupted
 Session data corrupted
+Watching for file changes with StatReloader
+Internal Server Error: /adminindex/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 63, in admin_index
+    return render(request, 'adminindex.html')
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'menumanagement' not found. 'menumanagement' is not a valid view function or pattern name.
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Processing booking for package 5
+Starting new HTTPS connection (1): api.razorpay.com:443
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Bad Request: /verify-payment/
+Processing booking for package 5
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Processing booking for package 5
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Processing booking for package 5
+Processing booking for package 5
+Starting new HTTPS connection (2): api.razorpay.com:443
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Processing booking for package 5
+Processing booking for package 5
+Starting new HTTPS connection (3): api.razorpay.com:443
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Processing booking for package 5
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Processing booking for package 5
+Error processing booking: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connection.py", line 464, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/lib/python3.10/http/client.py", line 1375, in getresponse
+    response.begin()
+  File "/usr/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python3.10/http/client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/util/retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/util/util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connection.py", line 464, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/lib/python3.10/http/client.py", line 1375, in getresponse
+    response.begin()
+  File "/usr/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python3.10/http/client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 607, in process_booking
+    razorpay_order = client.order.create({
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/razorpay/resources/order.py", line 71, in create
+    return self.post_url(url, data, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/razorpay/resources/base.py", line 20, in post_url
+    return self.client.post(url, data, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/razorpay/client.py", line 156, in post
+    return self.request('post', path, data=data, **options)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/razorpay/client.py", line 120, in request
+    response = getattr(self.session, method)(url, auth=self.auth,
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/requests/sessions.py", line 637, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/requests/adapters.py", line 682, in send
+    raise ConnectionError(err, request=request)
+requests.exceptions.ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+Internal Server Error: /package/5/process_booking/
+Processing booking for package 5
+Starting new HTTPS connection (4): api.razorpay.com:443
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Processing booking for package 5
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Processing booking for package 5
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Bad Request: /verify-payment/
+Error processing booking: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connection.py", line 464, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/lib/python3.10/http/client.py", line 1375, in getresponse
+    response.begin()
+  File "/usr/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python3.10/http/client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/util/retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/util/util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/urllib3/connection.py", line 464, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/lib/python3.10/http/client.py", line 1375, in getresponse
+    response.begin()
+  File "/usr/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python3.10/http/client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/daycation/adminpanal/views.py", line 607, in process_booking
+    razorpay_order = client.order.create({
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/razorpay/resources/order.py", line 71, in create
+    return self.post_url(url, data, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/razorpay/resources/base.py", line 20, in post_url
+    return self.client.post(url, data, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/razorpay/client.py", line 156, in post
+    return self.request('post', path, data=data, **options)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/razorpay/client.py", line 120, in request
+    response = getattr(self.session, method)(url, auth=self.auth,
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/requests/sessions.py", line 637, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/requests/adapters.py", line 682, in send
+    raise ConnectionError(err, request=request)
+requests.exceptions.ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+Internal Server Error: /package/5/process_booking/
+Internal Server Error: /userregister/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 342, in userregister
+    return render(request, 'userregister.html')
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 130: 'static'. Did you forget to register or load this tag?
+Internal Server Error: /userregister/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 342, in userregister
+    return render(request, 'userregister.html')
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 122: 'static'. Did you forget to register or load this tag?
+Internal Server Error: /userregister/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 342, in userregister
+    return render(request, 'userregister.html')
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 122: 'static'. Did you forget to register or load this tag?
+Internal Server Error: /userregister/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 342, in userregister
+    return render(request, 'userregister.html')
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 122: 'static'. Did you forget to register or load this tag?
+Internal Server Error: /userregister/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 342, in userregister
+    return render(request, 'userregister.html')
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 123: 'static'. Did you forget to register or load this tag?
+Internal Server Error: /userregister/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 342, in userregister
+    return render(request, 'userregister.html')
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 123: 'static'. Did you forget to register or load this tag?
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Not Found: /media/default.jpg
+Not Found: /media/default.jpg
+Not Found: /media/default.jpg
+Not Found: /media/default.jpg
+Not Found: /media/default.jpg
+Not Found: /media/default.jpg
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Not Found: /favicon.ico
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Starting new HTTPS connection (1): oauth2.googleapis.com:443
+https://oauth2.googleapis.com:443 "POST /token HTTP/11" 200 None
+Starting new HTTPS connection (1): oauth2.googleapis.com:443
+https://oauth2.googleapis.com:443 "POST /token HTTP/11" 200 None
+Internal Server Error: /about/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 96, in about
+    return render(request, 'about.html')
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'packages' not found. 'packages' is not a valid view function or pattern name.
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Internal Server Error: /blog/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 99, in blog
+    return render(request, 'blog.html')
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'packages' not found. 'packages' is not a valid view function or pattern name.
+Internal Server Error: /contact/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 201, in contact
+    return render(request, 'contact.html')
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'packages' not found. 'packages' is not a valid view function or pattern name.
+Internal Server Error: /userindex/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 215, in userindex
+    return render(request, 'userindex.html', context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'recommended_packages' not found. 'recommended_packages' is not a valid view function or pattern name.
+Internal Server Error: /userindex/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 215, in userindex
+    return render(request, 'userindex.html', context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 390: 'endblock'. Did you forget to register or load this tag?
+Not Found: /userindex/path_to_your_logo.png
+Not Found: /userindex/path_to_profile_pic.jpg
+Internal Server Error: /userindex/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 215, in userindex
+    return render(request, 'userindex.html', context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'staycation_packages' not found. 'staycation_packages' is not a valid view function or pattern name.
+Internal Server Error: /userindex/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 215, in userindex
+    return render(request, 'userindex.html', context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user' not found. 'user' is not a valid view function or pattern name.
+Internal Server Error: /userindex/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 215, in userindex
+    return render(request, 'userindex.html', context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 485: 'endblock'. Did you forget to register or load this tag?
+/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Watching for file changes with StatReloader
+Session data corrupted
+Session data corrupted
+Not Found: /favicon.ico
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Watching for file changes with StatReloader
+Session data corrupted
+Not Found: /favicon.ico
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Internal Server Error: /viewprofile/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 352, in viewprofile
+    return render(request, 'viewprofile.html', {'user': user})
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'edit_profile' not found. 'edit_profile' is not a valid view function or pattern name.
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Session data corrupted
+Not Found: /favicon.ico
+Processing booking for package 13
+Starting new HTTPS connection (1): api.razorpay.com:443
+https://api.razorpay.com:443 "POST /v1/orders HTTP/11" 200 215
+Bad Request: /verify-payment/
+/home/jobina/Documents/minproject/DRMS/daycation/userapp/models.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/jobina/Documents/minproject/DRMS/daycation/userapp/urls.py changed, reloading.
+Watching for file changes with StatReloader
+Session data corrupted
+Internal Server Error: /userregister/
+Traceback (most recent call last):
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/daycation/userapp/views.py", line 380, in userregister
+    return render(request, 'userregister.html')
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/jobina/Documents/minproject/DRMS/DjangoV/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'check_email' not found. 'check_email' is not a valid view function or pattern name.

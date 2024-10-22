@@ -6,8 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
-    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
@@ -21,47 +21,177 @@
     <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
     <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Playfair Display', serif;
+      }
+      .navbar {
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+      }
+      .navbar.scrolled {
+        background-color: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+      .navbar-brand {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.8rem;
+        color: #fff;
+        transition: color 0.3s ease;
+      }
+      .navbar.scrolled .navbar-brand {
+        color: #333;
+      }
+      .nav-link {
+        font-weight: 500;
+        color: #fff;
+        transition: all 0.3s ease;
+      }
+      .navbar.scrolled .nav-link {
+        color: #333;
+      }
+      .nav-link:hover {
+        opacity: 0.8;
+      }
+      .btn-explore {
+        background-color: transparent;
+        color: #fff;
+        border: 2px solid #fff;
+        padding: 10px 25px;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-explore:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      .hero-title {
+        font-size: 4rem;
+        font-weight: 700;
+        color: #fff;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      }
+      .hero-subtitle {
+        font-size: 1.5rem;
+        font-weight: 300;
+        color: #fff;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      }
+      .about-section {
+        background-color: #f8f9fa;
+        padding: 5rem 0;
+      }
+      .about-content {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        padding: 3rem;
+        margin-bottom: 3rem;
+      }
+      .about-image {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      }
+      .about-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .package-info {
+        background-color: #e9ecef;
+        border-radius: 10px;
+        padding: 2rem;
+        margin-top: 2rem;
+        transition: all 0.3s ease;
+      }
+      .package-info:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      }
+      .important-info {
+        background-color: #e9ecef;
+        border-radius: 10px;
+        padding: 2rem;
+        margin-top: 2rem;
+      }
+      .important-info h4 {
+        color: #1a73e8;
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 1rem;
+      }
+      .about-title {
+        color: #1a73e8;
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+      }
+      .about-text {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #333;
+      }
+      .package-list {
+        list-style-type: none;
+        padding-left: 0;
+      }
+      .package-list li {
+        margin-bottom: 0.5rem;
+        position: relative;
+        padding-left: 1.5rem;
+      }
+      .package-list li:before {
+        content: "\2022";
+        color: #1a73e8;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+      }
+    </style>
   </head>
   <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="index.html">Daylight</a>
+        <a class="navbar-brand" href="{% url 'userindex' %}">
+          <i class="fas fa-sun mr-2"></i>Daylight
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="oi oi-menu"></span> Menu
+          <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
-                  <li class="nav-item"><a href="{% url 'packs' %}" class="nav-link">Packages</a></li>
-                  <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
-                  <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
-                  <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-                  {% if request.session.username %}
-                  <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          {% if request.session.profile_image %}
-                              <img src="{{ request.session.profile_image }}" alt="User Icon" class="rounded-circle" style="width: 30px; height: 30px;" />
-                          {% else %}
-                              <img src="{% static 'icons/userlogin.jpeg' %}" alt="User Icon" class="rounded-circle" style="width: 30px; height: 30px;" />
-                          {% endif %}
-                          {{ request.session.username }}
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{% url 'viewprofile' %}">View Profile</a>
-                          <a class="dropdown-item" href="{% url 'editprofile' %}">Edit Profile</a>
-                          <a class="dropdown-item" href="{% url 'changepassword' %}">Change Password</a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-                      </div>
-                  </li>
-              {% else %}
-                  <li class="nav-item">
-                      <a href="{% url 'login' %}" class="nav-link">Login</a>
-                  </li>
-              {% endif %}
-
+            <li class="nav-item"><a href="{% url 'userindex' %}" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="{% url 'rooms' %}" class="nav-link">Rooms</a></li>
+            <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
+            <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+            {% if request.session.username %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user-circle mr-1"></i>{{ request.session.username }}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-user mr-2"></i>View Profile</a>
+                <a class="dropdown-item" href="{% url 'editprofile' %}"><i class="fas fa-user-edit mr-2"></i>Edit Profile</a>
+                <a class="dropdown-item" href="{% url 'booking_history' %}"><i class="fas fa-history mr-2"></i>Booking History</a>
+                <a class="dropdown-item" href="{% url 'changepassword' %}"><i class="fas fa-key mr-2"></i>Change Password</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+              </div>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a href="{% url 'login' %}" class="nav-link btn btn-outline-light ml-lg-3">Login</a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -73,18 +203,90 @@
       <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-            <h1 class="mb-3 bread">Welcome to Daylight</h1>
-            <p class="breadcrumbs"><span class="mr-2">Daycation &amp; Staycation Experiences</span></p>
+            <h1 class="hero-title mb-4">Welcome to Daylight</h1>
+            <p class="hero-subtitle mb-5">Daycation &amp; Staycation Experiences</p>
             <div class="mt-4">
-              <a href="{% url 'daycation_packages' %}" class="btn btn-primary py-3 px-4 mr-2">Explore Daycation Packages</a>
-              <a href="{% url 'packs' %}" class="btn btn-secondary py-3 px-4">Explore Staycation Packages</a>
+              <a href="{% url 'daycation_packages' %}" class="btn btn-explore mr-2">
+                <i class="fas fa-sun mr-2"></i>Explore Daycation Packages
+              </a>
+              <a href="{% url 'packs' %}" class="btn btn-explore">
+                <i class="fas fa-hotel mr-2"></i>Explore Staycation Packages
+              </a>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ... (keep existing about section) ... -->
+    <!-- Updated About Section -->
+    <section class="about-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-10">
+            <div class="about-content">
+              <div class="row align-items-center">
+                <div class="col-md-6">
+                  <h2 class="about-title">About Daylight Resort</h2>
+                  <p class="about-text">
+                    Welcome to Daylight Resort, your perfect getaway for both daycation and staycation experiences. Nestled in a picturesque location, our resort offers a blend of luxury, comfort, and natural beauty. Whether you're looking for a day of relaxation or an extended stay, we have the perfect package for you.
+                  </p>
+                </div>
+                <div class="col-md-6">
+                  <div class="about-image">
+                    <img src="{% static 'images/aboutpic.jpg' %}" alt="Daylight Resort Overview">
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="package-info">
+                  <h3 class="package-title">Daycation Packages</h3>
+                  <ul class="package-list">
+                    <li>Access to resort facilities for a full day</li>
+                    <li>Use of swimming pools, fitness center, and spa</li>
+                    <li>Complimentary non-alcoholic welcome drink</li>
+                    <li>Gourmet lunch included in select packages</li>
+                    <li>Optional add-ons like spa treatments or recreational activities</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="package-info">
+                  <h3 class="package-title">Staycation Packages</h3>
+                  <ul class="package-list">
+                    <li>Variety of room types to choose from, including deluxe rooms and suites</li>
+                    <li>All-inclusive meals at our gourmet restaurants</li>
+                    <li>Access to all resort amenities throughout your stay</li>
+                    <li>Complimentary Wi-Fi and parking</li>
+                    <li>Special activities and entertainment programs</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div class="important-info mt-4">
+              <h4>Important Information</h4>
+              <div class="row">
+                <div class="col-md-6">
+                  <ul>
+                    <li>Bookings must be made at least one day in advance</li>
+                    <li>No alcohol is served or allowed on the premises</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <ul>
+                    <li>Outside food is not permitted; all meals are included in the packages</li>
+                    <li>Flexible check-in and check-out times available (subject to availability)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section class="ftco-section py-5">
       <div class="container">
@@ -96,7 +298,7 @@
         <div class="row d-flex">
           <div class="col-md-6 d-flex ftco-animate">
             <div class="card shadow-sm border-0 w-100">
-              <a href="{% url 'daycation_packages' %}" class="block-20" style="background-image: url('{% static 'images/daycation.jpg' %}');" aria-label="Daycation Packages">
+              <a href="{% url 'daycation_packages' %}" class="block-20" style="background-image: url('{% static 'images/about1.jpg' %}');" aria-label="Daycation Packages">
               </a>
               <div class="card-body text-center">
                 <h5 class="card-title">Daycation Packages</h5>
@@ -107,7 +309,7 @@
           </div>
           <div class="col-md-6 d-flex ftco-animate">
             <div class="card shadow-sm border-0 w-100">
-              <a href="{% url 'packs' %}" class="block-20" style="background-image: url('{% static 'images/staycation.jpg' %}');" aria-label="Staycation Packages">
+              <a href="{% url 'packs' %}" class="block-20" style="background-image: url('{% static 'images/staycation.webp' %}');" aria-label="Staycation Packages">
               </a>
               <div class="card-body text-center">
                 <h5 class="card-title">Staycation Packages</h5>
@@ -120,40 +322,6 @@
       </div>
     </section>
 
-      <section class="ftco-section py-5">
-        <div class="container">
-            <div class="row justify-content-center mb-5 pb-3">
-                <div class="col-md-7 heading-section text-center ftco-animate">
-                    <h2>Our Package Categories</h2>
-                </div>
-            </div>
-            <div class="row d-flex">
-                {% if categories %}
-                    {% for category in categories %}
-                    <div class="col-md-4 d-flex ftco-animate">
-                        <div class="card shadow-sm border-0 w-100">
-                            {% if category.image %}
-                                <a href="#" class="block-20" style="background-image: url('{{ category.image.url }}');" aria-label="{{ category.name }}">
-                                </a>
-                            {% else %}
-                                <a href="#" class="block-20" style="background-color: #f0f0f0;" aria-label="{{ category.name }}">
-                                    <span>No Image Available</span>
-                                </a>
-                            {% endif %}
-                            <div class="card-body text-center">
-                                <h5 class="card-title">{{ category.name }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="col-12">
-                        <p class="text-center">No categories available.</p>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </section>
     
     <style>
         .block-20 {
@@ -400,6 +568,16 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="{% static 'js/google-map.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
+  <script>
+    // Add this script to change navbar background on scroll
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 50) {
+        document.querySelector('.navbar').classList.add('scrolled');
+      } else {
+        document.querySelector('.navbar').classList.remove('scrolled');
+      }
+    });
+  </script>
   
   </body>
 </html>

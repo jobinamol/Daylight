@@ -1,289 +1,467 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Register - Daylight Resort</title>
+    <title>Join Daylight Resort - Create Your Account</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Load static template tag library -->
-    {% load static %}
-
-    <!-- Link to CSS stylesheets -->
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            background-color: #f0f4f8;
         }
-        .hero-wrap {
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .image-section {
+            flex: 2;
+            background-image: url("{% static 'images/home.jpg' %}");
             background-size: cover;
             background-position: center;
-            height: 300px;
+            position: relative;
+            overflow: hidden;
         }
-        .hero-wrap .overlay {
-            background: rgba(0, 0, 0, 0.5);
-            height: 100%;
+
+        .image-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
         }
-        .hero-wrap .text {
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+
+        .welcome-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            text-align: center;
+            width: 80%;
         }
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+        .welcome-text h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: fadeInDown 1s ease-out;
+            line-height: 1.2;
         }
-        .card-body {
-            padding: 2rem;
+
+        .welcome-text p {
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            animation: fadeInUp 1s ease-out 0.5s;
+            opacity: 0;
+            animation-fill-mode: forwards;
         }
-        .form-control, .form-control-file, .btn {
-            border-radius: 10px;
+
+        .register-section {
+            flex: 1;
+            background-color: #ffffff;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: -10px 0 20px rgba(0,0,0,0.1);
+            overflow-y: auto;
         }
+
+        .register-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .register-container h3 {
+            font-family: 'Cormorant Garamond', serif;
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.8rem;
+        }
+
+        .form-control {
+            margin-bottom: 25px;
+            border-radius: 4px;
+            border: 1px solid #dadce0;
+            padding: 15px 25px;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            height: 40px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            margin-bottom: 15px;
+            text-decoration: none;
+        }
+
         .btn-primary {
-            background-color: #007bff;
+            background-color: #1a73e8;
             border: none;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .footer {
-            background: #333;
             color: #fff;
-            padding: 1rem 0;
         }
-        #username-error, #password-strength {
-            color: red;
+
+        .btn-primary:hover {
+            background-color: #1765cc;
+            box-shadow: 0 1px 2px 0 rgba(66,133,244,0.3),0 1px 3px 1px rgba(66,133,244,0.15);
+        }
+
+        .alert {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .login {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login a {
+            color: #1a73e8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 600;
+        }
+
+        .login a:hover {
+            color: #1765cc;
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: -20px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .back-icon {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: #ffffff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+            background-color: rgba(44, 62, 80, 0.5);
+            padding: 10px 15px;
+            border-radius: 50px;
+        }
+
+        .back-icon:hover {
+            background-color: #2c3e50;
+            color: #ffffff;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -70%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #5f6368;
+        }
+
+        .form-step {
+            display: none;
+        }
+        .form-step.active {
+            display: block;
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #dadce0;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+        }
+        .step.active .step-number {
+            background-color: #1a73e8;
+        }
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background-color: #dadce0;
+            z-index: -1;
+        }
+        .step:last-child::after {
+            display: none;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .btn-secondary {
+            background-color: #f1f3f4;
+            color: #5f6368;
+        }
+        .btn-secondary:hover {
+            background-color: #e8eaed;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">Daylight Resort</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="oi oi-menu"></span> Menu
-            </button>
-            <div class="collapse navbar-collapse" id="ftco-nav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="{% url 'packs' %}" class="nav-link">Packages</a></li>
-                    <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
-                    <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
-                    <li class="nav-item active"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-                    <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Login</a></li>
-                </ul>
+    <div class="container">
+        <div class="image-section">
+            <div class="welcome-text">
+                <h1>Join Daylight Resort</h1>
+                <p>Create your account and start planning your perfect getaway today.</p>
             </div>
+            <span class="back-icon" onclick="window.history.back();"><i class="fas fa-arrow-left"></i> Back</span>
         </div>
-    </nav>
-    <!-- END nav -->
-
-    <div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
-                <div class="col-md-9 text-center d-flex align-items-end justify-content-center">
-                    <div class="text">
-                        <p class="breadcrumbs mb-2"><span class="mr-2"><a href="{% url 'home' %}">Home</a></span> <span>Register</span></p>
-                        <h1 class="mb-4 bread">Register</h1>
+        <div class="register-section">
+            <div class="register-container">
+                <h3>Register</h3>
+                
+                {% if form.errors %}
+                    <div class="alert" role="alert">
+                        <ul>
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
                     </div>
+                {% endif %}
+                
+                <div class="step-indicator">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div>Personal Info</div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div>Contact</div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div>Account</div>
+                    </div>
+                </div>
+                
+                <form method="POST" action="{% url 'userregister' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-step active" id="step1">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" class="form-control" id="age" name="age" required min="1" max="999">
+                        </div>
+                        <div class="form-group">
+                            <label for="sex">Gender</label>
+                            <select class="form-control" id="sex" name="sex" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary" onclick="nextStep(1)">Next</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" id="step2">
+                        <div class="form-group">
+                            <label for="mobilenumber">Mobile Number</label>
+                            <input type="tel" class="form-control" id="mobilenumber" name="mobilenumber" required pattern="^\+?\d{10,15}$">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailid">Email</label>
+                            <input type="email" class="form-control" id="emailid" name="emailid" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="district">District</label>
+                            <input type="text" class="form-control" id="district" name="district" required>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Previous</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" id="step3">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required pattern="^[\w.@+-]+$">
+                            <span id="username-error" class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile_image" class="profile-image-label">
+                                <i class="fas fa-upload"></i> Upload Profile Image
+                            </label>
+                            <input type="file" class="profile-image-upload" id="profile_image" name="profile_image" accept="image/*">
+                            <span class="profile-image-name"></span>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep(3)">Previous</button>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="login">
+                    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container mt-5 mb-5">
-        <div class="row justify-content-center">
-            <div class="col-md-10 col-lg-8">
-                <div class="card shadow-sm">
-                    <div class="card-body p-4">
-                        <h3 class="text-center mb-4">Create Your Account</h3>
-                        <form method="POST" action="{% url 'userregister' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                        
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
-                                <span id="name-error" style="color: red;"></span> <!-- Error message span -->
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="address">Address</label>
-                                <input type="text" class="form-control" id="address" name="address" placeholder="Enter your address" required>
-                                <span id="address-error" style="color: red;"></span> <!-- Error message span -->
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="mobilenumber">Mobile Number</label>
-                                <input type="text" class="form-control" id="mobilenumber" name="mobilenumber" placeholder="Enter your mobile number" required>
-                                <span id="mobilenumber-error" style="color: red;"></span> <!-- Error message span -->
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="emailid">Email ID</label>
-                                <input type="email" class="form-control" id="emailid" name="emailid" placeholder="Enter your email ID" required>
-                                <span id="emailid-error" style="color: red;"></span> <!-- Error message span -->
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="district">District</label>
-                                <input type="text" class="form-control" id="district" name="district" placeholder="Enter your district" required>
-                                <span id="district-error" style="color: red;"></span> <!-- Error message span -->
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="age">Age</label>
-                                    <input type="number" class="form-control" id="age" name="age" placeholder="Enter your age" required>
-                                    <span id="age-error" style="color: red;"></span> <!-- Error message span -->
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="sex">Sex</label>
-                                    <select class="form-control" id="sex" name="sex" required>
-                                        <option value="" disabled selected>Choose...</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                    <span id="sex-error" style="color: red;"></span> <!-- Error message span -->
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="profile_image">Profile Image</label>
-                                <input type="file" class="form-control-file" id="profile_image" name="profile_image" accept="image/*">
-                                <span id="profile_image-error" style="color: red;"></span> <!-- Error message span -->
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="username">Username</label>
-                                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
-                                    <span id="username-error" style="color: red;"></span> <!-- Error message span -->
-                                </div>
-                            
-                                <div class="form-group col-md-6">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" required>
-                                    <span id="password-strength" style="color: red;"></span> <!-- Password strength message -->
-                                </div>
-                            </div>
-                        
-                            <div class="form-group text-center">
-                                <button type="submit" class="btn btn-primary btn-block">Register</button>
-                            </div>
-                        </form>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer text-center mt-5">
-        <p>© 2024 Daylight Resort. All rights reserved.</p>
-    </footer>
-
-    <!-- Include necessary JS files -->
+    <!-- JavaScript -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-
+    
     <script>
-        function showError(element, message) {
-            element.innerText = message;
-            element.style.color = 'red';
-        }
-    
-        function clearError(element) {
-            element.innerText = '';
-        }
-    
-        function validateField(fieldId, errorId, validationFunction) {
-            const field = document.getElementById(fieldId);
-            const errorElement = document.getElementById(errorId);
-            const isValid = validationFunction(field.value);
-    
-            if (isValid) {
-                clearError(errorElement);
-            } else {
-                showError(errorElement, 'This field is required.');
+        function nextStep(currentStep) {
+            if (validateStep(currentStep)) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                document.getElementById(`step${currentStep + 1}`).classList.add('active');
+                updateStepIndicator(currentStep + 1);
             }
-            return isValid;
         }
-    
-        document.getElementById('username').addEventListener('input', function() {
-            const username = this.value;
-            const errorMessage = document.getElementById('username-error');
-    
-            // Perform an AJAX request to check username validity
-            fetch("{% url 'check_username' %}?username=" + username)
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.available) {
-                        showError(errorMessage, data.message);
-                    } else {
-                        clearError(errorMessage);
-                    }
-                })
-                .catch(err => {
-                    console.error('Error checking username:', err);
-                });
-        });
-    
-        document.getElementById('password').addEventListener('input', function() {
-            const password = this.value;
-            const strengthMessage = document.getElementById('password-strength');
-    
-            let strength = 0;
-            if (password.length >= 8) strength++; // Minimum length
-            if (/[A-Z]/.test(password)) strength++; // Uppercase letter
-            if (/[a-z]/.test(password)) strength++; // Lowercase letter
-            if (/[0-9]/.test(password)) strength++; // Number
-            if (/[^A-Za-z0-9]/.test(password)) strength++; // Special character
-    
-            // Determine strength message
-            if (strength < 2) {
-                showError(strengthMessage, 'Weak password. Try using a mix of letters, numbers, and special characters.');
-            } else if (strength < 4) {
-                showError(strengthMessage, 'Moderate password. Keep improving!');
-            } else {
-                clearError(strengthMessage);
-                strengthMessage.innerText = 'Strong password!';
-                strengthMessage.style.color = 'green';
-            }
-        });
-    
-        const fieldsToValidate = [
-            { id: 'name', errorId: 'name-error' },
-            { id: 'address', errorId: 'address-error' },
-            { id: 'mobilenumber', errorId: 'mobilenumber-error' },
-            { id: 'emailid', errorId: 'emailid-error' },
-            { id: 'district', errorId: 'district-error' },
-            { id: 'age', errorId: 'age-error' },
-            { id: 'sex', errorId: 'sex-error' },
-            { id: 'username', errorId: 'username-error' },
-            { id: 'password', errorId: 'password-strength' }
-        ];
-    
-        fieldsToValidate.forEach(field => {
-            document.getElementById(field.id).addEventListener('input', function() {
-                validateField(field.id, field.errorId, value => value.trim() !== '');
-            });
-        });
-    
-        // Validate on form submit
-        document.querySelector('form').addEventListener('submit', function(event) {
-            let allValid = true;
-            fieldsToValidate.forEach(field => {
-                if (!validateField(field.id, field.errorId, value => value.trim() !== '')) {
-                    allValid = false;
+
+        function prevStep(currentStep) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep - 1}`).classList.add('active');
+            updateStepIndicator(currentStep - 1);
+        }
+
+        function updateStepIndicator(step) {
+            document.querySelectorAll('.step').forEach((el, index) => {
+                if (index + 1 <= step) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
                 }
             });
-    
-            if (!allValid) {
-                event.preventDefault(); // Prevent form submission
-            }
+        }
+
+        function validateStep(step) {
+            const fields = document.getElementById(`step${step}`).querySelectorAll('input, select');
+            let isValid = true;
+            fields.forEach(field => {
+                if (!field.checkValidity()) {
+                    field.reportValidity();
+                    isValid = false;
+                }
+            });
+            return isValid;
+        }
+
+        // AJAX Username Validation
+        document.getElementById('username').addEventListener('input', function() {
+            const username = this.value;
+            document.getElementById('username-error').innerText = '';
+            fetch(`/check_username/?username=${username}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('username-error').innerText = data.message;
+                })
+                .catch(error => {
+                    console.error('Error checking username:', error);
+                });
+        });
+
+        // Display file name when a profile image is selected
+        document.getElementById('profile_image').addEventListener('change', function() {
+            const fileName = this.files[0].name;
+            document.querySelector('.profile-image-name').textContent = fileName;
         });
     </script>
-    
 </body>
 </html>

@@ -1,77 +1,86 @@
-{% extends 'userdashboard.html' %}
+{% extends 'userindex.html' %}
 {% block content %}
 {% load static %}
+
 <div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
     <div class="overlay"></div>
     <div class="container">
         <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
             <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
                 <div class="text">
-                    <p class="breadcrumbs mb-2"><span class="mr-2"><a href="{% url 'home' %}">Home</a></span> <span>Contact</span></p>
-                    <h1 class="mb-4 bread">Contact Us</h1>
+                    <p class="breadcrumbs mb-2"><span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> <span>Contact</span></p>
+                    <h1 class="mb-4 bread">Get in Touch</h1>
                 </div>
             </div>
         </div>
     </div>
-  </div>
-<section class="ftco-section contact-section">
+</div>
+
+<section class="ftco-section contact-section bg-light">
     <div class="container">
-        <div class="row justify-content-center mb-5 pb-3">
-            <div class="col-md-7 heading-section text-center ftco-animate">
-                <p>We're here to help! Reach out to us using the form below, or visit our office at the given address.</p>
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-7 text-center">
+                <h2 class="ftco-heading-2">We're Here for You</h2>
+                <p class="lead">Reach out to us for any inquiries or to book your perfect Daylight experience.</p>
             </div>
         </div>
-        <div class="row contact-info mb-5">
-            <div class="col-md-4">
-                <div class="box p-4 text-center">
-                    <div class="icon">
-                        <span class="icon-map-marker"></span>
-                    </div>
-                    <h3 class="mb-3">Address</h3>
-                    <p>123 Daycation Street, Resort City, Country</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="box p-4 text-center">
-                    <div class="icon">
-                        <span class="icon-phone"></span>
-                    </div>
-                    <h3 class="mb-3">Phone</h3>
-                    <p><a href="tel://1234567890">+1 234 567 890</a></p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="box p-4 text-center">
-                    <div class="icon">
-                        <span class="icon-envelope"></span>
-                    </div>
-                    <h3 class="mb-3">Email</h3>
-                    <p><a href="mailto:info@daycation.com">info@daycation.com</a></p>
-                </div>
-            </div>
-        </div>
-        
         <div class="row">
-            <div class="col-md-12 ftco-animate">
+            <div class="col-md-6 mb-5 mb-md-0">
+                <div class="contact-info-wrap">
+                    <h3 class="mb-4">Contact Information</h3>
+                    <div class="w-100 d-flex mb-4">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <span class="fa fa-map-marker"></span>
+                        </div>
+                        <div class="text pl-3">
+                            <p><span>Address:</span> 123 Daycation Street, Resort City, Country</p>
+                        </div>
+                    </div>
+                    <div class="w-100 d-flex mb-4">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <span class="fa fa-phone"></span>
+                        </div>
+                        <div class="text pl-3">
+                            <p><span>Phone:</span> <a href="tel://1234567890">+1 234 567 890</a></p>
+                        </div>
+                    </div>
+                    <div class="w-100 d-flex mb-4">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <span class="fa fa-envelope"></span>
+                        </div>
+                        <div class="text pl-3">
+                            <p><span>Email:</span> <a href="mailto:info@daycation.com">info@daycation.com</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-container mt-5">
+                    <div id="map" style="height: 300px;"></div>
+                </div>
+            </div>
+            <div class="col-md-6 ftco-animate">
                 <form action="#" class="contact-form">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label for="name">Your Name</label>
                                 <input type="text" class="form-control" placeholder="Your Name">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label for="email">Your Email</label>
                                 <input type="email" class="form-control" placeholder="Your Email">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label for="subject">Subject</label>
                                 <input type="text" class="form-control" placeholder="Subject">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label for="message">Message</label>
                                 <textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="Message"></textarea>
                             </div>
                         </div>
