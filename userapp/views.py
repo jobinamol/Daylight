@@ -223,14 +223,14 @@ def check_username(request):
 
 def login_view(request):
     if request.method == 'POST':
-        username_or_email = request.POST.get('username')
+        username = request.POST.get('username')
         password = request.POST.get('password')
 
         # Clear previous session for the current user
         request.session.flush() 
 
         # Check if the user is the admin
-        if username_or_email == 'admin' and password == 'admin':
+        if username == 'admin' and password == 'admin':
             request.session['user_type'] = 'admin'
             request.session['username'] = 'admin'
             messages.success(request, 'Welcome, Admin!')
@@ -245,57 +245,38 @@ def login_view(request):
         }
 
         # Check if the username is in the staff credentials
-        if username_or_email in staff_credentials:
-            expected_password = staff_credentials[username_or_email][0]
-            if password == expected_password:
-                request.session['user_type'] = username_or_email.split('@')[0]
-                request.session['username'] = username_or_email
-                messages.success(request, f'Welcome, {username_or_email.split("@")[0].capitalize()} Service!')
-                return redirect(staff_credentials[username_or_email][1])
+        if username in staff_credentials:
+            # Verify the password for the respective staff
+            expected_password = staff_credentials[username][0]  # Get the expected password
+            if password == expected_password:  # Replace with actual password logic if needed
+                request.session['user_type'] = username.split('@')[0]  # Track user type based on email
+                request.session['username'] = username
+                messages.success(request, f'Welcome, {username.split("@")[0].capitalize()} Service!')
+                return redirect(staff_credentials[username][1])  # Redirect to respective dashboard
             else:
                 messages.error(request, 'Invalid username or password.')
                 return redirect('login')
 
         # Check if the user exists in the UserDB (regular user)
         try:
-            # Try to get user by username
-            user = UserDB.objects.get(username=username_or_email)
-        except UserDB.DoesNotExist:
-            try:
-                # If not found, try to get user by email
-                user = UserDB.objects.get(emailid=username_or_email)
-            except UserDB.DoesNotExist:
-                messages.error(request, 'Invalid username or email.')
+            user = UserDB.objects.get(username=username)
+            if check_password(password, user.password):
+                # Check if user already has an active session and clear it
+                _invalidate_user_sessions(user.id, 'user')
+
+                # Start a new session for the user
+                request.session['user_id'] = user.id
+                request.session['username'] = user.username
+                request.session['email'] = user.email  # Changed from emailid to email
+                request.session['profile_image'] = user.profile_image.url
+                request.session['user_type'] = 'user'  # Track the type of user
+                messages.success(request, f'Welcome, {user.name}!')
+                return redirect('userindex')
+            else:
+                messages.error(request, 'Invalid username or password.')
                 return redirect('login')
-
-        if check_password(password, user.password):
-            if not user.is_email_verified:
-                # Generate new OTP if the previous one has expired
-                verification = EmailVerification.objects.filter(user=user).order_by('-created_at').first()
-                if not verification or not verification.is_valid():
-                    otp = user.generate_otp()
-                    EmailVerification.objects.create(
-                        user=user,
-                        otp=otp,
-                        expires_at=timezone.now() + timezone.timedelta(minutes=10)
-                    )
-                    # Send new OTP email here
-                    # send_otp_email(user.emailid, otp)
-                messages.error(request, 'Please verify your email before logging in.')
-                return redirect('verify_email')
-
-            # Check if user already has an active session and clear it
-            _invalidate_user_sessions(user.id, 'user')
-
-            # Start a new session for the user
-            request.session['user_id'] = user.id
-            request.session['username'] = user.username
-            request.session['profile_image'] = user.profile_image.url
-            request.session['user_type'] = 'user'
-            messages.success(request, f'Welcome, {user.name}!')
-            return redirect('userindex')
-        else:
-            messages.error(request, 'Invalid password.')
+        except UserDB.DoesNotExist:
+            messages.error(request, 'Invalid username or password.')
             return redirect('login')
 
     return render(request, 'login.html')
@@ -317,7 +298,7 @@ def userregister(request):
         name = request.POST.get('name')
         address = request.POST.get('address')
         mobilenumber = request.POST.get('mobilenumber')
-        emailid = request.POST.get('emailid')
+        email = request.POST.get('email')  # Changed from emailid to email
         district = request.POST.get('district')
         age = request.POST.get('age')
         sex = request.POST.get('sex')
@@ -329,8 +310,8 @@ def userregister(request):
             messages.error(request, 'Username already exists.')
             return redirect('userregister')
 
-        if UserDB.objects.filter(emailid=emailid).exists():
-            messages.error(request, 'Email ID already exists.')
+        if UserDB.objects.filter(email=email).exists():  # Changed from emailid to email
+            messages.error(request, 'Email already exists.')
             return redirect('userregister')
 
         hashed_password = make_password(password)
@@ -346,36 +327,18 @@ def userregister(request):
             name=name,
             address=address,
             mobilenumber=mobilenumber,
-            emailid=emailid,
+            email=email,  # Changed from emailid to email
             district=district,
             age=age,
             sex=sex,
             username=username,
             password=hashed_password,
-            profile_image=profile_image_path,
-            is_email_verified=False
+            profile_image=profile_image_path
         )
         user_db.save()
 
-        # Generate OTP and create EmailVerification instance
-        otp = user_db.generate_otp()
-        EmailVerification.objects.create(
-            user=user_db,
-            otp=otp,
-            expires_at=timezone.now() + timezone.timedelta(minutes=10)
-        )
-
-        # Send email with OTP
-        send_mail(
-            'Verify your email',
-            f'Your OTP is: {otp}',
-            settings.DEFAULT_FROM_EMAIL,
-            [emailid],
-            fail_silently=False,
-        )
-
-        messages.success(request, 'Registration successful. Please check your email for verification OTP.')
-        return redirect('verify_email')
+        messages.success(request, 'Registration successful. You can now log in.')
+        return redirect('login')
 
     return render(request, 'userregister.html')
 
@@ -387,7 +350,7 @@ def viewprofile(request):
 
     user = UserDB.objects.get(username=request.session['username'])
     
-    return render(request, 'viewprofile.html', {'user': user})
+    return render(request, 'userapp/viewprofile.html', {'user': user})
 
 
 
@@ -669,47 +632,3 @@ def booking_success(request, booking_id):
     booking = get_object_or_404(Bookingpackage, id=booking_id)
     return render(request, 'booking_success.html', {'booking': booking})
 
-def verify_email(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        otp = request.POST.get('otp')
-        try:
-            user = UserDB.objects.get(emailid=email)
-            verification = EmailVerification.objects.filter(user=user).latest('created_at')
-            if verification.is_valid() and verification.otp == otp:
-                user.is_email_verified = True
-                user.save()
-                verification.delete()
-                messages.success(request, 'Email verified successfully. You can now log in.')
-                return redirect('login')
-            else:
-                messages.error(request, 'Invalid or expired OTP. Please try again.')
-        except (UserDB.DoesNotExist, EmailVerification.DoesNotExist):
-            messages.error(request, 'Invalid email or OTP. Please try again.')
-    return render(request, 'verify_email.html')
-
-def resend_otp(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        try:
-            user = UserDB.objects.get(emailid=email)
-            EmailVerification.objects.filter(user=user).delete()
-            otp = user.generate_otp()
-            EmailVerification.objects.create(
-                user=user,
-                otp=otp,
-                expires_at=timezone.now() + timezone.timedelta(minutes=10)
-            )
-            # Send email with new OTP
-            send_mail(
-                'New Verification OTP',
-                f'Your new OTP is: {otp}',
-                settings.DEFAULT_FROM_EMAIL,
-                [user.emailid],
-                fail_silently=False,
-            )
-            messages.success(request, 'A new OTP has been sent to your email.')
-            return redirect('verify_email')
-        except UserDB.DoesNotExist:
-            messages.error(request, 'Email not found.')
-    return render(request, 'resend_otp.html')

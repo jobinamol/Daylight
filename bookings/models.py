@@ -5,7 +5,7 @@ from staffs.models import *
 
 
 class Booking(models.Model):
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name='booking_entries')
+    user = models.ForeignKey(UserDB, null=True, blank=True, on_delete=models.CASCADE, related_name='booking_entries')
     package = models.ForeignKey(PackageManagement, null=True, blank=True, on_delete=models.CASCADE)  # Allow null for migration
     number_of_adults = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     number_of_children = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])

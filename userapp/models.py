@@ -1,86 +1,64 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.utils import timezone
-from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
-# Import models from adminindex and staff apps
-from adminpanal.models import* # Import Package from adminindex app
-from staffs.models import*
- # Adjust the import according to your structure
+from adminpanal.models import PackageManagement
+from staffs.models import Room
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
-class UserDB(models.Model):
-    id = models.AutoField(primary_key=True)  # or UUIDField
+# User Model
+class UserDBManager(BaseUserManager):
+    def create_user(self, username, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
+class UserDB(AbstractBaseUser):
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
     name = models.CharField(max_length=255)
-    mobilenumber = models.CharField(
-        max_length=15,
-        validators=[
-            RegexValidator(
-                regex=r'^\+?\d{10,15}$',
-                message='Mobile number must be between 10 and 15 digits and can optionally start with a "+" sign.'
-            )
-        ]
-    )
-    emailid = models.EmailField(unique=True)  # Ensure unique email
-    address = models.CharField(max_length=255)
-    district = models.CharField(max_length=255)
-    age = models.IntegerField(
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(999)
-        ]
-    )
-    sex = models.CharField(
-        max_length=10,
-        choices=[
-            ('male', 'Male'),
-            ('female', 'Female'),
-            ('other', 'Other')
-        ]
-    )
-    username = models.CharField(
-        max_length=255,
-        unique=True,
-        validators=[
-            RegexValidator(
-                regex=r'^[\w.@+-]+$', 
-                message='Username may only contain letters, numbers, and @/./+/-/_ characters.'
-            )
-        ]
-    )
+    address = models.TextField()
+    mobilenumber = models.CharField(max_length=15)
+    district = models.CharField(max_length=100)
+    age = models.IntegerField()
+    sex = models.CharField(max_length=10)
     profile_image = models.ImageField(upload_to='profile_images/', default='default.jpg')
-    password = models.CharField(max_length=128)  # Ensure hashed password
-    last_login = models.DateTimeField(default=timezone.now)  # Add last_login field
-    reset_token = models.CharField(max_length=100, blank=True, null=True)
-    is_email_verified = models.BooleanField(default=False)
+
+    objects = UserDBManager()
+
+    USERNAME_FIELD = 'username'
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = ['email', 'name']
+
+    def __str__(self):
+        return self.username
 
     class Meta:
-        db_table = 'users'
-        unique_together = ('emailid', 'username')  # Ensure unique combination of email and username
-
-    def get_email_field_name(self):
-        return 'emailid'
-
-    def generate_otp(self):
-        return ''.join(random.choices(string.digits, k=6))
+        db_table = 'users'  # This tells Django to use the 'users' table
 
 
+# Package Booking Model
 class PackageBooking(models.Model):
-    user = models.ForeignKey(UserDB, on_delete=models.CASCADE, related_name='bookings')  # Related name for easier access
+    user = models.ForeignKey(UserDB, on_delete=models.CASCADE, related_name='bookings')
     package_name = models.CharField(max_length=100, default="Default Package")
     number_of_adults = models.PositiveIntegerField(validators=[MinValueValidator(1)])  # Ensure at least one adult
-    payment_method = models.CharField(max_length=50, choices=[('credit_card', 'Credit Card'), ('paypal', 'PayPal'), ('cash', 'Cash')])  # Adding choices for payment method
+    payment_method = models.CharField(max_length=50, choices=[('credit_card', 'Credit Card'), ('paypal', 'PayPal'), ('cash', 'Cash')])
     booking_date = models.DateTimeField(auto_now_add=True)
     confirmation_status = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'package_bookings'  # Explicit table name
-        ordering = ['-booking_date']  # Default ordering by booking date (latest first)
+        ordering = ['-booking_date']
 
     def __str__(self):
         return f"{self.user.username} - {self.package_name} - {self.booking_date.strftime('%Y-%m-%d %H:%M')}"
-    
+
+
+# Booking Package Model
 class Bookingpackage(models.Model):
     PAYMENT_CHOICES = [
         ('credit_card', 'Credit Card'),
@@ -108,27 +86,17 @@ class Bookingpackage(models.Model):
     booking_date = models.DateTimeField(default=timezone.now, editable=False)
     check_in_date = models.DateField(null=True, blank=True)
     check_out_date = models.DateField(null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name} - {self.package}"
+    num_rooms = models.IntegerField(default=1)
+    food_preference = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         ordering = ['-booking_date']
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.package}"
+
     def save(self, *args, **kwargs):
         if not self.id:
-            self.booking_date = timezone.now()
+            self.booking_date = timezone.now()  # Automatically set the booking date
         return super(Bookingpackage, self).save(*args, **kwargs)
 
-
-
-
-
-class EmailVerification(models.Model):
-    user = models.ForeignKey(UserDB, on_delete=models.CASCADE)
-    otp = models.CharField(max_length=6)
-    created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField()
-
-    def is_valid(self):
-        return timezone.now() <= self.expires_at
