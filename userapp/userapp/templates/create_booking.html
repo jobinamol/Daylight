@@ -1,0 +1,321 @@
+{% extends 'userindex.html' %}
+{% load static %}
+
+{% block content %}
+<div class="hero-wrap" style="background-image: url('{{ package.image.url }}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <h1 class="mb-0 bread">Book {{ package.name }}</h1>
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span>
+                    <span>Booking</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow border-0">
+                    <div class="card-body p-5">
+                        <h2 class="text-center mb-4">Book Your Dream Package</h2>
+                        <div class="progress mb-4">
+                            <div class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Step 1</div>
+                        </div>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <form id="bookingForm" action="{% url 'booking_view' package.id %}" method="POST">
+                            {% csrf_token %}
+                            
+                            <div class="tab-content" id="bookingTabContent">
+                                <!-- Step 1: Personal Information -->
+                                <div class="tab-pane fade show active" id="personal-info" role="tabpanel">
+                                    <h3 class="mb-4">Personal Information</h3>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="first_name">First Name</label>
+                                            <input type="text" class="form-control" id="first_name" name="first_name" required value="{{ request.session.booking_info.first_name|default:'' }}">
+                                            <div class="invalid-feedback">Please enter your first name.</div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="last_name">Last Name</label>
+                                            <input type="text" class="form-control" id="last_name" name="last_name" required value="{{ request.session.booking_info.last_name|default:'' }}">
+                                            <div class="invalid-feedback">Please enter your last name.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" id="email" name="email" required value="{{ request.session.booking_info.email|default:'' }}">
+                                            <div class="invalid-feedback">Please enter a valid email address.</div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="phone">Phone</label>
+                                            <input type="tel" class="form-control" id="phone" name="phone" required value="{{ request.session.booking_info.phone|default:'' }}">
+                                            <div class="invalid-feedback">Please enter your phone number.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Step 2: Booking Details -->
+                                <div class="tab-pane fade" id="booking-details" role="tabpanel">
+                                    <h3 class="mb-4">Booking Details</h3>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="num_adults">Number of Adults</label>
+                                            <input type="number" class="form-control" id="num_adults" name="num_adults" min="1" required value="{{ request.session.booking_info.num_adults|default:'' }}">
+                                            <div class="invalid-feedback">Please enter the number of adults.</div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="num_children">Number of Children</label>
+                                            <input type="number" class="form-control" id="num_children" name="num_children" min="0" required value="{{ request.session.booking_info.num_children|default:'0' }}">
+                                            <div class="invalid-feedback">Please enter the number of children.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="num_rooms">Number of Rooms</label>
+                                        <input type="number" class="form-control" id="num_rooms" name="num_rooms" min="1" required value="{{ request.session.booking_info.num_rooms|default:'' }}">
+                                        <div class="invalid-feedback">Please enter the number of rooms.</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="food_preference">Food Preference</label>
+                                        <select name="food_preference" id="food_preference" class="form-control" required>
+                                            <option value="">Select Food Preference</option>
+                                            <option value="veg" {% if request.session.booking_info.food_preference == 'veg' %}selected{% endif %}>Vegetarian</option>
+                                            <option value="non-veg" {% if request.session.booking_info.food_preference == 'non-veg' %}selected{% endif %}>Non-Vegetarian</option>
+                                        </select>
+                                        <div class="invalid-feedback">Please select a food preference.</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Step 3: Payment -->
+                                <div class="tab-pane fade" id="payment" role="tabpanel">
+                                    <h3 class="mb-4">Payment</h3>
+                                    <div class="form-group">
+                                        <label>Select Payment Method</label>
+                                        <div class="payment-options">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="payment_method" id="bank_transfer" value="bank_transfer" required {% if request.session.booking_info.payment_method == 'bank_transfer' %}checked{% endif %}>
+                                                <label class="form-check-label" for="bank_transfer">
+                                                    <i class="fas fa-university"></i> Bank Transfer
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card" required {% if request.session.booking_info.payment_method == 'credit_card' %}checked{% endif %}>
+                                                <label class="form-check-label" for="credit_card">
+                                                    <i class="far fa-credit-card"></i> Credit Card
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="payment_method" id="debit_card" value="debit_card" required {% if request.session.booking_info.payment_method == 'debit_card' %}checked{% endif %}>
+                                                <label class="form-check-label" for="debit_card">
+                                                    <i class="fas fa-credit-card"></i> Debit Card
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="payment_method" id="upi" value="upi" required {% if request.session.booking_info.payment_method == 'upi' %}checked{% endif %}>
+                                                <label class="form-check-label" for="upi">
+                                                    <i class="fas fa-mobile-alt"></i> UPI
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="invalid-feedback">Please select a payment method.</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="total_amount">Total Amount</label>
+                                        <input type="text" class="form-control" id="total_amount" name="total_amount" readonly>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-block mt-4" id="payNowBtn" onclick="processPayment()">Pay Now</button>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="button" class="btn btn-secondary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                                <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .progress {
+        height: 5px;
+    }
+    .progress-bar {
+        background-color: #4CAF50;
+    }
+    .card {
+        border-radius: 15px;
+    }
+    .form-control {
+        border-radius: 20px;
+    }
+    .btn {
+        border-radius: 20px;
+        padding: 10px 20px;
+    }
+    .btn-primary {
+        background-color: #4CAF50;
+        border-color: #4CAF50;
+    }
+    .btn-primary:hover {
+        background-color: #45a049;
+        border-color: #45a049;
+    }
+    .payment-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .payment-options .form-check {
+        flex-basis: calc(50% - 15px);
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding: 15px;
+        transition: all 0.3s ease;
+    }
+    .payment-options .form-check:hover {
+        background-color: #e9ecef;
+    }
+    .payment-options .form-check-input {
+        margin-top: 0.3rem;
+    }
+    .payment-options .form-check-label {
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+    }
+    .payment-options .form-check-label i {
+        font-size: 1.5rem;
+        margin-right: 10px;
+    }
+    #payNowBtn {
+        font-size: 1.1rem;
+        padding: 12px 20px;
+    }
+</style>
+
+<script>
+    var currentTab = 0;
+    showTab(currentTab);
+
+    function showTab(n) {
+        var x = document.getElementsByClassName("tab-pane");
+        x[n].classList.add("show", "active");
+        if (n == 0) {
+            document.getElementById("prevBtn").style.display = "none";
+        } else {
+            document.getElementById("prevBtn").style.display = "inline";
+        }
+        if (n == (x.length - 1)) {
+            document.getElementById("nextBtn").style.display = "none";
+            document.getElementById("payNowBtn").style.display = "block";
+        } else {
+            document.getElementById("nextBtn").style.display = "inline";
+            document.getElementById("payNowBtn").style.display = "none";
+        }
+        updateProgressBar(n);
+        updateTotalAmount();
+    }
+
+    function nextPrev(n) {
+        var x = document.getElementsByClassName("tab-pane");
+        if (n == 1 && !validateForm()) return false;
+        x[currentTab].classList.remove("show", "active");
+        currentTab += n;
+        if (currentTab >= x.length) {
+            return false;
+        }
+        showTab(currentTab);
+    }
+
+    function validateForm() {
+        var x, y, i, valid = true;
+        x = document.getElementsByClassName("tab-pane");
+        y = x[currentTab].getElementsByTagName("input");
+        for (i = 0; i < y.length; i++) {
+            if (y[i].value == "" && y[i].hasAttribute('required')) {
+                y[i].classList.add("is-invalid");
+                valid = false;
+            } else {
+                y[i].classList.remove("is-invalid");
+            }
+        }
+        // Validate select elements
+        var selects = x[currentTab].getElementsByTagName("select");
+        for (i = 0; i < selects.length; i++) {
+            if (selects[i].value == "" && selects[i].hasAttribute('required')) {
+                selects[i].classList.add("is-invalid");
+                valid = false;
+            } else {
+                selects[i].classList.remove("is-invalid");
+            }
+        }
+        if (!valid) {
+            alert("Please fill in all required fields.");
+        }
+        return valid;
+    }
+
+    function updateProgressBar(n) {
+        var progress = document.querySelector('.progress-bar');
+        var percentage = ((n + 1) / 3) * 100;
+        progress.style.width = percentage + '%';
+        progress.setAttribute('aria-valuenow', percentage);
+        progress.innerHTML = 'Step ' + (n + 1);
+    }
+
+    function updateTotalAmount() {
+        var numAdults = document.getElementById("num_adults").value || 0;
+        var numChildren = document.getElementById("num_children").value || 0;
+        var numRooms = document.getElementById("num_rooms").value || 0;
+        var packagePrice = {{ package.price }};
+
+        var totalAmount = (parseInt(numAdults) + (parseInt(numChildren) * 0.5)) * parseFloat(packagePrice) * parseInt(numRooms);
+        document.getElementById("total_amount").value = totalAmount.toFixed(2);
+    }
+
+    function processPayment() {
+        if (!validateForm()) {
+            return false;
+        }
+
+        var selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked');
+        if (!selectedPaymentMethod) {
+            alert("Please select a payment method.");
+            return false;
+        }
+
+        var totalAmount = document.getElementById("total_amount").value;
+        
+        // Here you would typically integrate with a payment gateway
+        // For this example, we'll just show an alert and submit the form
+        alert("Processing payment of ₹" + totalAmount + " via " + selectedPaymentMethod.value);
+        document.getElementById("bookingForm").submit();
+    }
+
+    // Add event listeners to update total amount when inputs change
+    document.getElementById("num_adults").addEventListener("change", updateTotalAmount);
+    document.getElementById("num_children").addEventListener("change", updateTotalAmount);
+    document.getElementById("num_rooms").addEventListener("change", updateTotalAmount);
+</script>
+{% endblock %}

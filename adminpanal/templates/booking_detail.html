@@ -1,0 +1,34 @@
+{% extends 'userindex.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Booking Details</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Booking Reference: {{ booking.booking_reference }}</h5>
+            <p class="card-text"><strong>Package:</strong> {{ booking.package.name }}</p>
+            <p class="card-text"><strong>Date:</strong> {{ booking.date }}</p>
+            <p class="card-text"><strong>Status:</strong> {{ booking.get_status_display }}</p>
+            <p class="card-text"><strong>Total Price:</strong> ₹{{ booking.total_price }}</p>
+            <p class="card-text"><strong>Number of Adults:</strong> {{ booking.num_adults }}</p>
+            <p class="card-text"><strong>Number of Children:</strong> {{ booking.num_children }}</p>
+            <p class="card-text"><strong>Food Preference:</strong> {{ booking.get_food_preference_display }}</p>
+            <p class="card-text"><strong>Special Requests:</strong> {{ booking.special_requests|default:"None" }}</p>
+            {% if booking.addons.exists %}
+            <p class="card-text"><strong>Addons:</strong> {{ booking.addons.all|join:", " }}</p>
+            {% endif %}
+            <p class="card-text"><strong>Payment Status:</strong> {{ booking.get_payment_status_display }}</p>
+            {% if booking.cancellation_date %}
+            <p class="card-text"><strong>Cancellation Date:</strong> {{ booking.cancellation_date }}</p>
+            {% endif %}
+        </div>
+        <div class="card-footer">
+            {% if booking.can_be_cancelled %}
+            <a href="{% url 'cancel_booking' booking.booking_reference %}" class="btn btn-danger">Cancel Booking</a>
+            {% endif %}
+            <a href="{% url 'booking_history' %}" class="btn btn-secondary">Back to Booking History</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

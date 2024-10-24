@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Package Bookings</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Package Bookings</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Package Name</th>
+                <th>Number of Adults</th>
+                <th>Payment Method</th>
+                <th>Booking Date</th>
+                <th>Confirmation Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.user.username }}</td>
+                    <td>{{ booking.package_name }}</td>
+                    <td>{{ booking.number_of_adults }}</td>
+                    <td>{{ booking.get_payment_method_display }}</td>
+                    <td>{{ booking.booking_date|date:"Y-m-d H:i" }}</td>
+                    <td>{{ booking.confirmation_status|yesno:"Confirmed,Pending" }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">No bookings available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

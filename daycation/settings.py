@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',  # Required for allauth
+    'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -50,9 +50,10 @@ INSTALLED_APPS = [
     'reservations',
     'bookings',
     'social_django',
-
-
 ]
+
+# Add this line to specify the custom user model
+AUTH_USER_MODEL = 'userapp.UserDB'
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -82,10 +83,10 @@ REDIRECT_URIS = [
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # Authentication Backends
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',  # default
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
-)
+]
 
 
 # Redirect settings
@@ -96,8 +97,15 @@ LOGOUT_REDIRECT_URL = 'home'  # Redirect after logout
 
 # Allauth settings
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_ADAPTER = 'userapp.adapters.CustomSocialAccountAdapter'
+
+LOGIN_REDIRECT_URL = '/userindex/'  # Adjust this to your desired redirect URL after login
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
 # Google OAuth2 configuration for Django Allauth
 
@@ -187,17 +195,17 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': 'debug.log',
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'DEBUG',
     },
 }

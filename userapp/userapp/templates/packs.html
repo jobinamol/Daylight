@@ -1,0 +1,332 @@
+{% extends 'home.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+    .hero-wrap {
+        background-attachment: fixed;
+        height: 400px;
+        position: relative;
+    }
+    .hero-wrap .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+    }
+    .hero-wrap h1 {
+        font-size: 3.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        color: #fff;
+    }
+    .categories-section {
+        margin-top: -50px;
+        position: relative;
+        z-index: 10;
+    }
+    .categories-slider {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding: 20px 0;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .categories-slider::-webkit-scrollbar {
+        display: none;
+    }
+    .category-item {
+        flex: 0 0 auto;
+        width: 120px;
+        margin-right: 15px;
+        text-align: center;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 15px 10px;
+    }
+    .category-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    .category-image {
+        width: 60px;
+        height: 60px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        border: 3px solid #f8f9fa;
+    }
+    .category-item h5 {
+        font-size: 0.9rem;
+        margin-top: 5px;
+        color: #333;
+    }
+    .sidebar-wrap {
+        position: sticky;
+        top: 20px;
+    }
+    .package-card {
+        height: 100%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .package-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .btn-view-details {
+        background-color: #27ae60;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-view-details:hover {
+        background-color: #229954;
+        color: #fff;
+    }
+    .pagination {
+        justify-content: center;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #27ae60;
+        border-color: #27ae60;
+    }
+    .pagination .page-link {
+        color: #27ae60;
+    }
+    .package-features {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .package-features li {
+        margin-bottom: 5px;
+    }
+    .package-features i {
+        width: 20px;
+        text-align: center;
+        margin-right: 5px;
+        color: #27ae60;
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <div class="text">
+                    <h1 class="mb-4 bread">Discover Our Staycation Packages</h1>
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span>
+                        <span>Packages</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<section class="ftco-section bg-light">
+    <div class="container">
+        <!-- Categories Section -->
+        <div class="categories-section">
+            <div class="categories-slider">
+                <!-- "All" Category -->
+                <div class="category-item">
+                    <a href="{% url 'packs' %}" class="{% if not selected_category %}active{% endif %}">
+                        <div class="category-image" style="background-color: #27ae60; display: flex; align-items: center; justify-content: center;">
+                            <i class="fa fa-th" style="color: white; font-size: 24px;"></i>
+                        </div>
+                        <h5>All</h5>
+                    </a>
+                </div>
+
+                <!-- Dynamic Categories -->
+                {% for category in categories %}
+                    <div class="category-item">
+                        <a href="?category={{ category.id }}" class="{% if selected_category == category.id|stringformat:'s' %}active{% endif %}">
+                            {% if category.image %}
+                                <div class="category-image" style="background-image: url('{{ category.image.url }}');"></div>
+                            {% else %}
+                                <div class="category-image" style="background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                                    <span>{{ category.name|first }}</span>
+                                </div>
+                            {% endif %}
+                            <h5>{{ category.name }}</h5>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <!-- Sidebar: Filters -->
+            <div class="col-md-3">
+                <form id="filterForm" method="GET" action="{% url 'packs' %}">
+                    {% if selected_category %}
+                        <input type="hidden" name="category" value="{{ selected_category }}">
+                    {% endif %}
+                    <div class="sidebar-wrap bg-white p-4 shadow-sm rounded">
+                        <h3 class="heading mb-4">Refine Your Search</h3>
+                        
+                        <!-- Search bar -->
+                        <div class="form-group">
+                            <label for="search">Search Packages</label>
+                            <input type="text" name="search" id="search" class="form-control" placeholder="Enter keywords" value="{{ search_query }}">
+                        </div>
+                        
+                        <!-- Filter by Price -->
+                        <div class="form-group">
+                            <label for="price_range">Price Range</label>
+                            <select name="price_range" id="price_range" class="form-control">
+                                <option value="">Any Price</option>
+                                <option value="0-3000" {% if price_range == '0-3000' %}selected{% endif %}>Up to ₹3000</option>
+                                <option value="3000-10000" {% if price_range == '3000-10000' %}selected{% endif %}>₹3000 - ₹10000</option>
+                                <option value="10000-100000" {% if price_range == '10000-100000' %}selected{% endif %}>₹10000 - ₹100000</option>
+                                <option value="100000-" {% if price_range == '100000-' %}selected{% endif %}>₹100000 and above</option>
+                            </select>
+                        </div>
+
+                        <!-- Filter by Days -->
+                        <div class="form-group">
+                            <label for="days">Duration (Days)</label>
+                            <select name="days" id="days" class="form-control">
+                                <option value="">Any Duration</option>
+                                <option value="1" {% if days == '1' %}selected{% endif %}>1 Day</option>
+                                <option value="2" {% if days == '2' %}selected{% endif %}>2 Days</option>
+                                <option value="3" {% if days == '3' %}selected{% endif %}>3 Days</option>
+                                <option value="4" {% if days == '4' %}selected{% endif %}>4 Days</option>
+                                <option value="5+" {% if days == '5+' %}selected{% endif %}>5+ Days</option>
+                            </select>
+                        </div>
+
+                        <!-- Filter by Rating -->
+                        <div class="form-group">
+                            <label for="rating">Minimum Rating</label>
+                            <select name="rating" id="rating" class="form-control">
+                                <option value="">Any Rating</option>
+                                <option value="5" {% if rating == '5' %}selected{% endif %}>5 Stars</option>
+                                <option value="4" {% if rating == '4' %}selected{% endif %}>4 Stars & Up</option>
+                                <option value="3" {% if rating == '3' %}selected{% endif %}>3 Stars & Up</option>
+                                <option value="2" {% if rating == '2' %}selected{% endif %}>2 Stars & Up</option>
+                                <option value="1" {% if rating == '1' %}selected{% endif %}>1 Star & Up</option>
+                            </select>
+                        </div>
+
+                        <!-- Filter by Activity -->
+                        <div class="form-group">
+                            <label for="activity">Activity</label>
+                            <select name="activity" id="activity" class="form-control">
+                                <option value="">Any Activity</option>
+                                {% for activity in activities %}
+                                    <option value="{{ activity.id }}" {% if selected_activity == activity.id|stringformat:'s' %}selected{% endif %}>{{ activity.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-group mb-0">
+                            <button type="submit" class="btn btn-primary py-2 px-4 w-100">
+                                <i class="fa fa-filter mr-2"></i>Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Packages Section -->
+            <div class="col-md-9">
+                {% if no_results %}
+                    <div class="alert alert-info" role="alert">
+                        <i class="fa fa-info-circle mr-2"></i>No packages found matching your criteria. Please try different filters.
+                    </div>
+                {% elif not packages %}
+                    <div class="alert alert-info" role="alert">
+                        <i class="fa fa-info-circle mr-2"></i>No packages available at the moment.
+                    </div>
+                {% else %}
+                    <div class="row">
+                        {% for package in packages %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="package-card card shadow-sm border-0">
+                                <img src="{% if package.image %}{{ package.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}" 
+                                     alt="{{ package.name }}" 
+                                     class="card-img-top" style="height: 200px; object-fit: cover;">
+                                <div class="card-body d-flex flex-column">
+                                    <h3 class="card-title h5 mb-3">{{ package.name }}</h3>
+                                    <p class="card-text text-muted mb-3">{{ package.description|truncatewords:20 }}</p>
+                                    <ul class="package-features mb-3">
+                                        <li><i class="fas fa-dollar-sign"></i> ₹{{ package.price }}</li>
+                                        <li><i class="fas fa-calendar"></i> {{ package.duration }}</li>
+                                        <li><i class="fas fa-star" style="color: #f1c40f;"></i> {{ package.rating }} / 5</li>
+                                        <li><i class="fas fa-bed"></i> {{ package.rooms.all|join:", " }}</li>
+                                    </ul>
+                                    <a href="{% url 'package_details' package.id %}" class="btn btn-view-details mt-auto">
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pagination -->
+<div class="row mt-5">
+    <div class="col text-center">
+        <nav aria-label="Page navigation">
+            {% if is_paginated %}
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for page in page_obj.paginator.page_range %}
+                        {% if page == page_obj.number %}
+                            <li class="page-item active"><span class="page-link">{{ page }}</span></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </nav>
+    </div>
+</div>
+
+<script>
+document.getElementById('filterForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var form = this;
+    var url = new URL(form.action);
+    var formData = new FormData(form);
+    for (var pair of formData.entries()) {
+        if (pair[1]) {
+            url.searchParams.append(pair[0], pair[1]);
+        }
+    }
+    window.location.href = url.toString();
+});
+</script>
+
+{% endblock %}

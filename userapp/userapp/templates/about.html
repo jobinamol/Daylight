@@ -1,0 +1,294 @@
+{% extends 'userindex.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+                <div class="text">
+                    <p class="breadcrumbs mb-2"><span class="mr-2"><a href="{% url 'userdashboard' %}">Home</a></span> <span>About</span></p>
+                    <h1 class="mb-4 bread">About Daylight Resort</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section ftc-no-pb ftc-no-pt">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 p-md-5 img img-2 d-flex justify-content-center align-items-center" 
+                 style="background-image: url('{% static 'images/aboutpic.jpg' %}');">
+            </div>
+            <div class="col-md-7 py-5 wrap-about pb-md-5 ftco-animate">
+                <div class="heading-section heading-section-wo-line pt-md-5 pl-md-5 mb-5">
+                    <div class="ml-md-0">
+                        <span class="subheading">Welcome to Daylight</span>
+                        <h2 class="mb-4">Your Perfect Daycation & Staycation Destination</h2>
+                    </div>
+                </div>
+                <div class="pb-md-5">
+                    <p>Welcome to Daylight Resort! Experience a refreshing escape with our unique daycation and staycation packages designed for relaxation, family fun, adventure, luxury, corporate retreats, and student experiences.</p>
+                    <p>Our offerings include:</p>
+                    <ul class="list-unstyled">
+                        <li><i class="icon-check mr-2"></i>Daycation packages for short, luxurious escapes</li>
+                        <li><i class="icon-check mr-2"></i>Staycation options for extended, indulgent stays</li>
+                        <li><i class="icon-check mr-2"></i>Relaxation packages with spa treatments</li>
+                        <li><i class="icon-check mr-2"></i>Family-friendly activities and adventures</li>
+                        <li><i class="icon-check mr-2"></i>Gourmet dining experiences</li>
+                        <li><i class="icon-check mr-2"></i>State-of-the-art fitness facilities</li>
+                    </ul>
+                    <p class="mt-4">Whether you're looking to unwind for a day or enjoy an extended stay, we have the perfect package for you. Join us for a memorable experience where you can leave your worries behind and embrace joy, relaxation, and adventure.</p>
+                    <p><strong>Book your daycation or staycation today and redefine your getaway!</strong></p>
+                    <ul class="ftco-social d-flex mt-4">
+                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-google-plus"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-7 text-center">
+                <h2 class="mb-4 section-title">Our Luxurious Packages</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 ftco-animate">
+                <div class="package-card">
+                    <img src="{% static 'images/about1.jpg' %}" alt="Daycation Package" class="img-fluid">
+                    <div class="package-content">
+                        <h3>Daycation Packages</h3>
+                        <ul>
+                            <li>Full day access to resort facilities</li>
+                            <li>Luxurious spa treatments</li>
+                            <li>Gourmet dining experience</li>
+                            <li>Recreational activities</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 ftco-animate">
+                <div class="package-card">
+                    <img src="{% static 'images/staycation.webp' %}" alt="Staycation Package" class="img-fluid">
+                    <div class="package-content">
+                        <h3>Staycation Packages</h3>
+                        <ul>
+                            <li>Luxurious overnight accommodations</li>
+                            <li>All-inclusive meals</li>
+                            <li>Extended amenity access</li>
+                            <li>Special evening entertainment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-7 text-center">
+                <h2 class="mb-4 section-title">Your Daylight Experience</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 ftco-animate">
+                <div class="experience-card">
+                    <div class="card-icon">
+                        <i class="icon-sun-o"></i>
+                    </div>
+                    <h3>Daycation Guide</h3>
+                    <ol>
+                        <li>Choose your package online</li>
+                        <li>Select your preferred date</li>
+                        <li>Arrive and check-in (9 AM - 11 AM)</li>
+                        <li>Enjoy resort facilities until 6 PM</li>
+                        <li>Pre-book spa treatments & activities</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="col-md-6 ftco-animate">
+                <div class="experience-card">
+                    <div class="card-icon">
+                        <i class="icon-moon-o"></i>
+                    </div>
+                    <h3>Staycation Guide</h3>
+                    <ol>
+                        <li>Select package and dates online</li>
+                        <li>Complete booking process</li>
+                        <li>Check-in at 2 PM (early check-in available)</li>
+                        <li>Enjoy full resort access during your stay</li>
+                        <li>Check-out by 12 PM (late check-out option)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-12 ftco-animate">
+                <div class="important-notes">
+                    <h3>Important Notes</h3>
+                    <ul>
+                        <li>Advance reservations recommended</li>
+                        <li>Bring valid ID for check-in</li>
+                        <li>Outside food not permitted</li>
+                        <li>Inform us of special requests in advance</li>
+                        <li>Check cancellation policy when booking</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+                <h2 class="mb-4">Why Choose Daylight Resort</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services d-block text-center">
+                    <div class="d-flex justify-content-center"><div class="icon"><span class="flaticon-reception-bell"></span></div></div>
+                    <div class="media-body p-2 mt-3">
+                        <h3 class="heading">Personalized Service</h3>
+                        <p>Experience top-notch, personalized service throughout your stay.</p>
+                    </div>
+                </div>      
+            </div>
+            <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services d-block text-center">
+                    <div class="d-flex justify-content-center"><div class="icon"><span class="flaticon-serving-dish"></span></div></div>
+                    <div class="media-body p-2 mt-3">
+                        <h3 class="heading">Gourmet Cuisine</h3>
+                        <p>Indulge in exquisite meals prepared by our expert chefs.</p>
+                    </div>
+                </div>    
+            </div>
+            <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services d-block text-center">
+                    <div class="d-flex justify-content-center"><div class="icon"><span class="flaticon-car"></span></div></div>
+                    <div class="media-body p-2 mt-3">
+                        <h3 class="heading">Easy Accessibility</h3>
+                        <p>Conveniently located for a quick and easy getaway.</p>
+                    </div>
+                </div>      
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        color: #1a73e8;
+        position: relative;
+        padding-bottom: 15px;
+    }
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 2px;
+        background-color: #1a73e8;
+    }
+    .package-card {
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+    .package-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+    .package-content {
+        padding: 20px;
+    }
+    .package-content h3 {
+        color: #1a73e8;
+        margin-bottom: 15px;
+    }
+    .package-content ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .package-content ul li {
+        margin-bottom: 10px;
+        position: relative;
+        padding-left: 25px;
+    }
+    .package-content ul li::before {
+        content: '\2022';
+        color: #1a73e8;
+        font-size: 1.5em;
+        position: absolute;
+        left: 0;
+        top: -5px;
+    }
+    .experience-card {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        height: 100%;
+    }
+    .card-icon {
+        font-size: 3em;
+        color: #1a73e8;
+        margin-bottom: 20px;
+    }
+    .experience-card h3 {
+        color: #1a73e8;
+        margin-bottom: 20px;
+    }
+    .experience-card ol {
+        padding-left: 20px;
+    }
+    .experience-card ol li {
+        margin-bottom: 10px;
+    }
+    .important-notes {
+        background: #e9ecef;
+        border-radius: 10px;
+        padding: 30px;
+    }
+    .important-notes h3 {
+        color: #1a73e8;
+        margin-bottom: 20px;
+    }
+    .important-notes ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .important-notes ul li {
+        margin-bottom: 10px;
+        position: relative;
+        padding-left: 25px;
+    }
+    .important-notes ul li::before {
+        content: '\2713';
+        color: #1a73e8;
+        position: absolute;
+        left: 0;
+    }
+</style>
+{% endblock %}

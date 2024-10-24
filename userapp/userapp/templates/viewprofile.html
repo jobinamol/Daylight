@@ -1,0 +1,126 @@
+{% extends 'userindex.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+    .profile-header {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        height: 300px;
+        position: relative;
+        overflow: hidden;
+    }
+    .profile-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('{% static 'images/profile-bg.jpeg' %}') center/cover no-repeat;
+        opacity: 0.2;
+    }
+    .profile-img {
+        width: 150px;
+        height: 150px;
+        border: 5px solid #fff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+    .profile-img:hover {
+        transform: scale(1.05);
+    }
+    .profile-card {
+        margin-top: -100px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .info-item {
+        transition: background-color 0.3s ease;
+        border-radius: 8px;
+        padding: 15px;
+    }
+    .info-item:hover {
+        background-color: #f8f9fa;
+    }
+    .btn-edit {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        border: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .btn-edit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(37, 117, 252, 0.2);
+    }
+    .btn-back {
+        transition: transform 0.3s ease;
+    }
+    .btn-back:hover {
+        transform: translateX(-5px);
+    }
+</style>
+
+<div class="profile-header d-flex align-items-center justify-content-center">
+    <h1 class="text-white font-weight-bold position-relative">User Profile</h1>
+</div>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="profile-card p-4">
+                <div class="text-center mb-4">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="Profile Image" class="profile-img rounded-circle mb-3">
+                    {% else %}
+                        <img src="{% static 'default.jpg' %}" alt="Default Profile Image" class="profile-img rounded-circle mb-3">
+                    {% endif %}
+                    <h2 class="mb-0">{{ user.name }}</h2>
+                    <p class="text-muted">@{{ user.username }}</p>
+                    <a href="{% url 'edit_profile' %}" class="btn btn-edit text-white px-4 py-2 mt-2">Edit Profile</a>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="info-item">
+                            <h5 class="text-muted mb-1">Email</h5>
+                            <p class="mb-0 font-weight-bold">{{ user.emailid }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-item">
+                            <h5 class="text-muted mb-1">Mobile</h5>
+                            <p class="mb-0 font-weight-bold">{{ user.mobilenumber }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-item">
+                            <h5 class="text-muted mb-1">District</h5>
+                            <p class="mb-0 font-weight-bold">{{ user.district }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-item">
+                            <h5 class="text-muted mb-1">Age</h5>
+                            <p class="mb-0 font-weight-bold">{{ user.age }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-item">
+                            <h5 class="text-muted mb-1">Gender</h5>
+                            <p class="mb-0 font-weight-bold">{{ user.sex }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <a href="{% url 'userindex' %}" class="btn btn-back btn-outline-secondary">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+{% endblock %}

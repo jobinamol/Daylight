@@ -717,14 +717,35 @@ def booking_view(request, package_id):
 
     return render(request, 'book_package.html', context)
 
+@login_required
 def booking_history(request):
-    """Display booking history for authenticated users"""
     if request.user.is_authenticated:
         bookings = DaycationBooking.objects.filter(user=request.user).order_by('-created_at')
     else:
-        bookings = []
-
-    return render(request, 'booking_history.html', {'bookings': bookings})
+        booking_reference = request.session.get('booking_reference')
+        if booking_reference:
+            bookings = DaycationBooking.objects.filter(booking_reference=booking_reference).order_by('-created_at')
+        else:
+            bookings = DaycationBooking.objects.none()
+    
+    query = request.GET.get('q')
+    if query:
+        bookings = bookings.filter(
+            Q(booking_reference__icontains=query) |
+            Q(package__name__icontains=query) |
+            Q(status__icontains=query)
+        )
+    
+    paginator = Paginator(bookings, 10)  # Show 10 bookings per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'page_obj': page_obj,
+        'query': query,
+        'user': request.user,
+    }
+    return render(request, 'booking_history.html', context)
 
 def booking_confirmation(request, booking_id):
     """Display booking confirmation details"""
@@ -765,6 +786,73 @@ def verify_payment(request):
         except Exception as e:
             return JsonResponse({'status': 'fail', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'fail', 'message': 'Invalid request method'}, status=405)
+
+@require_POST
+def cancel_booking(request, booking_id):
+    booking = get_object_or_404(DaycationBooking, id=booking_id, user=request.user)
+    
+    if booking.cancel_and_refund():
+        messages.success(request, 'Booking successfully cancelled. Refund has been initiated.')
+    else:
+        messages.error(request, 'Booking cannot be cancelled or refund failed.')
+
+    return redirect('booking_history')
+
+def check_booking(request):
+    if request.method == 'POST':
+        booking_reference = request.POST.get('booking_reference')
+        if booking_reference:
+            booking = DaycationBooking.objects.filter(booking_reference=booking_reference).first()
+            if booking:
+                request.session['booking_reference'] = booking_reference
+                return redirect('booking_history')
+            else:
+                messages.error(request, 'No booking found with that reference.')
+        else:
+            messages.error(request, 'Please enter a booking reference.')
+    return redirect('booking_history')
+
+def booking_detail(request, booking_reference):
+    booking = get_object_or_404(DaycationBooking, booking_reference=booking_reference)
+    return render(request, 'booking_detail.html', {'booking': booking})
+
+def cancel_booking(request, booking_reference):
+    booking = get_object_or_404(DaycationBooking, booking_reference=booking_reference)
+    if booking.can_be_cancelled:
+        if booking.cancel_and_refund():
+            messages.success(request, "Booking cancelled successfully. Refund initiated.")
+        else:
+            messages.error(request, "Unable to cancel booking. Please contact support.")
+    else:
+        messages.error(request, "This booking cannot be cancelled.")
+    return redirect('booking_history')
+
+def check_booking(request):
+    if request.method == 'POST':
+        booking_reference = request.POST.get('booking_reference')
+        if booking_reference:
+            booking = DaycationBooking.objects.filter(booking_reference=booking_reference).first()
+            if booking:
+                request.session['booking_reference'] = booking_reference
+                return redirect('booking_detail', booking_reference=booking_reference)
+            else:
+                messages.error(request, 'No booking found with that reference.')
+        else:
+            messages.error(request, 'Please enter a booking reference.')
+    return redirect('booking_history')
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,128 @@
+{% extends 'userindex.html' %}
+{% load static %}
+
+{% block content %}
+<div class="hero-wrap" style="background-image: url('{{ package.image.url }}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <div class="text">
+                    <h1 class="mb-4 bread">{{ package.name }}</h1>
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span>
+                        <span class="mr-2"><a href="{% url 'packs' %}">Packages</a></span>
+                        <span>Package Details</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title mb-4" style="color: #2c3e50; font-weight: bold;">{{ package.name }}</h2>
+                        <p class="lead">{{ package.description }}</p>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h4>Package Includes:</h4>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-bed mr-2"></i>Accommodation</li>
+                                    <li><i class="fas fa-utensils mr-2"></i>Meals</li>
+                                    <li><i class="fas fa-hiking mr-2"></i>Activities</li>
+                                    <!-- Add more inclusions as needed -->
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Complimentaries:</h4>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-wifi mr-2"></i>Free Wi-Fi</li>
+                                    <li><i class="fas fa-swimming-pool mr-2"></i>Pool Access</li>
+                                    <li><i class="fas fa-parking mr-2"></i>Free Parking</li>
+                                    <!-- Add more complimentaries as needed -->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h4 class="mt-4">Activities:</h4>
+                        <div class="row">
+                            {% for activity in package.activities.all %}
+                                <div class="col-md-4 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ activity.name }}</h5>
+                                            <p class="card-text">{{ activity.description|truncatewords:20 }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <p>No activities listed for this package.</p>
+                            {% endfor %}
+                        </div>
+
+                        <h4 class="mt-4">Included Room</h4>
+                        <div class="row">
+                            {% for room in package.rooms.all %}
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <img src="{{ room.image.url }}" alt="{{ room.room_type }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ room.room_type }}</h5>
+                                            <p class="card-text">{{ room.description|truncatewords:20 }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <div class="col-12">
+                                    <p>No room information available for this package.</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 mb-4 sticky-top" style="top: 20px;">
+                    <div class="card-body">
+                        <h3 class="card-title mb-4">Package Summary</h3>
+                        <p><strong>Duration:</strong> {{ package.duration }} days</p>
+                        <p><strong>Price:</strong> ₹{{ package.price }} per person</p>
+                        <p><strong>Rating:</strong> 
+                            {% for i in "12345"|make_list %}
+                                {% if forloop.counter <= package.rating %}
+                                    <i class="fas fa-star text-warning"></i>
+                                {% else %}
+                                    <i class="far fa-star text-warning"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <hr>
+                        <h5>Food Included:</h5>
+                        <ul>
+                            {% for meal in package.meals.all %}
+                                <li>{{ meal.name }}</li>
+                            {% empty %}
+                                <li>No meal information available</li>
+                            {% endfor %}
+                        </ul>
+                        <hr>
+                        <form method="POST" action="{% url 'create_booking' package.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="package_id" value="{{ package.id }}">
+                            <input type="hidden" name="price" value="{{ package.price }}">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block py-3">Book Now</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -34,6 +34,9 @@ from decimal import Decimal
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
 import requests
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+import re
 
 # Helper function to convert credentials to a dictionary
 def credentials_to_dict(credentials):
@@ -209,7 +212,7 @@ def userindex(request):
     # Pass session data to the template context
     context = {
         'username': request.session.get('username'),
-        'email': request.session.get('email'),
+        'emailid': request.session.get('emailid'),
         'profile_image': request.session.get('profile_image')
     }
     return render(request, 'userindex.html', context)
@@ -230,7 +233,7 @@ def login_view(request):
         request.session.flush() 
 
         # Check if the user is the admin
-        if username == 'admin' and password == 'admin':
+        if username == 'admin' and password == 'admin':  # In production, use a more secure method
             request.session['user_type'] = 'admin'
             request.session['username'] = 'admin'
             messages.success(request, 'Welcome, Admin!')
@@ -238,7 +241,7 @@ def login_view(request):
         
         # Staff logins with redirection based on username
         staff_credentials = {
-            'frontdesk@gmail.com': ('frontdesk', 'frontdesk_dashboard'),
+            'frontdesk@gmail.com': ('frontdesk', 'userindex'),
             'culinary@gmail.com': ('culinary', 'kitchenstaff_dashboard'),
             'customerservice@gmail.com': ('customerservic', 'guestservice_dashboard'),
             'housekeeping@gmail.com': ('housekeeping', 'housekeep_dashboard'),
@@ -246,42 +249,45 @@ def login_view(request):
 
         # Check if the username is in the staff credentials
         if username in staff_credentials:
-            # Verify the password for the respective staff
-            expected_password = staff_credentials[username][0]  # Get the expected password
-            if password == expected_password:  # Replace with actual password logic if needed
-                request.session['user_type'] = username.split('@')[0]  # Track user type based on email
+            expected_password, redirect_url = staff_credentials[username]
+            if password == expected_password:  # In production, use a more secure method
+                request.session['user_type'] = username.split('@')[0]
                 request.session['username'] = username
                 messages.success(request, f'Welcome, {username.split("@")[0].capitalize()} Service!')
-                return redirect(staff_credentials[username][1])  # Redirect to respective dashboard
+                return redirect(redirect_url)
             else:
                 messages.error(request, 'Invalid username or password.')
                 return redirect('login')
 
         # Check if the user exists in the UserDB (regular user)
-        try:
-            user = UserDB.objects.get(username=username)
-            if check_password(password, user.password):
-                # Check if user already has an active session and clear it
-                _invalidate_user_sessions(user.id, 'user')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            # Check if user already has an active session and clear it
+            _invalidate_user_sessions(user.id, 'user')
 
-                # Start a new session for the user
-                request.session['user_id'] = user.id
-                request.session['username'] = user.username
-                request.session['email'] = user.email  # Changed from emailid to email
-                request.session['profile_image'] = user.profile_image.url
-                request.session['user_type'] = 'user'  # Track the type of user
-                messages.success(request, f'Welcome, {user.name}!')
-                return redirect('userindex')
-            else:
-                messages.error(request, 'Invalid username or password.')
-                return redirect('login')
-        except UserDB.DoesNotExist:
+            # Start a new session for the user
+            login(request, user)
+            request.session['user_id'] = user.id
+            request.session['username'] = user.username
+            request.session['email'] = user.emailid
+            request.session['profile_image'] = user.profile_image.url
+            request.session['user_type'] = 'user'
+            messages.success(request, f'Welcome, {user.name}!')
+            return redirect('userindex')
+        else:
             messages.error(request, 'Invalid username or password.')
-            return redirect('login')
 
     return render(request, 'login.html')
 
-
+def _invalidate_user_sessions(user_id, user_type):
+    """Helper function to invalidate all active sessions for a given user or staff."""
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    for session in sessions:
+        data = session.get_decoded()
+        if user_type == 'user' and data.get('user_id') == user_id:
+            session.delete()
+        elif user_type == 'staff' and data.get('staff_id') == user_id:
+            session.delete()
 
 def _invalidate_user_sessions(user_id, user_type):
     """Helper function to invalidate all active sessions for a given user or staff."""
@@ -298,7 +304,7 @@ def userregister(request):
         name = request.POST.get('name')
         address = request.POST.get('address')
         mobilenumber = request.POST.get('mobilenumber')
-        email = request.POST.get('email')  # Changed from emailid to email
+        email = request.POST.get('email')
         district = request.POST.get('district')
         age = request.POST.get('age')
         sex = request.POST.get('sex')
@@ -306,13 +312,42 @@ def userregister(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        if UserDB.objects.filter(username=username).exists():
-            messages.error(request, 'Username already exists.')
-            return redirect('userregister')
+        # Validation
+        errors = {}
+        if not name or len(name) < 2:
+            errors['name'] = 'Name must be at least 2 characters long.'
+        if not address:
+            errors['address'] = 'Address is required.'
+        if not mobilenumber or not re.match(r'^\+?1?\d{9,15}$', mobilenumber):
+            errors['mobilenumber'] = 'Invalid mobile number.'
+        try:
+            validate_email(email)
+        except ValidationError:
+            errors['email'] = 'Invalid email address.'
+        if not district:
+            errors['district'] = 'District is required.'
+        try:
+            age = int(age)
+            if age < 18 or age > 120:
+                errors['age'] = 'Age must be between 18 and 120.'
+        except ValueError:
+            errors['age'] = 'Invalid age.'
+        if sex not in ['M', 'F', 'O']:
+            errors['sex'] = 'Invalid sex selection.'
+        if not username or len(username) < 4:
+            errors['username'] = 'Username must be at least 4 characters long.'
+        if not password or len(password) < 8:
+            errors['password'] = 'Password must be at least 8 characters long.'
 
-        if UserDB.objects.filter(email=email).exists():  # Changed from emailid to email
-            messages.error(request, 'Email already exists.')
-            return redirect('userregister')
+        if UserDB.objects.filter(username=username).exists():
+            errors['username'] = 'Username already exists.'
+        if UserDB.objects.filter(email=email).exists():
+            errors['email'] = 'Email already exists.'
+
+        if errors:
+            for field, error in errors.items():
+                messages.error(request, f"{field.capitalize()}: {error}")
+            return render(request, 'userregister.html', {'errors': errors})
 
         hashed_password = make_password(password)
 
@@ -327,7 +362,7 @@ def userregister(request):
             name=name,
             address=address,
             mobilenumber=mobilenumber,
-            email=email,  # Changed from emailid to email
+            email=email,
             district=district,
             age=age,
             sex=sex,
@@ -631,4 +666,5 @@ def booking_view(request, package_id):
 def booking_success(request, booking_id):
     booking = get_object_or_404(Bookingpackage, id=booking_id)
     return render(request, 'booking_success.html', {'booking': booking})
+
 

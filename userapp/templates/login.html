@@ -144,6 +144,7 @@
             color: rgba(0, 0, 0, 0.54);
             border: 1px solid #dadce0;
             padding: 0 16px;
+            margin-bottom: 0;
         }
 
         .btn-google:hover {
@@ -248,6 +249,59 @@
             font-weight: 500;
             color: #5f6368;
         }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .success-message {
+            color: #28a745;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .or-divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .or-divider::before,
+        .or-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background-color: #dadce0;
+        }
+
+        .or-divider::before {
+            left: 0;
+        }
+
+        .or-divider::after {
+            right: 0;
+        }
+
+        .or-divider span {
+            display: inline-block;
+            padding: 0 10px;
+            background-color: #ffffff;
+            position: relative;
+            color: #5f6368;
+        }
+
+        form {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -257,44 +311,43 @@
                 <h1>Welcome to Daylight Resort</h1>
                 <p>Experience luxury and tranquility in the heart of nature. Your perfect getaway awaits.</p>
             </div>
-            <span class="back-icon" onclick="window.history.back();"><i class="fas fa-arrow-left"></i> Back</span>
+            <a href="{% url 'home' %}" class="back-icon"><i class="fas fa-arrow-left"></i> Back</a>
         </div>
         <div class="login-section">
             <div class="login-container">
                 <h3>Login</h3>
+                <a href="{% provider_login_url 'google' %}" class="btn btn-google">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">
+                    <span>Sign in with Google</span>
+                </a>
                 
-                {% if form.errors %}
-                    <div class="alert" role="alert">
-                        <ul>
-                            {% for field, errors in form.errors.items %}
-                                {% for error in errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
+                <div class="or-divider">
+                    <span>or</span>
+                </div>
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="{% if message.tags == 'success' %}success-message{% else %}alert{% endif %}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
                 {% endif %}
                 
                 <form method="post" action="{% url 'login' %}">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="username" >Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                        <span id="username-error"></span>
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
+                        <span id="username-error" class="error-message"></span>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                        <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Login</button>
                     </div>
                 </form>
-
-                <a href="{% provider_login_url 'google' %}" class="btn btn-google">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">
-                    <span>Sign in with Google</span>
-                </a>
 
                 <div class="forgot-password">
                     <a href="{% url 'forgot_password' %}">Forgot your password?</a>
@@ -314,15 +367,23 @@
     <script>
         document.getElementById('username').addEventListener('input', function() {
             const username = this.value;
-            document.getElementById('username-error').innerText = '';
-            fetch(`/check_username/?username=${username}`)
+            const errorElement = document.getElementById('username-error');
+            errorElement.innerText = '';
+            if (username.length > 0) {
+                fetch(`{% url 'check_username' %}?username=${encodeURIComponent(username)}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('username-error').innerText = data.message;
+                    errorElement.innerText = data.message || '';
                 })
                 .catch(error => {
                     console.error('Error checking username:', error);
                 });
+            }
         });
     </script>
 </body>

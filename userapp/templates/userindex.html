@@ -165,7 +165,7 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-
+    
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a href="{% url 'userindex' %}" class="nav-link">Home</a></li>
@@ -173,24 +173,32 @@
             <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
             <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
             <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-            {% if request.session.username %}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-user-circle mr-1"></i>{{ request.session.username }}
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-user mr-2"></i>View Profile</a>
-                <a class="dropdown-item" href="{% url 'editprofile' %}"><i class="fas fa-user-edit mr-2"></i>Edit Profile</a>
-                <a class="dropdown-item" href="{% url 'booking_history' %}"><i class="fas fa-history mr-2"></i>Booking History</a>
-                <a class="dropdown-item" href="{% url 'changepassword' %}"><i class="fas fa-key mr-2"></i>Change Password</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
-              </div>
-            </li>
+            
+            {% if user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-user-circle mr-1"></i>
+                  {% if user.get_full_name %}
+                    {{ user.get_full_name }}
+                  {% elif user.email %}
+                    {{ user.email }}
+                  {% else %}
+                    {{ user.username }}
+                  {% endif %}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-user mr-2"></i>View Profile</a>
+                  <a class="dropdown-item" href="{% url 'editprofile' %}"><i class="fas fa-user-edit mr-2"></i>Edit Profile</a>
+                  <a class="dropdown-item" href="{% url 'booking_history' %}"><i class="fas fa-history mr-2"></i>Booking History</a>
+                  <a class="dropdown-item" href="{% url 'changepassword' %}"><i class="fas fa-key mr-2"></i>Change Password</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                </div>
+              </li>
             {% else %}
-            <li class="nav-item">
-              <a href="{% url 'login' %}" class="nav-link btn btn-outline-light ml-lg-3">Login</a>
-            </li>
+              <li class="nav-item">
+                <a href="{% url 'login' %}" class="nav-link btn btn-outline-light ml-lg-3">Login</a>
+              </li>
             {% endif %}
           </ul>
         </div>
