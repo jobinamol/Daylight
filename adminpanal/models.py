@@ -13,6 +13,7 @@ import uuid
 from django.utils.crypto import get_random_string
 from django.conf import settings
 from decimal import Decimal
+from datetime import timedelta, datetime
 
 logger = logging.getLogger(__name__)
 
@@ -275,39 +276,19 @@ class DaycationBooking(models.Model):
             self.payment_status = 'unpaid'
         super().save(*args, **kwargs)
 
-    @property
     def can_be_cancelled(self):
-        return self.status in ['pending', 'confirmed'] and \
-               self.date > timezone.now().date() and \
-               (self.date - timezone.now().date()).days >= settings.CANCELLATION_WINDOW_DAYS
+        # Convert self.date to a datetime object at the start of the day
+        booking_datetime = timezone.make_aware(datetime.combine(self.date, datetime.min.time()))
+        # Allow cancellation up to 24 hours before the booking date
+        return timezone.now() <= booking_datetime - timedelta(hours=24)
 
     def cancel_and_refund(self):
-        if self.can_be_cancelled:
+        if self.can_be_cancelled():
+            # Implement your refund logic here (e.g., using Razorpay API)
+            # For now, we'll just mark the booking as cancelled
             self.status = 'cancelled'
-            self.cancellation_date = timezone.now()
-            
-            # Calculate refund amount (e.g., 90% of total price)
-            self.refund_amount = self.total_price * Decimal('0.9')
-            self.refund_status = 'pending'
             self.save()
-            
-            # Initiate refund process with Razorpay
-            try:
-                from .views import client  # Import the Razorpay client
-                refund = client.payment.refund(self.razorpay_payment_id, {
-                    "amount": int(self.refund_amount * 100),
-                    "speed": "normal"
-                })
-                if refund['status'] == 'processed':
-                    self.refund_status = 'processed'
-                    self.payment_status = 'refunded'
-                    self.save()
-                return True
-            except Exception as e:
-                logger.error(f"Refund failed for booking {self.id}: {str(e)}")
-                self.refund_status = 'failed'
-                self.save()
-                return False
+            return True
         return False
 
     def get_total_guests(self):

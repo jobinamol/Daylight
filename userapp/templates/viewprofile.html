@@ -5,7 +5,7 @@
 <style>
     .profile-header {
         background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        height: 300px;
+        height: 250px;
         position: relative;
         overflow: hidden;
     }
@@ -19,6 +19,10 @@
         background: url('{% static 'images/profile-bg.jpeg' %}') center/cover no-repeat;
         opacity: 0.2;
     }
+    .profile-img-container {
+        position: relative;
+        margin-top: -75px;
+    }
     .profile-img {
         width: 150px;
         height: 150px;
@@ -30,18 +34,20 @@
         transform: scale(1.05);
     }
     .profile-card {
-        margin-top: -100px;
         background: #fff;
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
     .info-item {
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
         border-radius: 8px;
         padding: 15px;
+        border: 1px solid #e0e0e0;
     }
     .info-item:hover {
         background-color: #f8f9fa;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
     .btn-edit {
         background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
@@ -66,47 +72,56 @@
 
 <div class="container mb-5">
     <div class="row justify-content-center">
-        <div class="col-lg-10">
+        <div class="col-lg-8">
             <div class="profile-card p-4">
                 <div class="text-center mb-4">
-                    {% if user.profile_image %}
-                        <img src="{{ user.profile_image.url }}" alt="Profile Image" class="profile-img rounded-circle mb-3">
-                    {% else %}
-                        <img src="{% static 'default.jpg' %}" alt="Default Profile Image" class="profile-img rounded-circle mb-3">
-                    {% endif %}
+                    <div class="profile-img-container">
+                        {% if user.profile_image %}
+                            <img src="{{ user.profile_image.url }}" alt="Profile Image" class="profile-img rounded-circle mb-3">
+                        {% else %}
+                            <img src="{% static 'default.jpg' %}" alt="Default Profile Image" class="profile-img rounded-circle mb-3">
+                        {% endif %}
+                    </div>
                     <h2 class="mb-0">{{ user.name }}</h2>
                     <p class="text-muted">@{{ user.username }}</p>
-                    <a href="{% url 'edit_profile' %}" class="btn btn-edit text-white px-4 py-2 mt-2">Edit Profile</a>
+                    <div class="mt-3">
+                        <a href="{% url 'edit_profile' %}" class="btn btn-edit text-white px-4 py-2 me-2">
+                            <i class="fas fa-edit mr-2"></i>Edit Profile
+                        </a>
+                        <a href="mailto:{{ user.emailid }}" class="btn btn-primary px-4 py-2">
+                            <i class="fas fa-envelope mr-2"></i>Send Email
+                        </a>
+                    </div>
                 </div>
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <div class="info-item">
-                            <h5 class="text-muted mb-1">Email</h5>
+                            <h5 class="text-muted mb-1"><i class="fas fa-envelope mr-2"></i>Email</h5>
                             <p class="mb-0 font-weight-bold">{{ user.emailid }}</p>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="info-item">
-                            <h5 class="text-muted mb-1">Mobile</h5>
+                            <h5 class="text-muted mb-1"><i class="fas fa-phone mr-2"></i>Mobile</h5>
                             <p class="mb-0 font-weight-bold">{{ user.mobilenumber }}</p>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="info-item">
-                            <h5 class="text-muted mb-1">District</h5>
+                            <h5 class="text-muted mb-1"><i class="fas fa-map-marker-alt mr-2"></i>District</h5>
                             <p class="mb-0 font-weight-bold">{{ user.district }}</p>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="info-item">
-                            <h5 class="text-muted mb-1">Age</h5>
+                            <h5 class="text-muted mb-1"><i class="fas fa-birthday-cake mr-2"></i>Age</h5>
                             <p class="mb-0 font-weight-bold">{{ user.age }}</p>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="info-item">
-                            <h5 class="text-muted mb-1">Gender</h5>
+                            <h5 class="text-muted mb-1"><i class="fas fa-venus-mars mr-2"></i>Gender</h5>
                             <p class="mb-0 font-weight-bold">{{ user.sex }}</p>
                         </div>
                     </div>

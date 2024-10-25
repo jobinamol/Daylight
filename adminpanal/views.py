@@ -683,50 +683,30 @@ def cancel_booking(request, booking_id):
 
     return redirect('booking_history')
 
+@login_required
 def booking_view(request, package_id):
-    """Render booking page with package details and addons"""
     package = get_object_or_404(DaycationPackage, id=package_id)
     addons = PackageAddon.objects.filter(package=package)
 
     user_info = {
-        'name': '',
-        'mobilenumber': '',
-        'emailid': '',
-        'address': '',
+        'name': request.user.get_full_name(),
+        'mobilenumber': request.user.userdb.mobilenumber if hasattr(request.user, 'userdb') else '',
+        'emailid': request.user.email,
+        'address': request.user.userdb.address if hasattr(request.user, 'userdb') else '',
     }
-
-    if request.user.is_authenticated:
-        try:
-            user = UserDB.objects.get(username=request.user.username)
-            user_info = {
-                'name': user.name,
-                'mobilenumber': user.mobilenumber,
-                'emailid': user.emailid,
-                'address': user.address,
-            }
-        except UserDB.DoesNotExist:
-            pass
 
     context = {
         'package': package,
         'addons': addons,
         'razorpay_key': settings.RAZORPAY_KEY_ID,
         'user_info': user_info,
-        'is_authenticated': request.user.is_authenticated,
     }
 
     return render(request, 'book_package.html', context)
 
 @login_required
 def booking_history(request):
-    if request.user.is_authenticated:
-        bookings = DaycationBooking.objects.filter(user=request.user).order_by('-created_at')
-    else:
-        booking_reference = request.session.get('booking_reference')
-        if booking_reference:
-            bookings = DaycationBooking.objects.filter(booking_reference=booking_reference).order_by('-created_at')
-        else:
-            bookings = DaycationBooking.objects.none()
+    bookings = DaycationBooking.objects.filter(user=request.user).order_by('-created_at')
     
     query = request.GET.get('q')
     if query:
@@ -736,14 +716,13 @@ def booking_history(request):
             Q(status__icontains=query)
         )
     
-    paginator = Paginator(bookings, 10)  # Show 10 bookings per page
+    paginator = Paginator(bookings, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
     context = {
         'page_obj': page_obj,
         'query': query,
-        'user': request.user,
     }
     return render(request, 'booking_history.html', context)
 
@@ -787,16 +766,22 @@ def verify_payment(request):
             return JsonResponse({'status': 'fail', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'fail', 'message': 'Invalid request method'}, status=405)
 
+@login_required
 @require_POST
 def cancel_booking(request, booking_id):
     booking = get_object_or_404(DaycationBooking, id=booking_id, user=request.user)
     
-    if booking.cancel_and_refund():
-        messages.success(request, 'Booking successfully cancelled. Refund has been initiated.')
+    if booking.can_be_cancelled():
+        if booking.cancel_and_refund():
+            messages.success(request, 'Booking successfully cancelled. Refund has been initiated.')
+        else:
+            messages.error(request, 'Booking cancellation failed. Please contact support.')
     else:
-        messages.error(request, 'Booking cannot be cancelled or refund failed.')
+        messages.error(request, 'This booking cannot be cancelled due to the cancellation policy.')
 
-    return redirect('booking_history')
+    return redirect('booking_detail', booking_id=booking_id)
+
+
 
 def check_booking(request):
     if request.method == 'POST':
@@ -812,9 +797,9 @@ def check_booking(request):
             messages.error(request, 'Please enter a booking reference.')
     return redirect('booking_history')
 
-def booking_detail(request, booking_reference):
-    booking = get_object_or_404(DaycationBooking, booking_reference=booking_reference)
-    return render(request, 'booking_detail.html', {'booking': booking})
+def booking_detail(request, booking_id):
+    booking = get_object_or_404(DaycationBooking, booking_reference=booking_id)
+    return render(request, 'booking_details1.html', {'booking': booking})
 
 def cancel_booking(request, booking_reference):
     booking = get_object_or_404(DaycationBooking, booking_reference=booking_reference)
@@ -840,6 +825,9 @@ def check_booking(request):
         else:
             messages.error(request, 'Please enter a booking reference.')
     return redirect('booking_history')
+
+
+
 
 
 

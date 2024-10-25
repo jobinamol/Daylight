@@ -53,10 +53,11 @@ urlpatterns = [
     path('process_booking/<int:package_id>/', views.process_booking, name='process_booking'),
     path('payment_callback/', views.payment_callback, name='payment_callback'),
     path('check_availability/', views.check_availability, name='check_availability'),
-    path('cancel_booking/<str:booking_reference>/', views.cancel_booking, name='cancel_booking'),
+    path('cancel_booking/<str:booking_id>/', views.cancel_booking, name='cancel_booking'),
     path('booking_history/', views.booking_history, name='booking_history'),
     path('booking_confirmation/<int:booking_id>/', views.booking_confirmation, name='booking_confirmation'),
     path('verify_payment/', views.verify_payment, name='verify_payment'),
     path('check_booking/', views.check_booking, name='check_booking'),
-    path('booking_detail/<str:booking_reference>/', views.booking_detail, name='booking_detail'),
+    path('booking_detailS/<str:booking_id>/', views.booking_detail, name='booking_detail'),
+    path('booking/<int:package_id>/', views.booking_view, name='booking_view'),
 ]
