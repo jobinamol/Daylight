@@ -89,7 +89,7 @@ def google_callback(request):
 
 
 def home(request):
-    categories = Category.objects.all()
+    categories = Category.objects.all()  # Make sure the model is being queried correctly
     return render(request, 'home.html', {'categories': categories})
 
 def about(request):
