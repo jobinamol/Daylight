@@ -83,9 +83,9 @@
                 </td>
                 <td>₹{{ booking.total_price|floatformat:2 }}</td>
                 <td>
-                  <a href="{% url 'booking_detail' booking_id=booking.booking_reference %}" class="btn btn-primary btn-sm mb-1">View Details</a>
+                  <a href="{% url 'booking_detail' booking_id=booking.booking_reference %}" class="btn btn-primary btn-sm">View Details</a>
                   {% if booking.can_be_cancelled %}
-                  <a href="{% url 'cancel_booking' booking_id=booking.booking_reference %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this booking?')">Cancel</a>
+                    <a href="{% url 'cancel_booking' booking_reference=booking.booking_reference %}" class="btn btn-danger btn-sm">Cancel</a>
                   {% endif %}
                 </td>
               </tr>

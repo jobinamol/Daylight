@@ -84,10 +84,9 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     {% if booking.can_be_cancelled %}
-                    <a href="{% url 'cancel_booking' booking_id=booking.booking_reference %}" class="btn btn-danger">Cancel Booking</a>
+                    <a href="{% url 'cancel_booking' booking_reference=booking.booking_reference %}" class="btn btn-danger me-2">Cancel Booking</a>
                     {% endif %}
                     <a href="{% url 'booking_history' %}" class="btn btn-secondary">Back to Booking History</a>
-                    <a href="{% url 'booking_detail' booking_id=booking.booking_reference %}" class="btn btn-primary">View Full Details</a>
                 </div>
             </div>
         </div>

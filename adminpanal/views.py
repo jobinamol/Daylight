@@ -8,7 +8,7 @@ from staffs.models import*
 from django.http import HttpResponse
 from django.contrib.auth import logout
 from django.http import JsonResponse
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -28,7 +28,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.db import transaction
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from .models import DaycationPackage, PackageAddon, DaycationBooking
+from .models import DaycationPackage, PackageAddon, DaycationBooking, Wishlist
 from decimal import Decimal
 import traceback
 import sys
@@ -464,48 +464,40 @@ def daycation_package_list(request):
 def daycation_packages(request):
     packages = DaycationPackage.objects.all()
     categories = Category.objects.all()
-    activities = Activity.objects.all()
 
     # Get filter parameters
     category_id = request.GET.get('category')
     search_query = request.GET.get('search')
     price_range = request.GET.get('price_range')
-    days = request.GET.get('days')
-    rating = request.GET.get('rating')
-    activity_id = request.GET.get('activity')
+    duration = request.GET.get('duration')
 
     # Apply filters
     if category_id:
         packages = packages.filter(category_id=category_id)
     
     if search_query:
-        packages = packages.filter(
-            Q(name__icontains=search_query) |
-            Q(description__icontains=search_query)
-        )
+        packages = packages.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
     
     if price_range:
         min_price, max_price = map(int, price_range.split('-'))
-        if max_price:
-            packages = packages.filter(price__gte=min_price, price__lte=max_price)
-        else:
-            packages = packages.filter(price__gte=min_price)
+        packages = packages.filter(price__gte=min_price, price__lte=max_price)
     
-    if days:
-        if days == '5+':
-            packages = packages.filter(duration__gte=5)
-        else:
-            packages = packages.filter(duration=int(days))
-    
-    if rating:
-        packages = packages.filter(rating__gte=int(rating))
-    
-    if activity_id:
-        packages = packages.filter(activities__id=activity_id)
+    if duration:
+        min_duration, max_duration = map(int, duration.split('-'))
+        packages = packages.filter(duration__gte=min_duration, duration__lte=max_duration)
+
+    # Check if packages are in user's wishlist
+    if request.user.is_authenticated:
+        wishlist_packages = Wishlist.objects.filter(user=request.user).values_list('package_id', flat=True)
+    else:
+        wishlist_packages = request.session.get('wishlist', [])
+
+    for package in packages:
+        package.is_in_wishlist = package.id in wishlist_packages
 
     # Pagination
     page = request.GET.get('page', 1)
-    paginator = Paginator(packages, 9)  # 9 packages per page
+    paginator = Paginator(packages, 9)  # Show 9 packages per page
     try:
         packages = paginator.page(page)
     except PageNotAnInteger:
@@ -516,18 +508,13 @@ def daycation_packages(request):
     context = {
         'packages': packages,
         'categories': categories,
-        'activities': activities,
         'selected_category': category_id,
         'search_query': search_query,
         'price_range': price_range,
-        'days': days,
-        'rating': rating,
-        'selected_activity': activity_id,
-        'is_paginated': packages.has_other_pages(),
-        'page_obj': packages,
+        'duration': duration,
     }
 
-    return render(request, 'daycation_packages.html', context)
+    return render(request, 'daycation_package.html', context)
 
 def daycation_category_packages(request, category_id):
     category = get_object_or_404(Category, id=category_id)
@@ -555,6 +542,8 @@ def book_package(request, package_id):
     context = {
         'package': package,
         'addons': addons,
+        'razorpay_key': settings.RAZORPAY_KEY_ID,
+
     }
     return render(request, 'book_package.html', context)
 
@@ -825,6 +814,62 @@ def check_booking(request):
         else:
             messages.error(request, 'Please enter a booking reference.')
     return redirect('booking_history')
+
+@login_required
+@require_POST
+def toggle_wishlist(request, package_id):
+    package = get_object_or_404(DaycationPackage, id=package_id)
+    
+    if request.user.is_authenticated:
+        wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, package=package)
+        if not created:
+            wishlist_item.delete()
+        is_in_wishlist = created
+    else:
+        wishlist = request.session.get('wishlist', [])
+        if package_id in wishlist:
+            wishlist.remove(package_id)
+            is_in_wishlist = False
+        else:
+            wishlist.append(package_id)
+            is_in_wishlist = True
+        request.session['wishlist'] = wishlist
+        request.session.modified = True
+    
+    return JsonResponse({
+        'status': 'success',
+        'is_in_wishlist': is_in_wishlist
+    })
+
+def wishlist(request):
+    if request.user.is_authenticated:
+        # Fetch wishlist items for authenticated users
+        wishlist_items = Wishlist.objects.filter(user=request.user).select_related('package')
+        packages = [item.package for item in wishlist_items]
+    else:
+        # Fetch wishlist items from session for non-authenticated users
+        wishlist = request.session.get('wishlist', [])
+        packages = DaycationPackage.objects.filter(id__in=wishlist)
+    
+    context = {
+        'packages': packages,
+        'is_wishlist_page': True  # Add this flag
+    }
+    return render(request, 'wishlist.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

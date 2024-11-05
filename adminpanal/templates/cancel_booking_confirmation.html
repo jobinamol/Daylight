@@ -1,0 +1,27 @@
+{% extends 'userindex.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Cancel Booking</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Booking Reference: {{ booking.booking_reference }}</h5>
+            <p class="card-text">Package: {{ booking.package.name }}</p>
+            <p class="card-text">Date: {{ booking.date }}</p>
+            <p class="card-text">Status: {{ booking.get_status_display }}</p>
+            
+            {% if booking.can_be_cancelled %}
+                <p class="text-warning">Are you sure you want to cancel this booking?</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+                    <a href="{% url 'booking_detail' booking_id=booking.booking_reference %}" class="btn btn-secondary">Go Back</a>
+                </form>
+            {% else %}
+                <p class="text-danger">This booking cannot be cancelled.</p>
+                <a href="{% url 'booking_detail' booking_id=booking.booking_reference %}" class="btn btn-primary">Back to Booking Details</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

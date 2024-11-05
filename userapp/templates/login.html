@@ -316,14 +316,6 @@
         <div class="login-section">
             <div class="login-container">
                 <h3>Login</h3>
-                <a href="{% provider_login_url 'google' %}" class="btn btn-google">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">
-                    <span>Sign in with Google</span>
-                </a>
-                
-                <div class="or-divider">
-                    <span>or</span>
-                </div>
                 
                 {% if messages %}
                     {% for message in messages %}
@@ -332,6 +324,15 @@
                         </div>
                     {% endfor %}
                 {% endif %}
+                
+                <a href="{% provider_login_url 'google' %}" class="btn btn-google">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">
+                    <span>Sign in with Google</span>
+                </a>
+                
+                <div class="or-divider">
+                    <span>or</span>
+                </div>
                 
                 <form method="post" action="{% url 'login' %}">
                     {% csrf_token %}

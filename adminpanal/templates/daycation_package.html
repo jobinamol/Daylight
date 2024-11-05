@@ -1,98 +1,321 @@
 {% extends 'userindex.html' %}
 {% load static %}
 
-{% block extra_css %}
+{% block content %}
+
 <style>
+    /* General Styling */
     .hero-wrap {
-        background-image: url('{% static "images/daycation-hero.jpg" %}');
-        background-size: cover;
-        background-position: center center;
-        height: 50vh;
+        background-attachment: fixed;
+        height: 500px;
         position: relative;
     }
     .hero-wrap .overlay {
+        background: rgba(0, 0, 0, 0.6);
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.5);
+        inset: 0;
     }
-    .hero-content {
+    .hero-wrap h1 {
+        font-size: 4rem;
+        color: #fff;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    .categories-section {
+        margin-top: -75px;
         position: relative;
-        z-index: 1;
-        color: white;
+        z-index: 10;
+    }
+    .categories-slider {
+        display: flex;
+        overflow-x: auto;
+        padding: 20px 0;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+    .categories-slider::-webkit-scrollbar {
+        display: none;
+    }
+    .category-item {
+        flex: 0 0 auto;
+        width: 150px;
+        text-align: center;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        padding: 20px 15px;
+        margin-right: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .category-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+    .category-image {
+        width: 80px;
+        height: 80px;
+        background-size: cover;
+        border-radius: 50%;
+        margin: 0 auto 15px;
+        border: 4px solid #f8f9fa;
+    }
+    .category-item h5 {
+        color: #333;
+        font-size: 1rem;
+        margin-top: 10px;
     }
     .package-card {
-        transition: transform 0.3s ease-in-out;
-        height: 100%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 20px;
+        overflow: hidden;
     }
     .package-card:hover {
-        transform: translateY(-5px);
-    }
-    .package-image {
-        height: 200px;
-        object-fit: cover;
-    }
-    .package-features {
-        list-style-type: none;
-        padding-left: 0;
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
     }
     .package-features li {
-        margin-bottom: 5px;
+        font-size: 0.95rem;
+        margin-bottom: 8px;
     }
-    .package-features i {
-        margin-right: 5px;
-        color: #28a745;
+    .btn-view-details {
+        background-color: #3498db;
+        color: #fff;
+        border-radius: 30px;
+        font-weight: bold;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+    .btn-view-details:hover {
+        background-color: #2980b9;
+    }
+    .wishlist-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        padding: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .wishlist-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+    }
+    .sidebar-wrap {
+        border-radius: 20px;
+    }
+    .form-control {
+        border-radius: 10px;
     }
 </style>
-{% endblock %}
 
-{% block content %}
 <!-- Hero Section -->
-<div class="hero-wrap d-flex align-items-center">
+<div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
     <div class="overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center hero-content">
-                <h1 class="mb-4">Daycation Packages</h1>
-                <p class="lead">Discover our amazing daycation experiences</p>
+    <div class="container h-100">
+        <div class="row h-100 align-items-center justify-content-center text-center">
+            <div class="col-md-10">
+                <h1 class="mb-4">Discover Your Perfect Daycation</h1>
+                <p class="text-white lead">Explore our curated collection of daycation packages for unforgettable experiences.</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Packages Section -->
-<section class="ftco-section">
+<!-- Main Content -->
+<section class="ftco-section bg-light">
     <div class="container">
-        <div class="row">
-            {% for package in packages %}
-            <div class="col-md-4 mb-4">
-                <div class="card package-card">
-                    <img src="{{ package.image.url }}" class="card-img-top package-image" alt="{{ package.name }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ package.name }}</h5>
-                        <p class="card-text">{{ package.description|truncatewords:20 }}</p>
-                        <ul class="package-features">
-                            <li><i class="fas fa-clock"></i> {{ package.duration }}</li>
-                            <li><i class="fas fa-user-friends"></i> Max {{ package.max_capacity }} guests</li>
-                            <li><i class="fas fa-rupee-sign"></i> {{ package.price }}</li>
-                        </ul>
-                        <a href="{% url 'daycation_package_details' package.id %}" class="btn btn-primary">View Details</a>
+        <!-- Categories Section -->
+        <div class="categories-section">
+            <div class="categories-slider">
+                <div class="category-item">
+                    <a href="{% url 'daycation_packages' %}" class="{% if not selected_category %}active{% endif %}">
+                        <div class="category-image" style="background-color: #3498db; display: flex; align-items: center; justify-content: center;">
+                            <i class="fa fa-th" style="color: white; font-size: 32px;"></i>
+                        </div>
+                        <h5>All Packages</h5>
+                    </a>
+                </div>
+                {% for category in categories %}
+                    <div class="category-item">
+                        <a href="{% url 'daycation_category_packages' category.id %}" class="{% if selected_category == category.id|stringformat:'s' %}active{% endif %}">
+                            {% if category.image %}
+                                <div class="category-image" style="background-image: url('{{ category.image.url }}');"></div>
+                            {% else %}
+                                <div class="category-image" style="background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                                    <span style="font-size: 24px; color: #333;">{{ category.name|first }}</span>
+                                </div>
+                            {% endif %}
+                            <h5>{{ category.name }}</h5>
+                        </a>
                     </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <!-- Sidebar: Filters -->
+            <div class="col-lg-3 col-md-4 mb-4">
+                <div class="sidebar-wrap bg-white p-4 shadow-sm">
+                    <h3 class="heading mb-4">Refine Your Search</h3>
+                    <form id="filterForm" method="GET" action="{% url 'daycation_packages' %}">
+                        {% if selected_category %}
+                            <input type="hidden" name="category" value="{{ selected_category }}">
+                        {% endif %}
+                        <div class="form-group mb-3">
+                            <label for="search" class="mb-2">Search Packages</label>
+                            <input type="text" name="search" id="search" class="form-control" placeholder="Enter keywords" value="{{ search_query }}">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="price_range" class="mb-2">Price Range</label>
+                            <select name="price_range" id="price_range" class="form-control">
+                                <option value="">Any Price</option>
+                                <option value="0-3000" {% if price_range == '0-3000' %}selected{% endif %}>Up to ₹3000</option>
+                                <option value="3000-10000" {% if price_range == '3000-10000' %}selected{% endif %}>₹3000 - ₹10000</option>
+                                <option value="10000-100000" {% if price_range == '10000-100000' %}selected{% endif %}>₹10000 - ₹100000</option>
+                                <option value="100000-" {% if price_range == '100000-' %}selected{% endif %}>₹100000 and above</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="duration" class="mb-2">Duration</label>
+                            <select name="duration" id="duration" class="form-control">
+                                <option value="">Any Duration</option>
+                                <option value="1-4" {% if duration == '1-4' %}selected{% endif %}>1-4 hours</option>
+                                <option value="5-8" {% if duration == '5-8' %}selected{% endif %}>5-8 hours</option>
+                                <option value="9-24" {% if duration == '9-24' %}selected{% endif %}>9+ hours</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary py-2 px-4 w-100">
+                            <i class="fa fa-filter mr-2"></i>Apply Filters
+                        </button>
+                    </form>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12">
-                <p>No daycation packages available at the moment.</p>
+
+            <!-- Packages Section -->
+            <div class="col-lg-9 col-md-8">
+                {% if not packages %}
+                    <div class="alert alert-info" role="alert">
+                        <i class="fa fa-info-circle mr-2"></i>No daycation packages available at the moment.
+                    </div>
+                {% else %}
+                    <div class="row">
+                        {% for package in packages %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="package-card card shadow-sm border-0 h-100">
+                                <div class="position-relative">
+                                    <img src="{% if package.image %}{{ package.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}" 
+                                         alt="{{ package.name }}" 
+                                         class="card-img-top" style="height: 250px; object-fit: cover;">
+                                    <button class="wishlist-btn" data-package-id="{{ package.id }}">
+                                        <i class="fas fa-heart {% if package.id in request.session.wishlist or package in user.wishlisted_packages.all %}text-danger{% else %}text-secondary{% endif %} fa-lg"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">{{ package.name }}</h5>
+                                    <p class="card-text text-muted mb-3">{{ package.description|truncatewords:15 }}</p>
+                                    <ul class="list-unstyled package-features mb-3">
+                                        <li><i class="fas fa-tag text-primary mr-2"></i> {{ package.category.name }}</li>
+                                        <li><i class="fas fa-rupee-sign text-success mr-2"></i> ₹{{ package.price }}</li>
+                                        <li><i class="fas fa-clock text-info mr-2"></i> {{ package.duration }} hrs</li>
+                                    </ul>
+                                    <a href="{% url 'daycation_package_details' package.id %}" class="btn btn-view-details mt-auto">
+                                        <i class="fas fa-info-circle mr-1"></i> View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if packages.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ packages.previous_page_number }}&{{ request.GET.urlencode }}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% for page_num in packages.paginator.page_range %}
+                                <li class="page-item {% if page_num == packages.number %}active{% endif %}">
+                                    <a class="page-link" href="?page={{ page_num }}&{{ request.GET.urlencode }}">{{ page_num }}</a>
+                                </li>
+                            {% endfor %}
+                            {% if packages.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ packages.next_page_number }}&{{ request.GET.urlencode }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
             </div>
-            {% endfor %}
         </div>
     </div>
 </section>
-{% endblock %}
 
-{% block extra_js %}
-<script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
-{% endblock %}
+<script>
+    // AJAX Toggle for Wishlist
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();
+            const packageId = this.dataset.packageId;
+            const heartIcon = this.querySelector('i');
+            
+            fetch(`/toggle-wishlist/${packageId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    heartIcon.classList.toggle('text-danger');
+                    heartIcon.classList.toggle('text-secondary');
+                    
+                    // Show a toast notification
+                    const message = data.is_in_wishlist ? 'Added to wishlist' : 'Removed from wishlist';
+                    showToast(message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
 
+    function showToast(message) {
+        // Create a toast element
+        const toast = document.createElement('div');
+        toast.className = 'toast position-fixed bottom-0 end-0 m-3';
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+        toast.setAttribute('aria-atomic', 'true');
+        toast.innerHTML = `
+            <div class="toast-header">
+                <strong class="me-auto">Wishlist</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${message}
+            </div>
+        `;
+        
+        // Append the toast to the body
+        document.body.appendChild(toast);
+        
+        // Initialize and show the toast
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+        
+        // Remove the toast element after it's hidden
+        toast.addEventListener('hidden.bs.toast', function () {
+            document.body.removeChild(toast);
+        });
+    }
+</script>
+
+{% endblock %}

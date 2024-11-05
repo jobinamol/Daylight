@@ -169,6 +169,9 @@
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a href="{% url 'userindex' %}" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="{% url 'userindex' %}" class="nav-link">Packages</a></li>
+            <li class="nav-item"><a href="{% url 'userindex' %}" class="nav-link">Restaurant</a></li>
+
             <li class="nav-item"><a href="{% url 'rooms' %}" class="nav-link">Rooms</a></li>
             <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
             <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
@@ -187,10 +190,12 @@
                   {% endif %}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-user mr-2"></i>View Profile</a>
-                  <a class="dropdown-item" href="{% url 'editprofile' %}"><i class="fas fa-user-edit mr-2"></i>Edit Profile</a>
+                  {% if request.session.user_type != 'google_user' %}
+                    <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-user mr-2"></i>View Profile</a>
+                    <a class="dropdown-item" href="{% url 'editprofile' %}"><i class="fas fa-user-edit mr-2"></i>Edit Profile</a>
+                    <a class="dropdown-item" href="{% url 'changepassword' %}"><i class="fas fa-key mr-2"></i>Change Password</a>
+                  {% endif %}
                   <a class="dropdown-item" href="{% url 'booking_history' %}"><i class="fas fa-history mr-2"></i>Booking History</a>
-                  <a class="dropdown-item" href="{% url 'changepassword' %}"><i class="fas fa-key mr-2"></i>Change Password</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
                 </div>
@@ -200,6 +205,9 @@
                 <a href="{% url 'login' %}" class="nav-link btn btn-outline-light ml-lg-3">Login</a>
               </li>
             {% endif %}
+            <li class="nav-item">
+                <a href="{% url 'wishlist' %}" class="nav-link">My Wishlist</a>
+            </li>
           </ul>
         </div>
       </div>

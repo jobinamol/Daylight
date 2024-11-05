@@ -183,6 +183,7 @@ class DaycationPackage(models.Model):
         'Category', on_delete=models.SET_NULL, null=True, blank=True, related_name='packages'
     )  # Link to Category model
     image = models.ImageField(upload_to='package_images/', blank=True, null=True)  # Optional image for the package
+    wishlist_users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Wishlist', related_name='wishlisted_packages')
 
     def __str__(self):
         return self.name
@@ -277,10 +278,13 @@ class DaycationBooking(models.Model):
         super().save(*args, **kwargs)
 
     def can_be_cancelled(self):
-        # Convert self.date to a datetime object at the start of the day
-        booking_datetime = timezone.make_aware(datetime.combine(self.date, datetime.min.time()))
-        # Allow cancellation up to 24 hours before the booking date
-        return timezone.now() <= booking_datetime - timedelta(hours=24)
+        # Convert self.date to a datetime object at midnight
+        booking_date = datetime.combine(self.date, datetime.min.time())
+        booking_date = timezone.make_aware(booking_date)  # Make it timezone-aware
+        now = timezone.now()
+        
+        # Check if the booking is more than 24 hours in the future
+        return self.status == 'pending' and (booking_date - now).days > 1
 
     def cancel_and_refund(self):
         if self.can_be_cancelled():
@@ -302,3 +306,16 @@ class DaycationBooking(models.Model):
 
     def generate_booking_reference():
         return get_random_string(20).upper()
+    
+
+
+
+
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    package = models.ForeignKey(DaycationPackage, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'package')

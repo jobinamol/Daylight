@@ -41,7 +41,5 @@ urlpatterns = [
     path('google-login/callback/', views.google_callback, name='google_callback'),
     path('booking/<int:package_id>/',views. booking_view, name='booking_view'),
     path('booking/success/<int:booking_id>/', views.booking_success, name='booking_success'),
-
-
-
+    path('toggle-wishlist/<int:package_id>/', views.toggle_wishlist, name='toggle_wishlist'),
 ]

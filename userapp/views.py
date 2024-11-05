@@ -37,6 +37,9 @@ import requests
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import re
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 # Helper function to convert credentials to a dictionary
 def credentials_to_dict(credentials):
@@ -667,4 +670,25 @@ def booking_success(request, booking_id):
     booking = get_object_or_404(Bookingpackage, id=booking_id)
     return render(request, 'booking_success.html', {'booking': booking})
 
+@login_required
+def wishlist(request):
+    wishlist_packages = request.user.daycation_wishlist.all()
+    return render(request, 'wishlist.html', {'packages': wishlist_packages})
 
+@login_required
+@require_POST
+def toggle_wishlist(request, package_id):
+    package = get_object_or_404(DaycationPackage, id=package_id)
+    if package.wishlist.filter(id=request.user.id).exists():
+        package.wishlist.remove(request.user)
+        is_in_wishlist = False
+    else:
+        package.wishlist.add(request.user)
+        is_in_wishlist = True
+    return JsonResponse({'is_in_wishlist': is_in_wishlist})
+
+def daycation_packages(request):
+    packages = DaycationPackage.objects.all()
+    for package in packages:
+        package.is_in_wishlist = package.wishlist.filter(id=request.user.id).exists() if request.user.is_authenticated else False
+    return render(request, 'daycation_package.html', {'packages': packages})

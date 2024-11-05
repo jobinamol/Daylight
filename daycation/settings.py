@@ -96,8 +96,14 @@ LOGOUT_REDIRECT_URL = 'home'  # Redirect after logout
  # This triggers Google login
 
 # Allauth settings
+AUTH_USER_MODEL = 'userapp.UserDB'
+
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_FIELD = 'emailid'  # Change this to 'emailid'
+
+
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
@@ -145,16 +151,30 @@ WSGI_APPLICATION = 'daycation.wsgi.application'
 # MySQL Database Configuration
 pymysql.install_as_MySQLdb()
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.getenv('DB_NAME', 'DRMS'),
+#         'USER': os.getenv('DB_USER', 'jobina'),
+#         'PASSWORD': os.getenv('DB_PASSWORD', '1234'),
+#         'HOST': os.getenv('DB_HOST', 'localhost'),
+#         'PORT': os.getenv('DB_PORT', '3306'),
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#         },
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'DRMS'),
-        'USER': os.getenv('DB_USER', 'jobina'),
-        'PASSWORD': os.getenv('DB_PASSWORD', '1234'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'NAME': 'DRMS_kitchenwe',
+        'USER': 'DRMS_kitchenwe',
+        'PASSWORD': 'e63c87edeef1a253b38a633793929686772a708a',
+        'HOST': 'w5mbd.h.filess.io',
+        'PORT': '3307',
         'OPTIONS': {
-            'charset': 'utf8mb4',
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
     }
 }

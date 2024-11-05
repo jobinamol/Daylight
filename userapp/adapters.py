@@ -17,19 +17,26 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
                 i += 1
             user.username = username
         
+        # Set emailid field
+        user.emailid = email
+        
         # Optionally, set other fields if available
         if 'name' in data:
-            name_parts = data['name'].split(' ', 1)
-            user.first_name = name_parts[0]
-            if len(name_parts) > 1:
-                user.last_name = name_parts[1]
+            user.name = data['name']  # Assuming your UserDB model has a 'name' field
         
         return user
 
     def save_user(self, request, sociallogin, form=None):
         user = super().save_user(request, sociallogin, form)
         
-        # Perform any additional actions after saving the user
-        # For example, you could create a profile for the user here
+        # Ensure emailid is set
+        if not user.emailid:
+            user.emailid = sociallogin.account.extra_data.get('email', '')
+        
+        # Set other fields from sociallogin data
+        user.name = sociallogin.account.extra_data.get('name', '')
+        
+        # Save the user again to ensure all fields are updated
+        user.save()
         
         return user

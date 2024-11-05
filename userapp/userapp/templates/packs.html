@@ -3,6 +3,7 @@
 {% load static %}
 
 <style>
+    /* Hero Section */
     .hero-wrap {
         background-attachment: fixed;
         height: 400px;
@@ -21,6 +22,8 @@
         text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         color: #fff;
     }
+
+    /* Categories Slider */
     .categories-section {
         margin-top: -50px;
         position: relative;
@@ -31,9 +34,7 @@
         overflow-x: auto;
         scroll-behavior: smooth;
         padding: 20px 0;
-        -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        -ms-overflow-style: none;
     }
     .categories-slider::-webkit-scrollbar {
         display: none;
@@ -62,22 +63,11 @@
         margin: 0 auto 10px;
         border: 3px solid #f8f9fa;
     }
-    .category-item h5 {
-        font-size: 0.9rem;
-        margin-top: 5px;
-        color: #333;
-    }
+
+    /* Sidebar Filters */
     .sidebar-wrap {
         position: sticky;
         top: 20px;
-    }
-    .package-card {
-        height: 100%;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .package-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
     }
     .btn-view-details {
         background-color: #27ae60;
@@ -88,6 +78,18 @@
         background-color: #229954;
         color: #fff;
     }
+
+    /* Package Card */
+    .package-card {
+        height: 100%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .package-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    /* Pagination */
     .pagination {
         justify-content: center;
     }
@@ -98,19 +100,6 @@
     .pagination .page-link {
         color: #27ae60;
     }
-    .package-features {
-        list-style-type: none;
-        padding-left: 0;
-    }
-    .package-features li {
-        margin-bottom: 5px;
-    }
-    .package-features i {
-        width: 20px;
-        text-align: center;
-        margin-right: 5px;
-        color: #27ae60;
-    }
 </style>
 
 <!-- Hero Section -->
@@ -119,13 +108,10 @@
     <div class="container">
         <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
             <div class="col-md-9 ftco-animate text-center">
-                <div class="text">
-                    <h1 class="mb-4 bread">Discover Our Staycation Packages</h1>
-                    <p class="breadcrumbs">
-                        <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span>
-                        <span>Packages</span>
-                    </p>
-                </div>
+                <h1 class="mb-4 bread">Discover Our Staycation Packages</h1>
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="{% url 'userindex' %}">Home</a></span> <span>Packages</span>
+                </p>
             </div>
         </div>
     </div>
@@ -137,7 +123,6 @@
         <!-- Categories Section -->
         <div class="categories-section">
             <div class="categories-slider">
-                <!-- "All" Category -->
                 <div class="category-item">
                     <a href="{% url 'packs' %}" class="{% if not selected_category %}active{% endif %}">
                         <div class="category-image" style="background-color: #27ae60; display: flex; align-items: center; justify-content: center;">
@@ -146,8 +131,6 @@
                         <h5>All</h5>
                     </a>
                 </div>
-
-                <!-- Dynamic Categories -->
                 {% for category in categories %}
                     <div class="category-item">
                         <a href="?category={{ category.id }}" class="{% if selected_category == category.id|stringformat:'s' %}active{% endif %}">
@@ -181,7 +164,7 @@
                             <input type="text" name="search" id="search" class="form-control" placeholder="Enter keywords" value="{{ search_query }}">
                         </div>
                         
-                        <!-- Filter by Price -->
+                        <!-- Price Filter -->
                         <div class="form-group">
                             <label for="price_range">Price Range</label>
                             <select name="price_range" id="price_range" class="form-control">
@@ -193,7 +176,7 @@
                             </select>
                         </div>
 
-                        <!-- Filter by Days -->
+                        <!-- Duration Filter -->
                         <div class="form-group">
                             <label for="days">Duration (Days)</label>
                             <select name="days" id="days" class="form-control">
@@ -206,7 +189,7 @@
                             </select>
                         </div>
 
-                        <!-- Filter by Rating -->
+                        <!-- Rating Filter -->
                         <div class="form-group">
                             <label for="rating">Minimum Rating</label>
                             <select name="rating" id="rating" class="form-control">
@@ -219,114 +202,81 @@
                             </select>
                         </div>
 
-                        <!-- Filter by Activity -->
+                        <!-- Activity Filter -->
                         <div class="form-group">
                             <label for="activity">Activity</label>
                             <select name="activity" id="activity" class="form-control">
                                 <option value="">Any Activity</option>
                                 {% for activity in activities %}
-                                    <option value="{{ activity.id }}" {% if selected_activity == activity.id|stringformat:'s' %}selected{% endif %}>{{ activity.name }}</option>
+                                    <option value="{{ activity.id }}" {% if selected_activity == activity.id|stringformat:'s' %}selected{% endif %}>
+                                        {{ activity.name }}
+                                    </option>
                                 {% endfor %}
                             </select>
                         </div>
 
-                        <!-- Submit Button -->
-                        <div class="form-group mb-0">
-                            <button type="submit" class="btn btn-primary py-2 px-4 w-100">
-                                <i class="fa fa-filter mr-2"></i>Apply Filters
-                            </button>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary mt-3 w-100">Apply Filters</button>
                         </div>
                     </div>
                 </form>
             </div>
 
-            <!-- Packages Section -->
+            <!-- Packages Display -->
             <div class="col-md-9">
-                {% if no_results %}
-                    <div class="alert alert-info" role="alert">
-                        <i class="fa fa-info-circle mr-2"></i>No packages found matching your criteria. Please try different filters.
-                    </div>
-                {% elif not packages %}
-                    <div class="alert alert-info" role="alert">
-                        <i class="fa fa-info-circle mr-2"></i>No packages available at the moment.
-                    </div>
-                {% else %}
-                    <div class="row">
+                <div class="row">
+                    {% if not packages %}
+                        <div class="col-12 text-center">
+                            <p>No packages found. Try adjusting your filters or <a href="{% url 'packs' %}">view all packages</a>.</p>
+                        </div>
+                    {% else %}
                         {% for package in packages %}
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="package-card card shadow-sm border-0">
-                                <img src="{% if package.image %}{{ package.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}" 
-                                     alt="{{ package.name }}" 
-                                     class="card-img-top" style="height: 200px; object-fit: cover;">
-                                <div class="card-body d-flex flex-column">
-                                    <h3 class="card-title h5 mb-3">{{ package.name }}</h3>
-                                    <p class="card-text text-muted mb-3">{{ package.description|truncatewords:20 }}</p>
-                                    <ul class="package-features mb-3">
-                                        <li><i class="fas fa-dollar-sign"></i> ₹{{ package.price }}</li>
-                                        <li><i class="fas fa-calendar"></i> {{ package.duration }}</li>
-                                        <li><i class="fas fa-star" style="color: #f1c40f;"></i> {{ package.rating }} / 5</li>
-                                        <li><i class="fas fa-bed"></i> {{ package.rooms.all|join:", " }}</li>
-                                    </ul>
-                                    <a href="{% url 'package_details' package.id %}" class="btn btn-view-details mt-auto">
-                                        View Details
+                            <div class="col-md-6 col-lg-4 ftco-animate d-flex">
+                                <div class="package-card shadow-sm rounded p-3">
+                                    <a href="{% url 'package_details' package.id %}">
+                                        <img src="{{ package.image.url }}" alt="{{ package.name }}" class="img-fluid mb-3">
                                     </a>
+                                    <h4>{{ package.name }}</h4>
+                                    <p class="mb-2">{{ package.description|truncatewords:15 }}</p>
+                                    <span class="d-block text-muted">{{ package.price|floatformat:2 }} ₹ / night</span>
+                                    <a href="{% url 'package_details' package.id %}" class="btn btn-view-details mt-3">View Details</a>
                                 </div>
                             </div>
-                        </div>
                         {% endfor %}
+                    {% endif %}
+                </div>
+
+                <!-- Pagination -->
+                <div class="row">
+                    <div class="col-12">
+                        <nav>
+                            <ul class="pagination">
+                                {% if packages.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ packages.previous_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}">Previous</a>
+                                    </li>
+                                {% endif %}
+                                {% for page_num in packages.paginator.page_range %}
+                                    {% if packages.number == page_num %}
+                                        <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_num }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}">{{ page_num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if packages.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ packages.next_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}">Next</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
                     </div>
-                {% endif %}
+                </div>
             </div>
         </div>
     </div>
 </section>
-
-<!-- Pagination -->
-<div class="row mt-5">
-    <div class="col text-center">
-        <nav aria-label="Page navigation">
-            {% if is_paginated %}
-                <ul class="pagination justify-content-center">
-                    {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                    {% for page in page_obj.paginator.page_range %}
-                        {% if page == page_obj.number %}
-                            <li class="page-item active"><span class="page-link">{{ page }}</span></li>
-                        {% else %}
-                            <li class="page-item"><a class="page-link" href="?page={{ page }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}">{{ page }}</a></li>
-                        {% endif %}
-                    {% endfor %}
-                    {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            {% endif %}
-        </nav>
-    </div>
-</div>
-
-<script>
-document.getElementById('filterForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var form = this;
-    var url = new URL(form.action);
-    var formData = new FormData(form);
-    for (var pair of formData.entries()) {
-        if (pair[1]) {
-            url.searchParams.append(pair[0], pair[1]);
-        }
-    }
-    window.location.href = url.toString();
-});
-</script>
 
 {% endblock %}
