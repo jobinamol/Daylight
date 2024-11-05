@@ -12,8 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = config('DJANGO_SECRET_KEY', default=get_random_secret_key())
 DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
+# ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
 
+ALLOWED_HOSTS = ['*']
 
 # Razorpay API credentials
 # settings.py
