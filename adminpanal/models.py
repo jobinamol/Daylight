@@ -184,6 +184,7 @@ class DaycationPackage(models.Model):
     )  # Link to Category model
     image = models.ImageField(upload_to='package_images/', blank=True, null=True)  # Optional image for the package
     wishlist_users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Wishlist', related_name='wishlisted_packages')
+    max_bookings = models.IntegerField(default=3)  # Maximum allowed bookings
 
     def __str__(self):
         return self.name
@@ -222,18 +223,15 @@ class DaycationBooking(models.Model):
         ('non-veg', 'Non-Vegetarian')
     ]
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
         ('cancelled', 'Cancelled')
     ]
     PAYMENT_STATUS_CHOICES = [
-        ('unpaid', 'Unpaid'),
         ('paid', 'Paid'),
         ('refunded', 'Refunded')
     ]
     REFUND_STATUS_CHOICES = [
         ('not_applicable', 'Not Applicable'),
-        ('pending', 'Pending'),
         ('processed', 'Processed'),
         ('failed', 'Failed')
     ]
@@ -251,8 +249,8 @@ class DaycationBooking(models.Model):
     addons = models.ManyToManyField(PackageAddon, blank=True, related_name='bookings')
     special_requests = models.TextField(blank=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='unpaid')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='confirmed')
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='paid')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)

@@ -72,16 +72,17 @@
                                     <h3 class="mb-4">Booking Details</h3>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                            <label for="num_adults">Number of Adults</label>
-                                            <input type="number" class="form-control" id="num_adults" name="num_adults" min="1" required>
-                                            <div class="invalid-feedback">Please enter the number of adults.</div>
+                                            <label for="num_adults">Number of Adults (Max: 5)</label>
+                                            <input type="number" class="form-control" id="num_adults" name="num_adults" min="1" max="5" required>
+                                            <div class="invalid-feedback">Please enter the number of adults (max 5).</div>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label for="num_children">Number of Children</label>
-                                            <input type="number" class="form-control" id="num_children" name="num_children" min="0" required>
-                                            <div class="invalid-feedback">Please enter the number of children.</div>
+                                            <label for="num_children">Number of Children (Max: 3)</label>
+                                            <input type="number" class="form-control" id="num_children" name="num_children" min="0" max="3" required>
+                                            <div class="invalid-feedback">Please enter the number of children (max 3).</div>
                                         </div>
                                     </div>
+                                    <small class="form-text text-muted">Please note: Maximum capacity is 5 adults and 3 children.</small>
                                     <div class="form-group">
                                         <label for="food_preference">Food Preference</label>
                                         <select name="food_preference" id="food_preference" class="form-control" required>
