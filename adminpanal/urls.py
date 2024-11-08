@@ -62,4 +62,5 @@ urlpatterns = [
     path('booking/<int:package_id>/', views.booking_view, name='booking_view'),
     path('toggle-wishlist/<int:package_id>/', views.toggle_wishlist, name='toggle_wishlist'),
     path('wishlist/', views.wishlist, name='wishlist'),
+    path('submit_feedback/', views.submit_feedback, name='submit_feedback'),
 ]

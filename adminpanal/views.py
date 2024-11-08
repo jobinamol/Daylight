@@ -287,10 +287,11 @@ def get_food_items_by_category(request, category_id):
     return JsonResponse(food_items_data, safe=False)
 
 def bookingmanagement(request):
-    # Fetch all booking records
-    bookings = Bookingpackage.objects.all()
+    # Fetch all booking records with related package and user data
+    bookings = DaycationBooking.objects.select_related('package', 'user').all()
+    
     # Pass the list of bookings to the template
-    return render(request, 'bookingmanage.html', {'bookings': bookings})
+    return render(request, 'bookingmanagement.html', {'bookings': bookings})
 
 
 
@@ -536,6 +537,7 @@ def daycation_package_details(request, package_id):
     }
     return render(request, 'day_packs_details.html', context)
 
+@login_required
 def book_package(request, package_id):
     package = get_object_or_404(DaycationPackage, id=package_id)
     addons = PackageAddon.objects.filter(package=package)
@@ -547,6 +549,7 @@ def book_package(request, package_id):
     }
     return render(request, 'book_package.html', context)
 
+@login_required
 def process_booking(request, package_id):
     """Process booking for a selected package"""
     if request.method == 'POST':
@@ -658,20 +661,6 @@ def check_availability(request):
 
     return JsonResponse({'available_capacity': available_capacity, 'is_available': available_capacity >= guests})
 
-@require_POST
-def cancel_booking(request, booking_id):
-    """Cancel a booking if allowed"""
-    booking = get_object_or_404(DaycationBooking, id=booking_id, user=request.user)
-    
-    if booking.can_be_cancelled:
-        booking.status = 'cancelled'
-        booking.save()
-        messages.success(request, 'Booking successfully cancelled.')
-    else:
-        messages.error(request, 'Booking cannot be cancelled.')
-
-    return redirect('booking_history')
-
 @login_required
 def booking_view(request, package_id):
     package = get_object_or_404(DaycationPackage, id=package_id)
@@ -715,10 +704,26 @@ def booking_history(request):
     }
     return render(request, 'booking_history.html', context)
 
+@login_required
 def booking_confirmation(request, booking_id):
     """Display booking confirmation details"""
     booking = get_object_or_404(DaycationBooking, id=booking_id)
     return render(request, 'booking_confirmation.html', {'booking': booking})
+
+@login_required
+@require_POST
+def cancel_booking(request, booking_id):
+    """Cancel a booking if allowed"""
+    booking = get_object_or_404(DaycationBooking, id=booking_id, user=request.user)
+    
+    if booking.can_be_cancelled:
+        booking.status = 'cancelled'
+        booking.save()
+        messages.success(request, 'Booking successfully cancelled.')
+    else:
+        messages.error(request, 'Booking cannot be cancelled.')
+
+    return redirect('booking_history')
 
 @csrf_exempt
 def verify_payment(request):
@@ -841,6 +846,7 @@ def toggle_wishlist(request, package_id):
         'is_in_wishlist': is_in_wishlist
     })
 
+@login_required
 def wishlist(request):
     if request.user.is_authenticated:
         # Fetch wishlist items for authenticated users
@@ -857,6 +863,23 @@ def wishlist(request):
     }
     return render(request, 'wishlist.html', context)
 
+@csrf_exempt
+def submit_feedback(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            rating = data.get('rating')
+            feedback = data.get('feedback')
+            booking_id = data.get('booking_id')  # Get booking ID
+
+            # Save feedback to the database
+            Feedback.objects.create(rating=rating, feedback=feedback, booking_id=booking_id)
+
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
 
 

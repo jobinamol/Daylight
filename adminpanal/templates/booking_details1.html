@@ -22,14 +22,12 @@
                         <div class="col-md-6">
                             <p><strong>Package:</strong> {{ booking.package.name }}</p>
                             <p><strong>Date:</strong> {{ booking.date }}</p>
-                            <p><strong>Status:</strong> <span class="badge {% if booking.status == 'confirmed' %}bg-success{% elif booking.status == 'cancelled' %}bg-danger{% else %}bg-warning{% endif %}">{{ booking.get_status_display }}</span></p>
                             <p><strong>Total Price:</strong> ₹{{ booking.total_price }}</p>
                         </div>
                         <div class="col-md-6">
                             <p><strong>Adults:</strong> {{ booking.num_adults }}</p>
                             <p><strong>Children:</strong> {{ booking.num_children }}</p>
                             <p><strong>Food Preference:</strong> {{ booking.get_food_preference_display }}</p>
-                            <p><strong>Payment Status:</strong> <span class="badge {% if booking.payment_status == 'paid' %}bg-success{% else %}bg-warning{% endif %}">{{ booking.get_payment_status_display }}</span></p>
                         </div>
                     </div>
                 </div>

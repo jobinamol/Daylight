@@ -317,3 +317,11 @@ class Wishlist(models.Model):
 
     class Meta:
         unique_together = ('user', 'package')
+
+class Feedback(models.Model):
+    rating = models.IntegerField()
+    feedback = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Feedback {self.id} - Rating: {self.rating}'

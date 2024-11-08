@@ -1,73 +1,102 @@
 {% extends 'userindex.html' %}
 {% load static %}
 
+
+
 {% block content %}
-<div class="container mt-5">
-    <h1 class="mb-4">Your Wishlist</h1>
-    
-    {% if packages %}
-        <div class="row">
-            {% for package in packages %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="{% if package.image %}{{ package.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}" 
-                         class="card-img-top" alt="{{ package.name }}" style="height: 200px; object-fit: cover;">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">{{ package.name }}</h5>
-                        <p class="card-text">{{ package.description|truncatewords:20 }}</p>
-                        <ul class="list-unstyled mt-auto">
-                            <li><strong>Price:</strong> ₹{{ package.price }}</li>
-                            <li><strong>Duration:</strong> {{ package.duration }} hours</li>
-                        </ul>
-                        <div class="mt-auto">
-                            <a href="{% url 'package_details' package.id %}" class="btn btn-primary">View Details</a>
-                            <button class="btn btn-danger remove-from-wishlist" data-package-id="{{ package.id }}">Remove</button>
-                        </div>
-                    </div>
+<div class="hero-wrap" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+                <div class="text">
+                    <p class="breadcrumbs mb-2"><span class="mr-2"><a href="{% url 'userdashboard' %}">Home</a></span> <span>About</span></p>
+                    <h1 class="mb-4 bread">About Daylight Resort</h1>
                 </div>
             </div>
-            {% endfor %}
         </div>
-    {% else %}
-        <div class="alert alert-info" role="alert">
-            Your wishlist is empty. <a href="{% url 'daycation_packages' %}" class="alert-link">Browse packages</a> to add items to your wishlist.
-        </div>
-    {% endif %}
+    </div>
 </div>
+<div class="container mt-5">
+    <h2 class="mb-4">Your Saved Packages</h2>
+    <div class="row">
+        {% for package in packages %}
+        <div class="col-md-4 mb-4">
+            <div class="card package-card">
+                <img src="{{ package.image.url }}" class="card-img-top package-image" alt="{{ package.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ package.name }}</h5>
+                    <p class="card-text">{{ package.description|truncatewords:20 }}</p>
+                    <ul class="package-features list-unstyled">
+                        <li><i class="fas fa-clock"></i> {{ package.duration }}</li>
+                        <li><i class="fas fa-user-friends"></i> Max {{ package.max_capacity }} guests</li>
+                        <li><i class="fas fa-rupee-sign"></i> {{ package.price }}</li>
+                    </ul>
+                    <a href="{% url 'daycation_package_details' package.id %}" class="btn btn-primary">View Details</a>
+                    <button class="btn btn-danger remove-from-wishlist" data-package-id="{{ package.id }}">Remove from Wishlist</button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle"></i> Your wishlist is empty.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
-    // AJAX Remove from Wishlist
-    document.querySelectorAll('.remove-from-wishlist').forEach(btn => {
-        btn.addEventListener('click', function(event) {
-            event.preventDefault();
-            const packageId = this.dataset.packageId;
-            const card = this.closest('.col-md-4');
-            
-            fetch(`/toggle-wishlist/${packageId}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    card.remove();
-                    showToast('Removed from wishlist');
-                    
-                    // Check if wishlist is empty after removal
-                    if (document.querySelectorAll('.col-md-4').length === 0) {
-                        location.reload(); // Reload to show empty wishlist message
-                    }
-                }
-            })
-            .catch(error => console.error('Error:', error));
+$(document).ready(function() {
+    $('.remove-from-wishlist').click(function() {
+        var btn = $(this);
+        var packageId = btn.data('package-id');
+
+        $.ajax({
+            url: '/toggle-wishlist/' + packageId + '/',
+            method: 'POST',
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            success: function(data) {
+                // Optionally, handle successful removal response
+                btn.closest('.col-md-4').fadeOut();
+            },
+            error: function(xhr) {
+                // Handle any error responses here
+                alert('Failed to remove package from wishlist. Please try again.');
+            }
         });
     });
-
-    function showToast(message) {
-        // Implementation of showToast function (same as in the package listing page)
-    }
+});
 </script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.header {
+    margin-bottom: 30px; /* Space below header */
+}
+
+.breadcrumb {
+    background-color: transparent; /* Transparent background for breadcrumb */
+}
+
+.package-card {
+    transition: transform 0.2s; /* Smooth transform on hover */
+}
+
+.package-card:hover {
+    transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+.package-features li {
+    margin-bottom: 10px; /* Space between features */
+}
+
+.btn-danger {
+    margin-top: 10px; /* Space above remove button */
+}
+</style>
 {% endblock %}

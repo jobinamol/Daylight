@@ -5,29 +5,27 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Phone</th>
+            <th>Full Name</th>
             <th>Email</th>
+            <th>Phone</th>
             <th>Package</th>
-            <th>Room</th>
             <th>Payment Method</th>
             <th>Total Amount</th>
-            <th>Actions</th>
+           
         </tr>
     </thead>
     <tbody>
         {% for booking in bookings %}
         <tr>
-            <td>{{ booking.first_name }}</td>
-            <td>{{ booking.last_name }}</td>
-            <td>{{ booking.phone }}</td>
+            <td>{{ booking.full_name }}</td>
             <td>{{ booking.email }}</td>
+            <td>{{ booking.phone }}</td>
             <td>{{ booking.package.name }}</td>
-            <td>{{ booking.room.room_type }}</td>
-            <td>{{ booking.payment_method }}</td>
-            <td>₹{{ booking.total_amount }}</td>
-            
+            <td>{{ booking.payment_status }}</td>
+            <td>₹{{ booking.total_price }}</td>
+            <td>
+                
+            </td>
         </tr>
         {% endfor %}
     </tbody>

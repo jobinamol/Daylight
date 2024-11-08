@@ -63,10 +63,11 @@ def evant_dashboard(request):
 def guestservice_dashboard(request):
     return render(request,"guestservice_dashboard.html")
 def menu_management(request):
-    # Retrieve all menu items and their categories
-    menu_items = MenuItem.objects.select_related('category').all()
-    categories = FoodCategory.objects.all()
-    return render(request, 'menu_management.html', {'menu_items': menu_items, 'categories': categories})
+    # Fetch all menu items with related food category data
+    menu_items = MenuItem.objects.select_related('food_category').all()
+    
+    # Pass the list of menu items to the template
+    return render(request, 'menu_management.html', {'menu_items': menu_items})
 
 def add_menu_item(request):
     # Retrieve all food categories
