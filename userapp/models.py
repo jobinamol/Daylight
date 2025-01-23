@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator, EmailValidator
 from django.utils import timezone
 from adminpanal.models import PackageManagement
 from staffs.models import Room
@@ -102,6 +102,16 @@ class UserDB(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=now)
+
+    ACCOUNT_TYPE_CHOICES = [
+        ('customer', 'Customer'),
+        ('resort_owner', 'Resort Owner'),
+    ]
+
+    account_type = models.CharField(max_length=50, choices=ACCOUNT_TYPE_CHOICES, default='customer')
+    email = models.EmailField(default='default@example.com')
+    password = models.CharField(max_length=255)  # Store hashed password
+    is_verified = models.BooleanField(default=False)  # To track email verification
 
     class Meta:
         db_table = 'users'

@@ -13,6 +13,7 @@ urlpatterns = [
     path('check_username/', views.check_username, name='check_username'),
 
     path('userregister/', views.userregister, name='userregister'),
+    path('verify_email/', views.verify_email, name='verify_email'),
     path('viewprofile/', views.viewprofile, name='viewprofile'),  # URL for viewing user profile
     path('editprofile/', views.editprofile, name='editprofile'),
     path('changepassword/', views.changepassword, name='changepassword'),

@@ -245,7 +245,7 @@ def login_view(request):
         # Staff logins with redirection based on username
         staff_credentials = {
             'frontdesk@gmail.com': ('frontdesk', 'userindex'),
-            'culinary@gmail.com': ('culinary', 'kitchenstaff_dashboard'),
+            'culinary@gmail.com': ('culinary', 'resort_owner_dashboard'),
             'customerservice@gmail.com': ('customerservic', 'guestservice_dashboard'),
             'housekeeping@gmail.com': ('housekeeping', 'housekeep_dashboard'),
         }
@@ -304,82 +304,45 @@ def _invalidate_user_sessions(user_id, user_type):
 
 def userregister(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
-        address = request.POST.get('address')
-        mobilenumber = request.POST.get('mobilenumber')
+        account_type = request.POST.get('account_type')
         email = request.POST.get('email')
-        district = request.POST.get('district')
-        age = request.POST.get('age')
-        sex = request.POST.get('sex')
-        profile_image = request.FILES.get('profile_image')
-        username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Validation
-        errors = {}
-        if not name or len(name) < 2:
-            errors['name'] = 'Name must be at least 2 characters long.'
-        if not address:
-            errors['address'] = 'Address is required.'
-        if not mobilenumber or not re.match(r'^\+?1?\d{9,15}$', mobilenumber):
-            errors['mobilenumber'] = 'Invalid mobile number.'
-        try:
-            validate_email(email)
-        except ValidationError:
-            errors['email'] = 'Invalid email address.'
-        if not district:
-            errors['district'] = 'District is required.'
-        try:
-            age = int(age)
-            if age < 18 or age > 120:
-                errors['age'] = 'Age must be between 18 and 120.'
-        except ValueError:
-            errors['age'] = 'Invalid age.'
-        if sex not in ['M', 'F', 'O']:
-            errors['sex'] = 'Invalid sex selection.'
-        if not username or len(username) < 4:
-            errors['username'] = 'Username must be at least 4 characters long.'
-        if not password or len(password) < 8:
-            errors['password'] = 'Password must be at least 8 characters long.'
+        # Validate email format
+        if not validate_email(email):
+            messages.error(request, 'Invalid email format.')
+            return render(request, 'userregister.html')
 
-        if UserDB.objects.filter(username=username).exists():
-            errors['username'] = 'Username already exists.'
+        # Check if the email already exists
         if UserDB.objects.filter(email=email).exists():
-            errors['email'] = 'Email already exists.'
+            messages.error(request, 'Email already exists. Please use a different email.')
+            return render(request, 'userregister.html')
 
-        if errors:
-            for field, error in errors.items():
-                messages.error(request, f"{field.capitalize()}: {error}")
-            return render(request, 'userregister.html', {'errors': errors})
-
-        hashed_password = make_password(password)
-
-        # Handle profile image
-        profile_image_path = 'default.jpg'
-        if profile_image:
-            fs = FileSystemStorage()
-            filename = fs.save(profile_image.name, profile_image)
-            profile_image_path = filename
-
-        user_db = UserDB(
-            name=name,
-            address=address,
-            mobilenumber=mobilenumber,
-            email=email,
-            district=district,
-            age=age,
-            sex=sex,
-            username=username,
-            password=hashed_password,
-            profile_image=profile_image_path
+        # Generate OTP for email verification
+        otp = random.randint(100000, 999999)
+        send_mail(
+            'Email Verification',
+            f'Your OTP for verification is: {otp}',
+            settings.DEFAULT_FROM_EMAIL,
+            [email],
+            fail_silently=False,
         )
-        user_db.save()
 
-        messages.success(request, 'Registration successful. You can now log in.')
-        return redirect('login')
+        # Store OTP and user data in session
+        request.session['otp'] = otp
+        request.session['account_type'] = account_type
+        request.session['email'] = email
+        request.session['password'] = make_password(password)  # Hash the password
+
+        messages.success(request, 'OTP sent to your email for verification!')
+        return redirect('verify_email')  # Redirect to OTP verification page
 
     return render(request, 'userregister.html')
 
+def validate_email(email):
+    # Simple email validation logic
+    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(email_pattern, email) is not None
 
 def viewprofile(request):
     if 'username' not in request.session:
@@ -687,5 +650,25 @@ def daycation_packages(request):
     for package in packages:
         package.is_in_wishlist = package.wishlist.filter(id=request.user.id).exists() if request.user.is_authenticated else False
     return render(request, 'daycation_package.html', {'packages': packages})
+
+def verify_email(request):
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        if entered_otp == str(request.session.get('otp')):
+            # Create the user after successful verification
+            user = UserDB(
+                account_type=request.session.get('account_type'),
+                email=request.session.get('email'),
+                password=request.session.get('password'),
+                is_verified=True  # Mark as verified
+            )
+            user.save()
+            messages.success(request, 'Registration successful!')
+            return redirect('login')  # Redirect to login page
+        else:
+            messages.error(request, 'Invalid OTP. Please try again.')
+            return render(request, 'verify_email.html')
+
+    return render(request, 'verify_email.html')  # Create a template for OTP input
 
 

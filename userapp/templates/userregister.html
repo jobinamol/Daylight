@@ -1,664 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Register - Daylight Resort</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration - Daylight Resort</title>
     {% load static %}
-    {% load socialaccount %}
-
-    <!-- CSS Stylesheets -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
-        body, html {
-            height: 100%;
+        body {
+            font-family: 'Arial', sans-serif;
             margin: 0;
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f0f4f8;
-        }
-
-        .container {
+            padding: 0;
             display: flex;
             height: 100vh;
+            background-color: #f4f4f4; /* Light background color */
         }
-
-        .image-section {
-            flex: 2;
-            background-image: url("{% static 'images/home.jpg' %}");
-            background-size: cover;
-            background-position: center;
+        .container {
+            width: 400px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             position: relative;
-            overflow: hidden;
+            z-index: 1;
         }
-
-        .image-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
-        }
-
-        .welcome-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ffffff;
+        h2 {
             text-align: center;
-            width: 80%;
+            color: #333; /* Dark text color */
         }
-
-        .welcome-text h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 5rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            animation: fadeInDown 1s ease-out;
-        }
-
-        .welcome-text p {
-            font-size: 1.5rem;
-            max-width: 600px;
-            margin: 0 auto;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            animation: fadeInUp 1s ease-out 0.5s;
-            opacity: 0;
-            animation-fill-mode: forwards;
-        }
-
-        .register-section {
-            flex: 1;
-            background-color: #ffffff;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            box-shadow: -10px 0 20px rgba(0,0,0,0.1);
-            overflow-y: auto;
-        }
-
-        .register-container {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .register-container h3 {
-            font-family: 'Cormorant Garamond', serif;
-            color: #2c3e50;
-            font-weight: 700;
-            margin-bottom: 30px;
-            text-align: center;
-            font-size: 2.8rem;
-        }
-
-        .step-indicator {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-        }
-
-        .step-dot {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: #dadce0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .step-dot.active {
-            background-color: #1a73e8;
-            transform: scale(1.2);
-        }
-
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
-
-        .form-group label {
+        label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #5f6368;
+            margin-bottom: 5px;
+            color: #555; /* Medium gray for labels */
         }
-
-        .form-group label.required::after {
-            content: " *";
-            color: #dc3545;
-        }
-
-        .form-control {
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
             width: 100%;
-            padding: 12px 15px;
-            font-size: 16px;
-            border: 1px solid #dadce0;
+            padding: 10px;
+            border: 1px solid #ccc; /* Light gray border */
             border-radius: 4px;
-            transition: border-color 0.3s ease;
         }
-
-        .form-control:focus {
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
-            outline: none;
-        }
-
-        .btn {
+        button {
             width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 10px;
+            background-color: #5cb85c; /* Green button */
             border: none;
             border-radius: 4px;
+            color: white;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
-
-        .btn-primary {
-            background-color: #1a73e8;
-            color: #ffffff;
+        button:hover {
+            background-color: #4cae4c; /* Darker green on hover */
         }
-
-        .btn-primary:hover {
-            background-color: #1557b0;
+        .error {
+            color: red;
+            font-size: 14px;
         }
-
-        .btn-secondary {
-            background-color: #f1f3f4;
-            color: #5f6368;
-        }
-
-        .btn-secondary:hover {
-            background-color: #e8eaed;
-        }
-
-        .error-message {
-            color: #dc3545;
-            font-size: 0.85rem;
-            margin-top: 5px;
-        }
-
-        .password-strength {
-            height: 5px;
-            margin-top: 5px;
-            background-color: #e0e0e0;
-            border-radius: 2px;
-        }
-
-        .password-strength-bar {
-            height: 100%;
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .btn-group .btn {
-            width: 48%;
-        }
-
-        .image-preview {
-            max-width: 100%;
-            max-height: 200px;
-            margin-top: 10px;
-            border-radius: 4px;
-            display: none;
-        }
-
-        .notification {
-            padding: 15px;
-            border-radius: 4px;
+        .welcome-message {
+            text-align: center;
             margin-bottom: 20px;
-            font-size: 0.9rem;
-            display: none;
+            color: #5cb85c; /* Green for welcome message */
         }
-
-        .notification.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .notification.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -70%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .back-icon {
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            color: #ffffff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 2;
-            background-color: rgba(44, 62, 80, 0.5);
-            padding: 10px 15px;
-            border-radius: 50px;
-        }
-
-        .back-icon:hover {
-            background-color: #2c3e50;
-        }
-
         .step {
             display: none;
         }
-
-        .step.active {
+        .active {
             display: block;
-        }
-
-        select.form-control {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235f6368' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            padding-right: 2.5rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="image-section">
-            <div class="welcome-text">
-                <h1>Join Daylight Resort</h1>
-                <p>Create your account and start planning your perfect getaway today.</p>
-            </div>
-            <span class="back-icon" onclick="window.history.back();"><i class="fas fa-arrow-left"></i> Back</span>
-        </div>
-        <div class="register-section">
-            <div class="register-container">
-                <h3>Register</h3>
-                
-                <div class="step-indicator">
-                    <div class="step-dot active">1</div>
-                    <div class="step-dot">2</div>
-                    <div class="step-dot">3</div>
-                    <div class="step-dot">4</div>
+        <h2>Sign Up</h2>
+        <p class="welcome-message">Welcome to Daylight Resort!</p>
+        <form id="registrationForm" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Step 1: Account Information -->
+            <div class="step active" id="step1">
+                <div class="form-group">
+                    <label for="account_type">Account Type:</label>
+                    <select id="account_type" name="account_type" required>
+                        <option value="" disabled selected>Select account type</option>
+                        <option value="customer">Customer</option>
+                        <option value="resort_owner">Resort Owner</option>
+                    </select>
                 </div>
-                
-                <form id="registerForm" method="POST" action="{% url 'userregister' %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    
-                    <div class="step active" id="step1">
-                        <div class="form-group">
-                            <label for="name" class="required">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                            <span class="error-message" id="name-error"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="emailid" class="required">Email</label>
-                            <input type="email" class="form-control" id="emailid" name="emailid" required>
-                            <span class="error-message" id="emailid-error"></span>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" onclick="nextStep(1)">Next</button>
-                        </div>
-                    </div>
-
-                    <div class="step" id="step2">
-                        <div class="form-group">
-                            <label for="address" class="required">Address</label>
-                            <input type="text" class="form-control" id="address" name="address" required>
-                            <span class="error-message" id="address-error"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="country" class="required">Country</label>
-                            <select class="form-control" id="country" name="country" required>
-                                <option value="" disabled selected>Select Country</option>
-                            </select>
-                            <span class="error-message" id="country-error"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="state" class="required">State</label>
-                            <select class="form-control" id="state" name="state" required>
-                                <option value="" disabled selected>Select State</option>
-                            </select>
-                            <span class="error-message" id="state-error"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="district" class="required">District</label>
-                            <select class="form-control" id="district" name="district" required>
-                                <option value="" disabled selected>Select District</option>
-                            </select>
-                            <span class="error-message" id="district-error"></span>
-                        </div>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Back</button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next</button>
-                        </div>
-                    </div>
-
-                    <div class="step" id="step3">
-                        <div class="form-group">
-                            <label for="age" class="required">Age</label>
-                            <input type="number" class="form-control" id="age" name="age" required>
-                            <span class="error-message" id="age-error"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="sex" class="required">Sex</label>
-                            <select class="form-control" id="sex" name="sex" required>
-                                <option value="" disabled selected>Choose...</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
-                            <span class="error-message" id="sex-error"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="profile_image" class="required">Profile Image</label>
-                            <input type="file" class="form-control-file" id="profile_image" name="profile_image" accept="image/*" required>
-                            <span class="error-message" id="profile_image-error"></span>
-                            <img id="image-preview" class="image-preview" src="#" alt="Profile Image Preview" />
-                        </div>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-secondary" onclick="prevStep(3)">Back</button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next</button>
-                        </div>
-                    </div>
-
-                    <div class="step" id="step4">
-                        <div class="form-group">
-                            <label for="username" class="required">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
-                            <span class="error-message" id="username-error"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="required">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                            <div class="password-strength">
-                                <div class="password-strength-bar" id="password-strength-bar"></div>
-                            </div>
-                            <span class="error-message" id="password-error"></span>
-                        </div>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-secondary" onclick="prevStep(4)">Back</button>
-                            <button type="submit" class="btn btn-primary">Register</button>
-                        </div>
-                    </div>
-                </form>
-
-                <div class="login-link">
-                    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <div id="emailError" class="error"></div>
                 </div>
-
-                <div id="notification" class="notification"></div>
+                <button type="button" onclick="nextStep(1)">Next</button>
             </div>
-        </div>
+
+            <!-- Step 2: Password Setup -->
+            <div class="step" id="step2">
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                    <div id="passwordError" class="error"></div>
+                </div>
+                <button type="button" onclick="validateAndSubmit()">Submit</button>
+            </div>
+        </form>
     </div>
 
-    <!-- JavaScript -->
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    
     <script>
-        function showNotification(message, type) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 5000);
+        function nextStep(step) {
+            const currentStep = document.getElementById(`step${step}`);
+            const nextStep = document.getElementById(`step${step + 1}`);
+            currentStep.classList.remove('active');
+            nextStep.classList.add('active');
         }
 
-        function updateStepIndicator(currentStep) {
-            const dots = document.querySelectorAll('.step-dot');
-            dots.forEach((dot, index) => {
-                if (index < currentStep) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
+        function validateAndSubmit() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
 
-        function showError(elementId, message) {
-            const errorElement = document.getElementById(elementId);
-            errorElement.innerText = message;
-            errorElement.style.display = 'block';
-        }
+            // Reset errors
+            emailError.textContent = '';
+            passwordError.textContent = '';
 
-        function clearError(elementId) {
-            const errorElement = document.getElementById(elementId);
-            errorElement.innerText = '';
-            errorElement.style.display = 'none';
-        }
-
-        function validateField(fieldId, errorId, validationFunction) {
-            const field = document.getElementById(fieldId);
-            const isValid = validationFunction(field.value);
-
-            if (isValid) {
-                clearError(errorId);
-                field.style.borderColor = '#28a745';
-            } else {
-                showError(errorId, 'This field is required and must be valid.');
-                field.style.borderColor = '#dc3545';
+            // Validate email format
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                emailError.textContent = 'Invalid email format.';
+                return;
             }
-            return isValid;
+
+            // Validate password match
+            if (password !== confirmPassword) {
+                passwordError.textContent = 'Passwords do not match.';
+                return;
+            }
+
+            // If validation passes, submit the form
+            document.getElementById('registrationForm').submit();
         }
-
-        function nextStep(currentStep) {
-            const currentStepElement = document.getElementById(`step${currentStep}`);
-            const nextStepElement = document.getElementById(`step${currentStep + 1}`);
-            
-            let isValid = true;
-            currentStepElement.querySelectorAll('input, select').forEach(input => {
-                if (!validateField(input.id, `${input.id}-error`, value => value.trim() !== '')) {
-                    isValid = false;
-                }
-            });
-
-            if (isValid) {
-                currentStepElement.classList.remove('active');
-                nextStepElement.classList.add('active');
-                updateStepIndicator(currentStep + 1);
-            } else {
-                showNotification('Please fill in all required fields correctly.', 'error');
-            }
-        }
-
-        function prevStep(currentStep) {
-            document.getElementById(`step${currentStep}`).classList.remove('active');
-            document.getElementById(`step${currentStep - 1}`).classList.add('active');
-            updateStepIndicator(currentStep - 1);
-        }
-
-        // Email existence check
-        document.getElementById('emailid').addEventListener('blur', function() {
-            const email = this.value;
-            if (email.length > 0) {
-                fetch(`/check_email/?email=${email}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.exists) {
-                            showError('emailid-error', 'This email is already registered.');
-                        } else {
-                            clearError('emailid-error');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error checking email:', error);
-                    });
-            }
-        });
-
-        // Password strength meter
-        document.getElementById('password').addEventListener('input', function() {
-            const password = this.value;
-            const strengthBar = document.getElementById('password-strength-bar');
-            const strengthMessage = document.getElementById('password-error');
-
-            let strength = 0;
-            if (password.length >= 8) strength++; // Minimum length
-            if (/[A-Z]/.test(password)) strength++; // Uppercase letter
-            if (/[a-z]/.test(password)) strength++; // Lowercase letter
-            if (/[0-9]/.test(password)) strength++; // Number
-            if (/[^A-Za-z0-9]/.test(password)) strength++; // Special character
-
-            const strengthPercentage = (strength / 5) * 100;
-            strengthBar.style.width = `${strengthPercentage}%`;
-
-            if (strength < 2) {
-                strengthBar.style.backgroundColor = '#dc3545';
-                strengthMessage.innerText = 'Weak password';
-            } else if (strength < 4) {
-                strengthBar.style.backgroundColor = '#ffc107';
-                strengthMessage.innerText = 'Moderate password';
-            } else {
-                strengthBar.style.backgroundColor = '#28a745';
-                strengthMessage.innerText = 'Strong password';
-            }
-        });
-
-        // Image preview
-        document.getElementById('profile_image').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            const preview = document.getElementById('image-preview');
-            
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = '#';
-                preview.style.display = 'none';
-            }
-        });
-
-        // Form submission
-        document.getElementById('registerForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            let allValid = true;
-            
-            this.querySelectorAll('input, select').forEach(input => {
-                if (!validateField(input.id, `${input.id}-error`, value => value.trim() !== '')) {
-                    allValid = false;
-                }
-            });
-
-            if (allValid) {
-                showNotification('Registration successful! Welcome to Daylight Resort.', 'success');
-                // Uncomment the line below to actually submit the form
-                // this.submit();
-            } else {
-                showNotification('Please fill in all required fields correctly.', 'error');
-            }
-        });
-
-        // Live validation for all fields
-        document.querySelectorAll('.form-control').forEach(input => {
-            input.addEventListener('input', function() {
-                validateField(this.id, `${input.id}-error`, value => value.trim() !== '');
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const locationData = {
-                "India": {
-                    "Kerala": ["Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam"],
-                    "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"],
-                    "Karnataka": ["Bengaluru", "Mysuru", "Hubballi-Dharwad", "Mangaluru", "Belagavi"]
-                },
-                "USA": {
-                    "California": ["Los Angeles", "San Francisco", "San Diego", "San Jose", "Fresno"],
-                    "New York": ["New York City", "Buffalo", "Rochester", "Yonkers", "Syracuse"],
-                    "Texas": ["Houston", "San Antonio", "Dallas", "Austin", "Fort Worth"]
-                },
-                "UK": {
-                    "England": ["London", "Manchester", "Birmingham", "Liverpool", "Leeds"],
-                    "Scotland": ["Edinburgh", "Glasgow", "Aberdeen", "Dundee", "Inverness"],
-                    "Wales": ["Cardiff", "Swansea", "Newport", "Bangor", "St Asaph"]
-                }
-            };
-
-            const countrySelect = document.getElementById('country');
-            const stateSelect = document.getElementById('state');
-            const districtSelect = document.getElementById('district');
-
-            // Populate country dropdown
-            Object.keys(locationData).forEach(country => {
-                const option = document.createElement('option');
-                option.value = country;
-                option.textContent = country;
-                countrySelect.appendChild(option);
-            });
-
-            // Event listener for country selection
-            countrySelect.addEventListener('change', function() {
-                stateSelect.innerHTML = '<option value="" disabled selected>Select State</option>';
-                districtSelect.innerHTML = '<option value="" disabled selected>Select District</option>';
-
-                if (this.value in locationData) {
-                    Object.keys(locationData[this.value]).forEach(state => {
-                        const option = document.createElement('option');
-                        option.value = state;
-                        option.textContent = state;
-                        stateSelect.appendChild(option);
-                    });
-                }
-            });
-
-            // Event listener for state selection
-            stateSelect.addEventListener('change', function() {
-                districtSelect.innerHTML = '<option value="" disabled selected>Select District</option>';
-
-                const selectedCountry = countrySelect.value;
-                const selectedState = this.value;
-
-                if (selectedCountry in locationData && selectedState in locationData[selectedCountry]) {
-                    locationData[selectedCountry][selectedState].forEach(district => {
-                        const option = document.createElement('option');
-                        option.value = district;
-                        option.textContent = district;
-                        districtSelect.appendChild(option);
-                    });
-                }
-            });
-        });
     </script>
 </body>
 </html>

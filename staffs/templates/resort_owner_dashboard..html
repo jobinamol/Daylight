@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <title>Resort Owner Dashboard - Daylight Daycation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .dashboard-card {
+            margin-bottom: 20px;
+        }
+        .dashboard-card h5 {
+            font-weight: bold;
+        }
+    </style>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">Daylight</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="{% url 'resort_owner_dashboard' %}" class="nav-link">Dashboard</a></li>
+            <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="text-center">Resort Owner Dashboard</h2>
+
+        <!-- Resort Management Section -->
+        <div class="card dashboard-card">
+            <div class="card-header">Resort Management</div>
+            <div class="card-body">
+                <a href="{% url 'create_resort' %}" class="btn btn-primary">Add Resort</a>
+                <a href="{% url 'edit_resort' resort.id %}" class="btn btn-secondary">Edit Resort</a>
+                <hr>
+                <h5>Resort Details</h5>
+                <p>Name: {{ resort.name }}</p>
+                <p>Location: {{ resort.location }}</p>
+                <p>Description: {{ resort.description }}</p>
+            </div>
+        </div>
+
+        <!-- Package Management Section -->
+        <div class="card dashboard-card">
+            <div class="card-header">Package Management</div>
+            <div class="card-body">
+                <a href="{% url 'create_package' %}" class="btn btn-primary">Add Package</a>
+                <hr>
+                <h5>Existing Packages</h5>
+                <ul>
+                    {% for package in packages %}
+                        <li>{{ package.name }} - <a href="{% url 'edit_package' package.id %}">Edit</a></li>
+                    {% empty %}
+                        <li>No packages available.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Room Management Section -->
+        <div class="card dashboard-card">
+            <div class="card-header">Room Management</div>
+            <div class="card-body">
+                <a href="{% url 'create_room' %}" class="btn btn-primary">Add Room</a>
+                <hr>
+                <h5>Existing Rooms</h5>
+                <ul>
+                    {% for room in rooms %}
+                        <li>{{ room.room_type }} - <a href="{% url 'edit_room' room.id %}">Edit</a></li>
+                    {% empty %}
+                        <li>No rooms available.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="card dashboard-card">
+            <div class="card-header">Analytics Overview</div>
+            <div class="card-body">
+                <h5>Total Bookings: {{ total_bookings }}</h5>
+                <h5>Total Revenue: ${{ total_revenue }}</h5>
+                <a href="{% url 'resort_analytics' %}" class="btn btn-info">View Detailed Analytics</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="ftco-footer ftco-bg-dark ftco-section">
+        <div class="container">
+          <div class="row mb-5">
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Daylight Resort</h2>
+                <p>Providing the best daycation and staycation experiences.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  </body>
+</html>
