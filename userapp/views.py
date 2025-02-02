@@ -41,6 +41,10 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+from django.http import JsonResponse
+from django.contrib.auth.forms import AuthenticationForm
 # Helper function to convert credentials to a dictionary
 def credentials_to_dict(credentials):
     return {
@@ -220,59 +224,94 @@ def userindex(request):
     }
     return render(request, 'userindex.html', context)
 
+def resortindex(request):
+    return render(request, 'resortindex.html')
+
 def check_username(request):
     username = request.GET.get('username')
     if UserDB.objects.filter(username=username).exists():
         return JsonResponse({'message': 'Username is already taken.'})
     else:
         return JsonResponse({'message': 'Username is available.'})
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, get_user_model
+from django.core.mail import send_mail
+from django.contrib import messages
+from django.contrib.sessions.models import Session
+from django.utils import timezone
+from django.core.cache import cache
+import pyotp
+from django.contrib.auth import authenticate
+from userapp.models import UserDB 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.core.cache import cache
+
+def generate_otp():
+    # Function to generate OTP (implement logic)
+    return "123456"
+
+def send_otp(email, otp):
+    # Function to send OTP (implement logic)
+    pass
+
+def _invalidate_user_sessions(user_id, user_type):
+    # Function to invalidate previous sessions (implement logic)
+    pass
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username = request.POST.get('email')
         password = request.POST.get('password')
 
-        # Clear previous session for the current user
-        request.session.flush() 
+        if not username or not password:
+            messages.error(request, "Please enter both username and password.")
+            return redirect('login')
 
-        # Check if the user is the admin
-        if username == 'admin' and password == 'admin':  # In production, use a more secure method
+        # Clear previous session for the current user
+        request.session.flush()
+
+        # Admin Login
+        admin_credentials = {'admin@gmail.com': 'admin'}
+        if username in admin_credentials and password == admin_credentials[username]:
             request.session['user_type'] = 'admin'
             request.session['username'] = 'admin'
             messages.success(request, 'Welcome, Admin!')
             return redirect('adminindex')
-        
-        # Staff logins with redirection based on username
+
+        # Staff Logins
         staff_credentials = {
-            'frontdesk@gmail.com': ('frontdesk', 'userindex'),
-            'culinary@gmail.com': ('culinary', 'resort_owner_dashboard'),
-            'customerservice@gmail.com': ('customerservic', 'guestservice_dashboard'),
-            'housekeeping@gmail.com': ('housekeeping', 'housekeep_dashboard'),
+            'jobina@gmail.com': ('jobina123', 'resortindex'),
+            'ammu@gmail.com': ('ammu123', 'userindex'),
         }
 
-        # Check if the username is in the staff credentials
         if username in staff_credentials:
             expected_password, redirect_url = staff_credentials[username]
-            if password == expected_password:  # In production, use a more secure method
+            if password == expected_password:
                 request.session['user_type'] = username.split('@')[0]
                 request.session['username'] = username
-                messages.success(request, f'Welcome, {username.split("@")[0].capitalize()} Service!')
+                messages.success(request, f'Welcome, {username.split("@")[0].capitalize()}!')
                 return redirect(redirect_url)
             else:
                 messages.error(request, 'Invalid username or password.')
                 return redirect('login')
 
-        # Check if the user exists in the UserDB (regular user)
+        # Regular User Login (UserDB Authentication)
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            # Check if user already has an active session and clear it
+            otp = generate_otp()
+            cache.set(username, otp, timeout=300)
+            send_otp(user.email, otp)
+
+            # Invalidate previous sessions
             _invalidate_user_sessions(user.id, 'user')
 
             # Start a new session for the user
             login(request, user)
             request.session['user_id'] = user.id
             request.session['username'] = user.username
-            request.session['email'] = user.emailid
+            request.session['email'] = user.email
             request.session['profile_image'] = user.profile_image.url
             request.session['user_type'] = 'user'
             messages.success(request, f'Welcome, {user.name}!')
@@ -282,15 +321,41 @@ def login_view(request):
 
     return render(request, 'login.html')
 
-def _invalidate_user_sessions(user_id, user_type):
-    """Helper function to invalidate all active sessions for a given user or staff."""
-    sessions = Session.objects.filter(expire_date__gte=timezone.now())
-    for session in sessions:
-        data = session.get_decoded()
-        if user_type == 'user' and data.get('user_id') == user_id:
-            session.delete()
-        elif user_type == 'staff' and data.get('staff_id') == user_id:
-            session.delete()
+def verify_otp_view(request):
+    """
+    OTP verification after login attempt.
+    """
+    if request.method == "POST":
+        otp_entered = request.POST.get("otp")
+        user_id = request.session.get("otp_user_id")
+
+        if user_id:
+            user = UserDB.objects.get(id=user_id)
+            cached_otp = cache.get(user.email)  # Retrieve OTP from cache
+
+            if cached_otp and cached_otp == otp_entered:
+                login(request, user)  # Log in the user
+
+                # Store user session details
+                request.session['user_id'] = user.id
+                request.session['username'] = user.username
+                request.session['email'] = user.email
+                request.session['profile_image'] = user.profile_image.url
+                request.session['user_type'] = 'user'
+
+                messages.success(request, f'Welcome, {user.name}!')
+                return redirect('userindex')
+            else:
+                messages.error(request, "Invalid OTP. Please try again.")
+        else:
+            messages.error(request, "Session expired. Please log in again.")
+            return redirect('login')
+
+    return render(request, "verify_otp.html")
+
+
+
+
 
 def _invalidate_user_sessions(user_id, user_type):
     """Helper function to invalidate all active sessions for a given user or staff."""
@@ -301,48 +366,91 @@ def _invalidate_user_sessions(user_id, user_type):
             session.delete()
         elif user_type == 'staff' and data.get('staff_id') == user_id:
             session.delete()
+
 
 def userregister(request):
     if request.method == 'POST':
-        account_type = request.POST.get('account_type')
+        username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
+        name = request.POST.get('name')
+        mobilenumber = request.POST.get('mobilenumber')
+        address = request.POST.get('address')
+        district = request.POST.get('district')
+        age = request.POST.get('age')
+        sex = request.POST.get('sex')
+        profile_image = request.FILES.get('profile_image')
 
-        # Validate email format
-        if not validate_email(email):
-            messages.error(request, 'Invalid email format.')
-            return render(request, 'userregister.html')
+        if not username or not email or not password:
+            messages.error(request, 'Please fill in all required fields.')
+            return redirect('userregister')
 
-        # Check if the email already exists
-        if UserDB.objects.filter(email=email).exists():
-            messages.error(request, 'Email already exists. Please use a different email.')
-            return render(request, 'userregister.html')
+        User = get_user_model()
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email is already registered.')
+            return redirect('userregister')
 
-        # Generate OTP for email verification
-        otp = random.randint(100000, 999999)
+        user = User.objects.create(
+            username=username,
+            email=email,
+            name=name,
+            mobilenumber=mobilenumber,
+            address=address,
+            district=district,
+            age=age,
+            sex=sex,
+            profile_image=profile_image,
+            is_active=False,
+        )
+        user.set_password(password)  # Hashing password
+        user.save()
+
+        otp_secret = pyotp.random_base32()
+        user.otp_secret = otp_secret
+        user.save()
+
+        totp = pyotp.TOTP(otp_secret)
+        otp_code = totp.now()
+
         send_mail(
-            'Email Verification',
-            f'Your OTP for verification is: {otp}',
-            settings.DEFAULT_FROM_EMAIL,
-            [email],
+            'Your OTP Code for Registration',
+            f'Your OTP code is {otp_code}. It will expire in 30 seconds.',
+            'from@example.com',
+            [user.email],
             fail_silently=False,
         )
 
-        # Store OTP and user data in session
-        request.session['otp'] = otp
-        request.session['account_type'] = account_type
-        request.session['email'] = email
-        request.session['password'] = make_password(password)  # Hash the password
-
-        messages.success(request, 'OTP sent to your email for verification!')
-        return redirect('verify_email')  # Redirect to OTP verification page
+        messages.info(request, 'Please check your email for the OTP code.')
+        return redirect('verify_otp', user_id=user.id)
 
     return render(request, 'userregister.html')
 
-def validate_email(email):
-    # Simple email validation logic
-    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    return re.match(email_pattern, email) is not None
+
+def verify_otp(request, user_id):
+    User = get_user_model()
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        messages.error(request, 'User not found.')
+        return redirect('login')
+
+    if request.method == 'POST':
+        otp_entered = request.POST.get('otp')
+
+        if not otp_entered:
+            messages.error(request, 'Please enter the OTP.')
+            return redirect('verify_otp', user_id=user_id)
+
+        totp = pyotp.TOTP(user.otp_secret)
+        if totp.verify(otp_entered):
+            user.is_active = True
+            user.save()
+            messages.success(request, 'Account successfully activated!')
+            return redirect('login')
+        else:
+            messages.error(request, 'Invalid OTP, please try again.')
+
+    return render(request, 'verify_otp.html', {'email': user.email})
 
 def viewprofile(request):
     if 'username' not in request.session:
@@ -373,7 +481,7 @@ def editprofile(request):
         user.name = request.POST.get('name')
         user.address = request.POST.get('address')
         user.mobilenumber = request.POST.get('mobilenumber')
-        user.emailid = request.POST.get('emailid')
+        user.email = request.POST.get('emailid')
         user.district = request.POST.get('district')
         user.age = request.POST.get('age')
         user.sex = request.POST.get('sex')
@@ -650,25 +758,5 @@ def daycation_packages(request):
     for package in packages:
         package.is_in_wishlist = package.wishlist.filter(id=request.user.id).exists() if request.user.is_authenticated else False
     return render(request, 'daycation_package.html', {'packages': packages})
-
-def verify_email(request):
-    if request.method == 'POST':
-        entered_otp = request.POST.get('otp')
-        if entered_otp == str(request.session.get('otp')):
-            # Create the user after successful verification
-            user = UserDB(
-                account_type=request.session.get('account_type'),
-                email=request.session.get('email'),
-                password=request.session.get('password'),
-                is_verified=True  # Mark as verified
-            )
-            user.save()
-            messages.success(request, 'Registration successful!')
-            return redirect('login')  # Redirect to login page
-        else:
-            messages.error(request, 'Invalid OTP. Please try again.')
-            return render(request, 'verify_email.html')
-
-    return render(request, 'verify_email.html')  # Create a template for OTP input
 
 

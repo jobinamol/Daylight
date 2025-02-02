@@ -6,8 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
-    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
@@ -21,12 +20,232 @@
     <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
     <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        :root {
+            --heading-font: 'Playfair Display', serif;
+            --body-font: 'Poppins', sans-serif;
+            --accent-font: 'Cormorant Garamond', serif;
+            
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #ff6b6b;
+            --text-dark: #1a1a1a;
+            --text-light: #666666;
+        }
+
+        body {
+            font-family: var(--body-font);
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        /* Enhanced Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--heading-font);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-wrap h1 {
+            font-size: 4.5rem;
+            line-height: 1.2;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        .subheading {
+            font-family: var(--accent-font);
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .hero-wrap p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            line-height: 1.8;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Enhanced Brand Typography */
+        .navbar-brand {
+            font-family: var(--heading-font);
+        }
+
+        .brand-text {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #fff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-tagline {
+            font-family: var(--body-font);
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        /* Search Container Typography */
+        .search-container label {
+            font-family: var(--body-font);
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-dark);
+        }
+
+        .search-container .form-control {
+            font-family: var(--body-font);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* Resort Card Typography */
+        .resort-card h3 {
+            font-family: var(--heading-font);
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-dark);
+        }
+
+        .resort-info .location {
+            font-family: var(--body-font);
+            font-size: 0.95rem;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+
+        .price-range {
+            font-family: var(--accent-font);
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .price-range span {
+            font-family: var(--heading-font);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* Section Headers */
+        .heading-section h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .heading-section h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        /* Button Typography */
+        .btn {
+            font-family: var(--body-font);
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Featured Tag Typography */
+        .featured-tag {
+            font-family: var(--body-font);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Rating Badge Typography */
+        .rating .badge {
+            font-family: var(--body-font);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Amenities Typography */
+        .amenities span {
+            font-family: var(--body-font);
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+
+        /* Animation Classes */
+        .fade-up {
+            animation: fadeUpAnimation 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeUpAnimation {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Typography */
+        @media (max-width: 768px) {
+            .hero-wrap h1 {
+                font-size: 3rem;
+            }
+
+            .subheading {
+                font-size: 1.4rem;
+            }
+
+            .heading-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .brand-text {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
   </head>
   <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
       <div class="container">
-        <a class="navbar-brand" href="index.html">Daylight</a>
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <span class="brand-text">SmartBookingHub</span>
+          <span class="brand-tagline">Premium Resort Experiences</span>
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="oi oi-menu"></span> Menu
         </button>
@@ -34,26 +253,78 @@
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
-                  <li class="nav-item"><a href="{% url 'daycation_packages' %}" class="nav-link">Packages</a></li>
-                  <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
-                  <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
-                  <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-                  <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Login</a></li>
-
-          </ul>
+            <li class="nav-item"><a href="{% url 'daycation_packages' %}" class="nav-link">Packages</a></li>
+            <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
+            <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Login
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'login' %}">Guest Login</a>
+                    <a class="dropdown-item" href="{% url 'login' %}">Resort Owner Login</a>
+                </div>
+            </li>
+        </ul>
         </div>
       </div>
     </nav>
     <!-- END nav -->
      {% block content %} 
-     <section class="hero-wrap js-fullheight" style="background-image: url('{% static 'images/home.webp' %}');" data-stellar-background-ratio="0.5">
+     <section class="hero-wrap js-fullheight" style="background-image: url('{% static 'images/Hero.webp' %}');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
-        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
-          <div class="col-md-9 ftco-animate text-center">
-            <h1 class="mb-3 bread">Welcome to Daylight</h1>
-            <p class="breadcrumbs"><span class="mr-2">Daycation &amp; Resorts</span></p>
-            <a href="{% url 'daycation_packages' %}" class="btn btn-primary py-3 px-4 mt-3">Explore Packages</a>
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-start">
+          <div class="col-md-8 ftco-animate fade-up">
+            <div class="text mt-5">
+              <span class="subheading">Discover Premium Resorts</span>
+              <h1 class="mb-4">Find Your Perfect Resort Experience</h1>
+              <p class="mb-4">Explore curated packages from top-rated resorts. Your gateway to exceptional stays and memorable experiences.</p>
+              
+              <div class="search-container p-4 rounded">
+                <form class="search-property-1">
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label><i class="fas fa-map-marker-alt"></i> Location</label>
+                        <select class="form-control">
+                          <option value="">Select Location</option>
+                          <option>Beach Resorts</option>
+                          <option>Mountain Retreats</option>
+                          <option>City Luxe</option>
+                          <option>Countryside Escapes</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Date</label>
+                        <input type="date" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Experience</label>
+                        <select class="form-control">
+                          <option value="">Select Experience</option>
+                          <option>Luxury Daycation</option>
+                          <option>Family Package</option>
+                          <option>Romantic Getaway</option>
+                          <option>Adventure Package</option>
+                          <option>Wellness Retreat</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-search"></i> Find Perfect Resort
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -143,6 +414,120 @@
         .card-title {
             font-weight: bold;
             font-size: 1.25rem; /* Adjust the font size as needed */
+        }
+
+        .navbar-brand {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .brand-tagline {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .search-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .resort-card {
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .resort-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .resort-image {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .rating {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        .rating .badge {
+            background: rgba(255, 255, 255, 0.9);
+            color: #ffa500;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .featured-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .resort-info {
+            padding: 20px;
+        }
+
+        .resort-info h3 {
+            margin: 0 0 10px;
+            font-size: 1.3rem;
+        }
+
+        .location {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .amenities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .amenities span {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .price-range {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .price-range span {
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .resort-card {
+                margin: 10px;
+            }
+
+            .resort-image {
+                height: 200px;
+            }
         }
     </style>
     
@@ -270,6 +655,59 @@
                 <span class="icon-instagram align-self-center"></span>
               </div>
             </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ftco-section featured-resorts">
+      <div class="container">
+        <div class="row justify-content-center mb-5">
+          <div class="col-md-7 text-center heading-section ftco-animate">
+            <span class="subheading">Featured Partners</span>
+            <h2>Premium Resort Partners</h2>
+            <p>Discover handpicked luxury resorts offering exceptional experiences</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="featured-carousel owl-carousel ftco-animate">
+              {% for resort in featured_resorts %}
+              <div class="item">
+                <div class="resort-card">
+                  <div class="resort-image" style="background-image: url('{{ resort.image.url }}');">
+                    <div class="rating">
+                      <span class="badge">
+                        <i class="fas fa-star"></i> {{ resort.rating }}
+                      </span>
+                    </div>
+                    {% if resort.featured_tag %}
+                    <div class="featured-tag">
+                      {{ resort.featured_tag }}
+                    </div>
+                    {% endif %}
+                  </div>
+                  <div class="resort-info">
+                    <h3>{{ resort.name }}</h3>
+                    <div class="location">
+                      <i class="fas fa-map-marker-alt"></i> {{ resort.location }}
+                    </div>
+                    <div class="amenities">
+                      {% for amenity in resort.amenities.all|slice:":4" %}
+                      <span><i class="{{ amenity.icon }}"></i> {{ amenity.name }}</span>
+                      {% endfor %}
+                    </div>
+                    <div class="price-range">
+                      From <span>${{ resort.starting_price }}</span> / day
+                    </div>
+                    <a href="{% url 'resort_detail' resort.id %}" class="btn btn-outline-primary">
+                      View Packages
+                    </a>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
           </div>
         </div>
       </div>

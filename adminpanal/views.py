@@ -28,7 +28,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.db import transaction
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from .models import DaycationPackage, PackageAddon, DaycationBooking, Wishlist
+from .models import *
 from decimal import Decimal
 import traceback
 import sys
@@ -131,7 +131,6 @@ def delete_staff(request, staff_id):
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import PackageManagement, Category, Room, Activity
 from decimal import Decimal
 
 def packagemanagement(request):

@@ -27,6 +27,9 @@ urlpatterns = [
     path('', include('adminpanal.urls')),
     path('staffs/', include('staffs.urls')),
     path('accounts/', include('allauth.urls')),  # Make sure this line is present
+    path('resort/', include('resort.urls')),  # Ensure this line is present
+    path('', include('users.urls')),  # Ensure this line is present
+
 ]
 
 if settings.DEBUG:

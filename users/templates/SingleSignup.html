@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Signup -SmartBookingHub</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% load static %}
+    {% load socialaccount %}
+
+    <!-- CSS Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            background-color: #e9ecef;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #FAEEEEFF;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0B40ECFF; /* Primary color for headings */
+        }
+        .form-group {
+            margin-bottom: 20px; /* Increased margin for better spacing */
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .label {
+            display: block;
+            width: 100%;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-align: left;
+            font-size: 1rem; 
+        }
+        .input-container {
+            position: relative;
+        }
+
+        .form-control:focus {
+            border-color: #CAD1DAFF;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .status-icon {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 1.2rem;
+            display: none; /* Initially hidden */
+        }
+
+
+
+
+        .image-section {
+            flex: 2;
+            background-image: url("{% static 'images/Hero.webp' %}");
+            background-size: cover;d
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .image-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+        }
+
+        .welcome-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            text-align: center;
+            width: 80%;
+        }
+
+        .welcome-text h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: fadeInDown 1s ease-out;
+            line-height: 1.2;
+        }
+
+        .welcome-text p {
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            animation: fadeInUp 1s ease-out 0.5s;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .login-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa, #e4e8eb);
+            padding: 20px;
+        }
+
+        .login-container {
+            background: #ffffff;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        h3 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 2rem;
+            font-size: 28px;
+            font-weight: 600;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .form-container {
+            width: 100%;
+            padding: 0 15px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 0.5rem;
+            width: 100%;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 2.25rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #2d3748;
+            background-color: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            height: 48px;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+            outline: none;
+        }
+
+        .input-container i {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+        }
+
+        .status-icon {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .btn {
+            display: block;
+            width: calc(100% - 30px);
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            margin: 1.5rem auto;
+            height: 48px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #4299e1;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #3182ce;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            padding-left: 0.5rem;
+        }
+
+        .success-message {
+            color: #38a169;
+            background-color: #f0fff4;
+            border: 1px solid #c6f6d5;
+            padding: 1rem;
+            margin: 1rem 15px;
+            border-radius: 10px;
+        }
+
+        .alert {
+            color: #c53030;
+            background-color: #fff5f5;
+            border: 1px solid #fed7d7;
+            padding: 1rem;
+            margin: 1rem 15px;
+            border-radius: 10px;
+        }
+
+        select.form-control {
+            padding-right: 2rem;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a0aec0'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em 1.5em;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        /* Valid/Invalid states */
+        .valid {
+            color: #38a169;
+        }
+
+        .invalid {
+            color: #e53e3e;
+        }
+
+        /* Messages container */
+        .messages {
+            width: calc(100% - 30px);
+            margin: 1rem auto;
+        }
+
+        /* Additional alignment fixes */
+        .form-container > * {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Ensure consistent width for all form elements */
+        .form-group, .input-container, .form-control {
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .forgot-password, .signup {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .forgot-password a, .signup a {
+            color: #1a73e8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 600;
+        }
+
+        .forgot-password a:hover, .signup a:hover {
+            color: #1765cc;
+            text-decoration: underline;
+        }
+
+        #username-error {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: -20px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .back-icon {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: #ffffff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+            background-color: rgba(44, 62, 80, 0.5);
+            padding: 10px 15px;
+            border-radius: 50px;
+        }
+
+        .back-icon:hover {
+            background-color: #0F7BE7FF;
+            color: #ffffff;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -70%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #5f6368;
+        }
+
+        .or-divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .or-divider::before,
+        .or-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background-color: #dadce0;
+        }
+
+        .or-divider::before {
+            left: 0;
+        }
+
+        .or-divider::after {
+            right: 0;
+        }
+
+        .or-divider span {
+            display: inline-block;
+            padding: 0 10px;
+            background-color: #ffffff;
+            position: relative;
+            color: #6c757d;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-section">
+            <div class="welcome-text">
+                <h1>Welcome to SmartBookingHub.</h1>
+                <p>Experience luxury and tranquility in the heart of nature. Your perfect getaway awaits.</p>
+            </div>
+            <a href="{% url 'home' %}" class="back-icon"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+        <div class="login-section">
+            <div class="login-container">
+                <h3>Create an Account</h3>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="{% if message.tags == 'success' %}success-message{% else %}alert{% endif %}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                 <form method="POST" id="signupForm" class="form-container">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="email" class="label">Email</label>
+            <div class="input-container">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" id="email" placeholder="Email" required class="form-control">
+                <span id="email-status" class="status-icon"></span>
+            </div>
+            <div id="email-error" class="error-message"></div>
+        </div>
+        <button type="button" class="btn btn-primary" id="sendOtpBtn">Send OTP</button>
+
+        <div class="form-group" id="otp-section" style="display:none;">
+            <label for="otp" class="label">Enter OTP</label>
+            <div class="input-container">
+                <i class="fas fa-key"></i>
+                <input type="text" name="otp" id="otp" placeholder="Enter OTP" required class="form-control">
+            </div>
+            <div id="otp-error" class="error-message"></div>
+        </div>
+        <button type="button" class="btn btn-primary" id="verifyOtpBtn" style="display:none;">Verify OTP</button>
+
+        <div class="form-group" id="password-section" style="display:none;">
+            <label for="password" class="label">Password</label>
+            <div class="input-container">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" id="password" placeholder="Password" required class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group" id="account-type-section" style="display:none;">
+            <label for="account_type" class="label">Account Type</label>
+            <select name="account_type" id="account_type" required class="form-control">
+                <option value="guest">Guest</option>
+                <option value="resort_owner">Resort Owner</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" id="createAccountBtn" style="display:none;">Create Account</button>
+    </form>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                
+                <script>
+                    // Email input validation
+                    document.getElementById('email').addEventListener('input', function() {
+                        const email = this.value;
+                        const errorElement = document.getElementById('email-error');
+                        const statusIcon = document.getElementById('email-status');
+                        errorElement.innerText = '';
+                        statusIcon.className = '';
+                
+                        if (email.length > 0) {
+                            fetch(`{% url 'check_email' %}?email=${encodeURIComponent(email)}`, {
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'X-CSRFToken': '{{ csrf_token }}'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.exists) {
+                                    errorElement.innerText = 'Email is already registered.';
+                                    statusIcon.className = 'fas fa-times invalid'; // Red icon for invalid email
+                                } else {
+                                    statusIcon.className = 'fas fa-check valid'; // Green icon for valid email
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error checking email:', error);
+                            });
+                        }
+                    });
+                
+                    // Sending OTP
+                    document.getElementById('sendOtpBtn').addEventListener('click', function() {
+                        const email = document.getElementById('email').value;
+                        if (email) { // Check if email is not empty
+                            fetch(`{% url 'send_otp' %}`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'X-CSRFToken': '{{ csrf_token }}',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ email: email })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') { // Check for success status
+                                    document.getElementById('otp-section').style.display = 'block';
+                                    document.getElementById('verifyOtpBtn').style.display = 'block';
+                                } else {
+                                    alert('Failed to send OTP. Please try again.');
+                                    console.log(error);
+                                }
+                            });
+                        } else {
+                            alert('Please enter a valid email address.');
+                        }
+                    });
+                
+                    // Verifying OTP
+                    document.getElementById('verifyOtpBtn').addEventListener('click', function() {
+                        const otp = document.getElementById('otp').value;
+                        fetch(`{% url 'verify_otp' %}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRFToken': '{{ csrf_token }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ otp: otp })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') { // Check for success status
+                                document.getElementById('password-section').style.display = 'block';
+                                document.getElementById('account-type-section').style.display = 'block';
+                                document.getElementById('createAccountBtn').style.display = 'block';
+                            } else {
+                                document.getElementById('otp-error').innerText = 'Invalid OTP. Please try again.';
+                            }
+                        });
+                    });
+                
+                    // Creating Account
+                    document.getElementById('createAccountBtn').addEventListener('click', function() {
+                        const email = document.getElementById('email').value;
+                        const password = document.getElementById('password').value;
+                        const accountType = document.getElementById('account_type').value;
+                
+                        fetch(`{% url 'singlesignup' %}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRFToken': '{{ csrf_token }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ email: email, password: password, account_type: accountType })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                alert('Account created successfully! Redirecting...');
+                                window.location.href = '/'; // Redirect to the homepage or desired page
+                            } else {
+                                alert(data.message || 'Failed to create account. Please try again.');
+                            }
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

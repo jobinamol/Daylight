@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {% load static %}
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body, html {
@@ -13,12 +13,14 @@
             margin: 0;
             font-family: 'Montserrat', sans-serif;
             background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
             display: flex;
             height: 100vh;
-            justify-content: center;
-            align-items: center;
+            width: 100%;
         }
         .signup-section {
             background-color: #ffffff;
@@ -46,13 +48,11 @@
             align-items: center;
             justify-content: center;
             font-weight: 600;
-        }
-        .btn-primary {
             background-color: #1a73e8;
             color: #fff;
             border: none;
         }
-        .btn-primary:hover {
+        .btn:hover {
             background-color: #1765cc;
         }
         .alert {
@@ -84,121 +84,60 @@
                 <p>Join us for unforgettable daycation and staycation experiences.</p>
             </div>
             
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="{% if message.tags == 'success' %}success-message{% else %}alert{% endif %}" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
+            <div id="message"></div>
             
-            <form id="signupForm" method="post" action="{% url 'signup' %}">
-                {% csrf_token %}
-                
-                <!-- Step 1: Account Type Selection -->
-                <div class="step active" id="step1">
-                    <div class="form-group account-type">
-                        <label>
-                            <input type="radio" name="account_type" value="customer" required> Customer
-                        </label>
-                        <label>
-                            <input type="radio" name="account_type" value="stakeholder" required> Resort Owner
-                        </label>
-                    </div>
-                    <div class="navigation">
-                        <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
-                    </div>
+            <!-- Step 1: Account Type Selection -->
+            <div class="step active" id="step1">
+                <div class="form-group account-type">
+                    <label>
+                        <input type="radio" name="account_type" value="guest" required> Guest
+                    </label>
+                    <label>
+                        <input type="radio" name="account_type" value="resort" required> Resort Owner
+                    </label>
                 </div>
-
-                <!-- Step 2: Basic Details -->
-                <div class="step" id="step2">
-                    <div class="form-group">
-                        <label for="first_name">First Name</label>
-                        <input type="text" class="form-control" id="first_name" name="first_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="last_name">Last Name</label>
-                        <input type="text" class="form-control" id="last_name" name="last_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="age">Age</label>
-                        <input type="number" class="form-control" id="age" name="age" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Address</label>
-                        <input type="text" class="form-control" id="address" name="address" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="district">District</label>
-                        <input type="text" class="form-control" id="district" name="district" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="country">Country</label>
-                        <select class="form-control" id="country" name="country" required>
-                            <option value="" disabled selected>Select Country</option>
-                            <option value="India">India</option>
-                            <option value="USA">USA</option>
-                            <option value="UK">UK</option>
-                            <!-- Add more countries as needed -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="gender">Gender</label>
-                        <select class="form-control" id="gender" name="gender" required>
-                            <option value="" disabled selected>Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="navigation">
-                        <button type="button" class="btn btn-primary" onclick="prevStep()">Back</button>
-                        <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
-                    </div>
+                <div class="navigation">
+                    <button type="button" class="btn" onclick="nextStep()">Next</button>
                 </div>
+            </div>
 
-                <!-- Step 3: Contact Information -->
-                <div class="step" id="step3">
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" class="form-control" id="phone" name="phone" required>
-                    </div>
-                    <div class="navigation">
-                        <button type="button" class="btn btn-primary" onclick="prevStep()">Back</button>
-                        <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
-                    </div>
+            <!-- Step 2: Email Verification -->
+            <div class="step" id="step2">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" required>
                 </div>
-
-                <!-- Step 4: Set Password -->
-                <div class="step" id="step4">
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirm_password">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                    </div>
-                    <div class="navigation">
-                        <button type="button" class="btn btn-primary" onclick="prevStep()">Back</button>
-                        <button type="submit" class="btn btn-primary">Sign Up</button>
-                    </div>
+                <div class="form-group">
+                    <label for="otp">Enter OTP</label>
+                    <input type="text" class="form-control" id="otp" required>
                 </div>
-            </form>
+                <div class="navigation">
+                    <button type="button" class="btn" onclick="prevStep()">Back</button>
+                    <button type="button" class="btn" onclick="sendOtp()">Send OTP</button>
+                    <button type="button" class="btn" onclick="verifyOtp()">Verify OTP</button>
+                </div>
+            </div>
 
-            <div class="login">
-                <p>Already have an account? <a href="{% url 'login' %}">Log In</a></p>
+            <!-- Step 3: Set Password -->
+            <div class="step" id="step3">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirm_password" required>
+                </div>
+                <div class="navigation">
+                    <button type="button" class="btn" onclick="prevStep()">Back</button>
+                    <button type="button" class="btn" onclick="submitData()">Sign Up</button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- JavaScript -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script>
         let currentStep = 0;
         const steps = document.querySelectorAll('.step');
@@ -221,6 +160,87 @@
                 currentStep--;
                 showStep(currentStep);
             }
+        }
+
+        function sendOtp() {
+            const email = document.getElementById('email').value;
+
+            // AJAX request to send OTP
+            $.ajax({
+                type: 'POST',
+                url: '{% url "send_otp" %}',  // Update with your URL
+                data: {
+                    'email': email,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // Include CSRF token
+                },
+                success: function(response) {
+                    document.getElementById('message').innerHTML = '<div class="alert alert-success">OTP sent to your email!</div>';
+                },
+                error: function(xhr) {
+                    document.getElementById('message').innerHTML = '<div class="alert">An error occurred. Please try again.</div>';
+                }
+            });
+        }
+
+        function verifyOtp() {
+            const email = document.getElementById('email').value;
+            const otp = document.getElementById('otp').value;
+
+            // AJAX request to verify OTP
+            $.ajax({
+                type: 'POST',
+                url: '{% url "verify_otp" %}',  // Update with your URL
+                data: {
+                    'email': email,
+                    'otp': otp,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // Include CSRF token
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        document.getElementById('message').innerHTML = '<div class="alert alert-success">OTP verified! Please set your password.</div>';
+                        nextStep();  // Move to the password step
+                    } else {
+                        document.getElementById('message').innerHTML = '<div class="alert">Invalid OTP. Please try again.</div>';
+                    }
+                },
+                error: function(xhr) {
+                    document.getElementById('message').innerHTML = '<div class="alert">An error occurred. Please try again.</div>';
+                }
+            });
+        }
+
+        function submitData() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            // Password validation
+            const passwordPattern = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/; // At least 8 characters, 1 uppercase, 1 number
+            if (!passwordPattern.test(password)) {
+                document.getElementById('message').innerHTML = '<div class="alert">Password must be at least 8 characters long, contain at least one uppercase letter and one number.</div>';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                document.getElementById('message').innerHTML = '<div class="alert">Passwords do not match!</div>';
+                return;
+            }
+
+            // AJAX request to submit data
+            $.ajax({
+                type: 'POST',
+                url: '{% url "userregister" %}',  // Update with your URL
+                data: {
+                    'email': document.getElementById('email').value,
+                    'password': password,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // Include CSRF token
+                },
+                success: function(response) {
+                    document.getElementById('message').innerHTML = '<div class="alert alert-success">Registration successful!</div>';
+                },
+                error: function(xhr) {
+                    document.getElementById('message').innerHTML = '<div class="alert">An error occurred. Please try again.</div>';
+                }
+            });
         }
     </script>
 </body>

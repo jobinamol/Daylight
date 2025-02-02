@@ -1,156 +1,703 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration - Daylight Resort</title>
+    <title>Signup -SmartBookingHub</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% load socialaccount %}
+
+    <!-- CSS Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        body, html {
+            height: 100%;
             margin: 0;
-            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .container {
             display: flex;
             height: 100vh;
-            background-color: #f4f4f4; /* Light background color */
+            max-width: 1400px;
+            margin: 0 auto;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         }
-        .container {
-            width: 400px;
-            margin: auto;
-            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+        .image-section {
+            flex: 1.2;
             position: relative;
+            background-image: url("{% static 'images/luxury-resort.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px 0 0 20px;
+            overflow: hidden;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(0, 0, 0, 0.8) 0%,
+                rgba(0, 0, 0, 0.4) 100%
+            );
             z-index: 1;
         }
-        h2 {
+
+        .welcome-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
-            color: #333; /* Dark text color */
+            color: #ffffff;
+            z-index: 2;
+            width: 80%;
         }
+
+        .welcome-text h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .welcome-text p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out 0.3s;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            animation: fadeInUp 1s ease-out 0.6s;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-item i {
+            font-size: 2rem;
+            color: #4299e1;
+            background: rgba(255, 255, 255, 0.9);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover i {
+            transform: translateY(-5px);
+        }
+
+        .feature-item span {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .back-icon {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .back-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .back-icon i {
+            font-size: 1.2rem;
+        }
+
+        .back-icon span {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced mobile responsiveness */
+        @media (max-width: 1024px) {
+            .welcome-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .features {
+                gap: 20px;
+            }
+
+            .feature-item i {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .image-section {
+                display: block;
+                height: 300px;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .welcome-text h1 {
+                font-size: 2rem;
+            }
+
+            .welcome-text p {
+                font-size: 1rem;
+            }
+
+            .features {
+                gap: 15px;
+            }
+
+            .feature-item i {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .feature-item span {
+                font-size: 0.9rem;
+            }
+        }
+
+        .login-section {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-radius: 0 20px 20px 0;
+        }
+
+        .login-container {
+            max-width: 450px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 20px;
+        }
+
+        h3 {
+            font-size: 32px;
+            color: #2d3748;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+            position: relative;
+        }
+
+        h3:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #4299e1, #667eea);
+            border-radius: 2px;
+        }
+
+        .form-step {
+            animation: fadeIn 0.5s ease-out;
+        }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 25px;
         }
-        label {
-            display: block;
+
+        .input-container {
+            position: relative;
             margin-bottom: 5px;
-            color: #555; /* Medium gray for labels */
         }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        select {
+
+        .form-control {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc; /* Light gray border */
-            border-radius: 4px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #5cb85c; /* Green button */
-            border: none;
-            border-radius: 4px;
-            color: white;
+            padding: 12px 45px;
             font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+
+        .form-control:focus {
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+            outline: none;
+        }
+
+        .input-container i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .input-container:focus-within i {
+            color: #4299e1;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 20px;
             cursor: pointer;
         }
-        button:hover {
-            background-color: #4cae4c; /* Darker green on hover */
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4299e1 0%, #667eea 100%);
+            color: white;
+            border: none;
         }
-        .error {
-            color: red;
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-secondary {
+            background: #718096;
+            color: white;
+            border: none;
+        }
+
+        .requirements-list {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .requirements-list ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        .requirements-list li {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            color: #718096;
             font-size: 14px;
         }
-        .welcome-message {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #5cb85c; /* Green for welcome message */
+
+        .requirements-list li::before {
+            margin-right: 10px;
+            font-size: 16px;
         }
-        .step {
+
+        .requirements-list li.valid {
+            color: #48bb78;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 14px;
+            margin-top: 5px;
+            padding-left: 15px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Progress indicator */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .step-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #718096;
+            font-weight: 600;
+            position: relative;
+            margin: 0 20px;
+        }
+
+        .step-indicator.active {
+            background: #4299e1;
+            color: white;
+        }
+
+        .step-indicator::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background: #e2e8f0;
+            right: -40px;
+            top: 50%;
+        }
+
+        .step-indicator:last-child::after {
             display: none;
         }
-        .active {
-            display: block;
+
+        .step-indicator.completed {
+            background: #48bb78;
+            color: white;
+        }
+
+        .step-indicator.completed::after {
+            background: #48bb78;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Sign Up</h2>
-        <p class="welcome-message">Welcome to Daylight Resort!</p>
-        <form id="registrationForm" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <!-- Step 1: Account Information -->
-            <div class="step active" id="step1">
-                <div class="form-group">
-                    <label for="account_type">Account Type:</label>
-                    <select id="account_type" name="account_type" required>
-                        <option value="" disabled selected>Select account type</option>
-                        <option value="customer">Customer</option>
+        <div class="image-section">
+            <div class="image-overlay"></div>
+            <div class="welcome-text">
+                <h1>Welcome to SmartBookingHub</h1>
+                <p>Your gateway to exceptional resort experiences</p>
+                <div class="features">
+                    <div class="feature-item">
+                        <i class="fas fa-hotel"></i>
+                        <span>Premium Resorts</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-concierge-bell"></i>
+                        <span>Luxury Service</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-star"></i>
+                        <span>Best Experiences</span>
+                    </div>
+                </div>
+            </div>
+            <a href="{% url 'home' %}" class="back-icon">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Home</span>
+            </a>
+        </div>
+        <div class="login-section">
+            <div class="login-container">
+                <h3>Create an Account</h3>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="{% if message.tags == 'success' %}success-message{% else %}alert{% endif %}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                 <form method="POST" id="signupForm" class="form-container">
+        {% csrf_token %}
+        <!-- Step 1: Basic Details -->
+        <div id="step1" class="form-step">
+            <div class="form-group">
+                <label for="name" class="label">Full Name</label>
+                <div class="input-container">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="name" id="name" placeholder="Enter your full name" required class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="label">Email</label>
+                <div class="input-container">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="email" id="email" placeholder="Enter your email" required class="form-control">
+                    <span id="email-status" class="status-icon"></span>
+                </div>
+                <div id="email-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="label">Username</label>
+                <div class="input-container">
+                    <i class="fas fa-at"></i>
+                    <input type="text" name="username" id="username" placeholder="Choose a username" required class="form-control"
+                        pattern="^[\w.@+-]+$" title="Username may only contain letters, numbers, and @/./+/-/_ characters.">
+                </div>
+                <div id="username-error" class="error-message"></div>
+            </div>
+
+            <button type="button" class="btn btn-primary"a href="{% url 'verify_otp' %}" id="sendOtpBtn">Continue & Send OTP</button>
+        </div>
+
+        <!-- Step 2: OTP Verification -->
+        <div id="step2" class="form-step" style="display:none;">
+            <div class="form-group">
+                <label for="otp" class="label">Enter OTP</label>
+                <div class="input-container">
+                    <i class="fas fa-key"></i>
+                    <input type="text" name="otp" id="otp" placeholder="Enter OTP sent to your email" required class="form-control">
+                </div>
+                <div id="otp-error" class="error-message"></div>
+            </div>
+            <button type="button" class="btn btn-primary" id="verifyOtpBtn">Verify OTP</button>
+            <button type="button" class="btn btn-secondary" id="resendOtpBtn">Resend OTP</button>
+        </div>
+
+        <!-- Step 3: Additional Details -->
+        <div id="step3" class="form-step" style="display:none;">
+            <div class="form-group">
+                <label for="mobilenumber" class="label">Mobile Number</label>
+                <div class="input-container">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" name="mobilenumber" id="mobilenumber" placeholder="Enter mobile number" required class="form-control"
+                        pattern="^\+?\d{10,15}$" title="Mobile number must be between 10 and 15 digits">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="age" class="label">Age</label>
+                <div class="input-container">
+                    <i class="fas fa-birthday-cake"></i>
+                    <input type="number" name="age" id="age" placeholder="Enter your age" required class="form-control"
+                        min="1" max="120">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="sex" class="label">Gender</label>
+                <div class="input-container">
+                    <i class="fas fa-venus-mars"></i>
+                    <select name="sex" id="sex" required class="form-control">
+                        <option value="">Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="continueToPasswordBtn">Continue</button>
+        </div>
+
+        <!-- Step 4: Password and Account Type -->
+        <div id="step4" class="form-step" style="display:none;">
+            <div class="form-group">
+                <label for="password" class="label">Password</label>
+                <div class="input-container">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" id="password" placeholder="Create a strong password" required class="form-control">
+                    <span id="password-strength" class="status-icon"></span>
+                </div>
+                <div id="password-requirements" class="requirements-list">
+                    <small>Password must contain:</small>
+                    <ul>
+                        <li id="length">At least 8 characters</li>
+                        <li id="uppercase">One uppercase letter</li>
+                        <li id="lowercase">One lowercase letter</li>
+                        <li id="number">One number</li>
+                        <li id="special">One special character</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="account_type" class="label">Account Type</label>
+                <div class="input-container">
+                    <i class="fas fa-user-tag"></i>
+                    <select name="account_type" id="account_type" required class="form-control">
+                        <option value="guest">Guest</option>
                         <option value="resort_owner">Resort Owner</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                    <div id="emailError" class="error"></div>
-                </div>
-                <button type="button" onclick="nextStep(1)">Next</button>
             </div>
 
-            <!-- Step 2: Password Setup -->
-            <div class="step" id="step2">
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirm_password">Confirm Password:</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required>
-                    <div id="passwordError" class="error"></div>
-                </div>
-                <button type="button" onclick="validateAndSubmit()">Submit</button>
+            <button type="submit" class="btn btn-primary" id="createAccountBtn">Create Account</button>
+        </div>
+    </form>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                
+                <script>
+                    // Email input validation
+                    document.getElementById('email').addEventListener('input', function() {
+                        const email = this.value;
+                        const errorElement = document.getElementById('email-error');
+                        const statusIcon = document.getElementById('email-status');
+                        errorElement.innerText = '';
+                        statusIcon.className = '';
+                
+                        if (email.length > 0) {
+                            fetch(`{% url 'check_email' %}?email=${encodeURIComponent(email)}`, {
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'X-CSRFToken': '{{ csrf_token }}'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.exists) {
+                                    errorElement.innerText = 'Email is already registered.';
+                                    statusIcon.className = 'fas fa-times invalid'; // Red icon for invalid email
+                                } else {
+                                    statusIcon.className = 'fas fa-check valid'; // Green icon for valid email
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error checking email:', error);
+                            });
+                        }
+                    });
+                
+                    // Sending OTP
+                    document.getElementById('sendOtpBtn').addEventListener('click', function() {
+                        const email = document.getElementById('email').value;
+                        if (email) { // Check if email is not empty
+                            fetch(`{% url 'send_otp' %}`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'X-CSRFToken': '{{ csrf_token }}',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ email: email })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') { // Check for success status
+                                    document.getElementById('step2').style.display = 'block';
+                                    document.getElementById('verifyOtpBtn').style.display = 'block';
+                                } else {
+                                    alert('Failed to send OTP. Please try again.');
+                                    console.log(error);
+                                }
+                            });
+                        } else {
+                            alert('Please enter a valid email address.');
+                        }
+                    });
+                
+                    // Verifying OTP
+                    document.getElementById('verifyOtpBtn').addEventListener('click', function() {
+                        const otp = document.getElementById('otp').value;
+                        fetch(`{% url 'verify_otp' %}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRFToken': '{{ csrf_token }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ otp: otp })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') { // Check for success status
+                                document.getElementById('step3').style.display = 'block';
+                                document.getElementById('createAccountBtn').style.display = 'block';
+                            } else {
+                                document.getElementById('otp-error').innerText = 'Invalid OTP. Please try again.';
+                            }
+                        });
+                    });
+                
+                    // Creating Account
+                    document.getElementById('createAccountBtn').addEventListener('click', function() {
+                        const email = document.getElementById('email').value;
+                        const password = document.getElementById('password').value;
+                        const accountType = document.getElementById('account_type').value;
+                
+                        fetch(`{% url 'singlesignup' %}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRFToken': '{{ csrf_token }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ email: email, password: password, account_type: accountType })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                alert('Account created successfully! Redirecting...');
+                                window.location.href = '/'; // Redirect to the homepage or desired page
+                            } else {
+                                alert(data.message || 'Failed to create account. Please try again.');
+                            }
+                        });
+                    });
+                </script>
             </div>
-        </form>
+        </div>
     </div>
-
-    <script>
-        function nextStep(step) {
-            const currentStep = document.getElementById(`step${step}`);
-            const nextStep = document.getElementById(`step${step + 1}`);
-            currentStep.classList.remove('active');
-            nextStep.classList.add('active');
-        }
-
-        function validateAndSubmit() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm_password').value;
-            const emailError = document.getElementById('emailError');
-            const passwordError = document.getElementById('passwordError');
-
-            // Reset errors
-            emailError.textContent = '';
-            passwordError.textContent = '';
-
-            // Validate email format
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(email)) {
-                emailError.textContent = 'Invalid email format.';
-                return;
-            }
-
-            // Validate password match
-            if (password !== confirmPassword) {
-                passwordError.textContent = 'Passwords do not match.';
-                return;
-            }
-
-            // If validation passes, submit the form
-            document.getElementById('registrationForm').submit();
-        }
-    </script>
 </body>
 </html>

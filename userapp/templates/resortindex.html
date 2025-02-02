@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <title>Daylight Daycation Resort Management System</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Playfair Display', serif;
+      }
+      .navbar {
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+      }
+      .navbar.scrolled {
+        background-color: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+      .navbar-brand {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.8rem;
+        color: #fff;
+        transition: color 0.3s ease;
+      }
+      .navbar.scrolled .navbar-brand {
+        color: #333;
+      }
+      .nav-link {
+        font-weight: 500;
+        color: #fff;
+        transition: all 0.3s ease;
+      }
+      .navbar.scrolled .nav-link {
+        color: #333;
+      }
+      .nav-link:hover {
+        opacity: 0.8;
+      }
+      .btn-explore {
+        background-color: transparent;
+        color: #fff;
+        border: 2px solid #fff;
+        padding: 10px 25px;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-explore:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      .hero-title {
+        font-size: 4rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        color: #fff;
+      }
+      .hero-subtitle {
+        font-size: 1.8rem;
+        font-weight: 300;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        color: #fff;
+      }
+      .about-section {
+        background-color: #f8f9fa;
+        padding: 5rem 0;
+      }
+      .about-content {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        padding: 3rem;
+        margin-bottom: 3rem;
+      }
+      .about-image {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      }
+      .about-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .package-info {
+        background-color: #e9ecef;
+        border-radius: 10px;
+        padding: 2rem;
+        margin-top: 2rem;
+        transition: all 0.3s ease;
+      }
+      .package-info:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      }
+      .important-info {
+        background-color: #e9ecef;
+        border-radius: 10px;
+        padding: 2rem;
+        margin-top: 2rem;
+      }
+      .important-info h4 {
+        color: #1a73e8;
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 1rem;
+      }
+      .about-title {
+        color: #1a73e8;
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+      }
+      .about-text {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #333;
+      }
+      .package-list {
+        list-style-type: none;
+        padding-left: 0;
+      }
+      .package-list li {
+        margin-bottom: 0.5rem;
+        position: relative;
+        padding-left: 1.5rem;
+      }
+      .package-list li:before {
+        content: "\2022";
+        color: #1a73e8;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+      }
+      .profile-icon {
+        font-size: 1.5rem;
+        margin-right: 10px;
+      }
+      .resort-info {
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        margin: 20px 0;
+      }
+      .resort-info h3 {
+        color: #1a73e8;
+      }
+      .dashboard-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+        margin-bottom: 20px;
+      }
+      .dashboard-card:hover {
+        transform: translateY(-5px);
+      }
+      .dashboard-card i {
+        color: #1a73e8;
+      }
+      .dashboard-card h4 {
+        color: #333;
+        font-size: 1.1rem;
+        margin: 10px 0;
+      }
+      .resort-dashboard {
+        background-color: #f8f9fa;
+      }
+      .feature-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+        height: 100%;
+      }
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+      .feature-icon {
+        font-size: 3rem;
+        color: #1a73e8;
+        margin-bottom: 1.5rem;
+      }
+      .package-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+      }
+      .package-card:hover {
+        transform: translateY(-5px);
+      }
+      .package-image {
+        height: 200px;
+        overflow: hidden;
+      }
+      .package-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .package-content {
+        padding: 1.5rem;
+      }
+      .package-features {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0 0;
+      }
+      .package-features li {
+        margin-bottom: 0.5rem;
+        color: #666;
+      }
+      .package-features i {
+        color: #1a73e8;
+        margin-right: 0.5rem;
+      }
+      .btn-explore {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 2px solid #fff;
+        padding: 1rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-explore:hover {
+        background-color: #fff;
+        color: #1a73e8;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+      }
+      .section-title {
+        color: #333;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 3rem;
+        font-family: 'Playfair Display', serif;
+      }
+    </style>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'userindex' %}">
+          <i class="fas fa-sun mr-2"></i>Daylight
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="{% url 'resortindex' %}" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="{% url 'daycation_package_list' %}" class="nav-link">packages</a></li>
+            <li class="nav-item"><a href="{% url 'packs' %}" class="nav-link">Resort</a></li>
+
+            <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
+            <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-hotel mr-2"></i>Resort Management
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-user mr-2"></i>Resort Profile</a>
+                <a class="dropdown-item" href="{% url 'editprofile' %}"><i class="fas fa-user-edit mr-2"></i>Edit Profile</a>
+                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-hotel mr-2"></i>Manage Resort</a>
+                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-box mr-2"></i>Manage Packages</a>
+                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-calendar-check mr-2"></i>Booking Requests</a>
+                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-chart-line mr-2"></i>Analytics</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-history mr-2"></i>Booking List</a>
+              </div>
+            </li>
+
+            <li class="nav-item">
+              <a href="{% url 'wishlist' %}" class="nav-link">
+                <i class="fas fa-heart mr-2"></i>My Wishlist
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+     {% block content %} 
+     <section class="hero-wrap js-fullheight" style="background-image: url('{% static 'images/Hero.webp' %}');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
+          <div class="col-md-9 ftco-animate text-center">
+            <h1 class="hero-title mb-4">Welcome to Daylight</h1>
+            <p class="hero-subtitle mb-5">Luxury Resort & Day Retreat Management</p>
+            <div class="mt-4">
+              <a href="{% url 'packs' %}" class="btn btn-explore mr-2">
+                <i class="fas fa-sun mr-2"></i>Explore Packages
+              </a>
+              <a href="{% url 'about' %}" class="btn btn-explore">
+                <i class="fas fa-info-circle mr-2"></i>About Daylight
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resort Features Section -->
+    <section class="features-section py-5">
+      <div class="container">
+        <h2 class="section-title text-center mb-5">Experience Luxury at Daylight</h2>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-swimming-pool"></i>
+              </div>
+              <h4>Premium Facilities</h4>
+              <p>Luxurious pools, spa facilities, and recreational areas for the perfect daycation experience</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <h4>Gourmet Dining</h4>
+              <p>Exquisite dining options featuring international cuisine and local specialties</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-spa"></i>
+              </div>
+              <h4>Wellness & Spa</h4>
+              <p>Rejuvenating spa treatments and wellness programs for complete relaxation</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Package Highlights -->
+    <section class="package-highlights py-5 bg-light">
+      <div class="container">
+        <h2 class="section-title text-center mb-5">Our Signature Experiences</h2>
+        <div class="row">
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="package-card">
+              <div class="package-image">
+                <img src="{% static 'images/daycation.jpg' %}" alt="Daycation Package">
+              </div>
+              <div class="package-content">
+                <h4>Daycation Delight</h4>
+                <p>Perfect for a day of luxury and relaxation</p>
+                <ul class="package-features">
+                  <li><i class="fas fa-check"></i> Pool Access</li>
+                  <li><i class="fas fa-check"></i> Gourmet Lunch</li>
+                  <li><i class="fas fa-check"></i> Spa Credit</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="package-card">
+              <div class="package-image">
+                <img src="{% static 'images/couples.jpg' %}" alt="Couples Retreat">
+              </div>
+              <div class="package-content">
+                <h4>Couples Retreat</h4>
+                <p>Romantic escape for two</p>
+                <ul class="package-features">
+                  <li><i class="fas fa-check"></i> Private Cabana</li>
+                  <li><i class="fas fa-check"></i> Couple's Massage</li>
+                  <li><i class="fas fa-check"></i> Romantic Dinner</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="package-card">
+              <div class="package-image">
+                <img src="{% static 'images/family.jpg' %}" alt="Family Fun">
+              </div>
+              <div class="package-content">
+                <h4>Family Fun Day</h4>
+                <p>Create memories with loved ones</p>
+                <ul class="package-features">
+                  <li><i class="fas fa-check"></i> Kids Activities</li>
+                  <li><i class="fas fa-check"></i> Family Lunch</li>
+                  <li><i class="fas fa-check"></i> Recreation Access</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ftco-section py-5">
+      <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+          <div class="col-md-7 heading-section text-center ftco-animate">
+            <h2>Our Package Categories</h2>
+          </div>
+        </div>
+        <div class="row d-flex">
+          <div class="col-md-6 d-flex ftco-animate">
+            <div class="card shadow-sm border-0 w-100">
+              <a href="{% url 'daycation_packages' %}" class="block-20" style="background-image: url('{% static 'images/about1.jpg' %}');" aria-label="Daycation Packages">
+              </a>
+              <div class="card-body text-center">
+                <h5 class="card-title">Daycation Packages</h5>
+                <p class="card-text">Enjoy a perfect day getaway with our daycation packages.</p>
+                <a href="{% url 'daycation_packages' %}" class="btn btn-primary">Explore Daycation</a>
+              </div>
+            </div>
+          </div>
+         
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <style>
+        .block-20 {
+            height: 200px; /* Adjust the height as needed */
+            background-size: cover;
+            background-position: center;
+            border-radius: 0.5rem;
+        }
+    
+        .card {
+            transition: transform 0.3s;
+        }
+    
+        .card:hover {
+            transform: scale(1.05); /* Slight zoom effect on hover */
+        }
+    
+        .card-title {
+            font-weight: bold;
+            font-size: 1.25rem; /* Adjust the font size as needed */
+        }
+    </style>
+    
+    
+    
+    
+
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+          <div class="col-md-7 heading-section text-center ftco-animate">
+            <h2>Recent Blog</h2>
+          </div>
+        </div>
+        <div class="row d-flex">
+          <!-- Blog Entry 1 -->
+          <div class="col-md-3 d-flex ftco-animate">
+            <div class="blog-entry align-self-stretch">
+              <a href="blog-single.html" class="block-20" style="background-image: url('{% static 'images/image_1.jpg' %}');" aria-label="Blog 1">
+              </a>
+              <div class="text mt-3 d-block">
+                <h3 class="heading mt-3"><a href="blog-single.html">Even the all-powerful Pointing has no control about the blind texts</a></h3>
+                <div class="meta mb-3">
+                  <div><a href="#">Dec 6, 2018</a></div>
+                  <div><a href="#">Admin</a></div>
+                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Blog Entry 2 -->
+          <div class="col-md-3 d-flex ftco-animate">
+            <div class="blog-entry align-self-stretch">
+              <a href="blog-single.html" class="block-20" style="background-image: url('{% static 'images/image_2.jpg' %}');" aria-label="Blog 2">
+              </a>
+              <div class="text mt-3">
+                <h3 class="heading mt-3"><a href="blog-single.html">Even the all-powerful Pointing has no control about the blind texts</a></h3>
+                <div class="meta mb-3">
+                  <div><a href="#">Dec 6, 2018</a></div>
+                  <div><a href="#">Admin</a></div>
+                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Blog Entry 3 -->
+          <div class="col-md-3 d-flex ftco-animate">
+            <div class="blog-entry align-self-stretch">
+              <a href="blog-single.html" class="block-20" style="background-image: url('{% static 'images/image_3.jpg' %}');" aria-label="Blog 3">
+              </a>
+              <div class="text mt-3">
+                <h3 class="heading mt-3"><a href="blog-single.html">Even the all-powerful Pointing has no control about the blind texts</a></h3>
+                <div class="meta mb-3">
+                  <div><a href="#">Dec 6, 2018</a></div>
+                  <div><a href="#">Admin</a></div>
+                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Blog Entry 4 -->
+          <div class="col-md-3 d-flex ftco-animate">
+            <div class="blog-entry align-self-stretch">
+              <a href="blog-single.html" class="block-20" style="background-image: url('{% static 'images/image_4.jpg' %}');" aria-label="Blog 4">
+              </a>
+              <div class="text mt-3">
+                <h3 class="heading mt-3"><a href="blog-single.html">Even the all-powerful Pointing has no control about the blind texts</a></h3>
+                <div class="meta mb-3">
+                  <div><a href="#">Dec 6, 2018</a></div>
+                  <div><a href="#">Admin</a></div>
+                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <section class="instagram">
+      <div class="container-fluid">
+        <div class="row no-gutters justify-content-center pb-5">
+          <div class="col-md-7 text-center heading-section ftco-animate">
+            <h2><span>Instagram</span></h2>
+          </div>
+        </div>
+        <div class="row no-gutters">
+          <!-- Instagram Image 1 -->
+          <div class="col-sm-12 col-md ftco-animate">
+            <a href="{% static 'images/insta-1.jpg' %}" class="insta-img image-popup" style="background-image: url('{% static 'images/insta-1.jpg' %}');" aria-label="Instagram Image 1">
+              <div class="icon d-flex justify-content-center">
+                <span class="icon-instagram align-self-center"></span>
+              </div>
+            </a>
+          </div>
+          <!-- Instagram Image 2 -->
+          <div class="col-sm-12 col-md ftco-animate">
+            <a href="{% static 'images/insta-2.jpg' %}" class="insta-img image-popup" style="background-image: url('{% static 'images/insta-2.jpg' %}');" aria-label="Instagram Image 2">
+              <div class="icon d-flex justify-content-center">
+                <span class="icon-instagram align-self-center"></span>
+              </div>
+            </a>
+          </div>
+          <!-- Instagram Image 3 -->
+          <div class="col-sm-12 col-md ftco-animate">
+            <a href="{% static 'images/insta-3.jpg' %}" class="insta-img image-popup" style="background-image: url('{% static 'images/insta-3.jpg' %}');" aria-label="Instagram Image 3">
+              <div class="icon d-flex justify-content-center">
+                <span class="icon-instagram align-self-center"></span>
+              </div>
+            </a>
+          </div>
+          <!-- Instagram Image 4 -->
+          <div class="col-sm-12 col-md ftco-animate">
+            <a href="{% static 'images/insta-4.jpg' %}" class="insta-img image-popup" style="background-image: url('{% static 'images/insta-4.jpg' %}');" aria-label="Instagram Image 4">
+              <div class="icon d-flex justify-content-center">
+                <span class="icon-instagram align-self-center"></span>
+              </div>
+            </a>
+          </div>
+          <!-- Instagram Image 5 -->
+          <div class="col-sm-12 col-md ftco-animate">
+            <a href="{% static 'images/insta-5.jpg' %}" class="insta-img image-popup" style="background-image: url('{% static 'images/insta-5.jpg' %}');" aria-label="Instagram Image 5">
+              <div class="icon d-flex justify-content-center">
+                <span class="icon-instagram align-self-center"></span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Add Resort Owner Dashboard Section if user is resort owner -->
+    {% if user.is_authenticated and user.is_resort_owner %}
+    <section class="resort-dashboard py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="text-center mb-4">Resort Management Dashboard</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="dashboard-card">
+              <i class="fas fa-calendar-check fa-2x mb-3"></i>
+              <h4>Today's Bookings</h4>
+              <p class="h2 mb-0">{{ today_bookings_count }}</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="dashboard-card">
+              <i class="fas fa-users fa-2x mb-3"></i>
+              <h4>Active Guests</h4>
+              <p class="h2 mb-0">{{ active_guests_count }}</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="dashboard-card">
+              <i class="fas fa-box fa-2x mb-3"></i>
+              <h4>Available Packages</h4>
+              <p class="h2 mb-0">{{ available_packages_count }}</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="dashboard-card">
+              <i class="fas fa-star fa-2x mb-3"></i>
+              <h4>Rating</h4>
+              <p class="h2 mb-0">{{ resort_rating }}/5.0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    {% endblock %}
+
+    <footer class="ftco-footer ftco-bg-dark ftco-section">
+        <div class="container">
+          <div class="row mb-5">
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Daylight Resort</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                  <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4 ml-md-5">
+                <h2 class="ftco-heading-2">Useful Links</h2>
+                <ul class="list-unstyled">
+                  <li><a href="#" class="py-2 d-block">Blog</a></li>
+                  <li><a href="#" class="py-2 d-block">Rooms</a></li>
+                  <li><a href="#" class="py-2 d-block">Amenities</a></li>
+                  <li><a href="#" class="py-2 d-block">Gift Card</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Privacy</h2>
+                <ul class="list-unstyled">
+                  <li><a href="#" class="py-2 d-block">Career</a></li>
+                  <li><a href="#" class="py-2 d-block">About Us</a></li>
+                  <li><a href="#" class="py-2 d-block">Contact Us</a></li>
+                  <li><a href="#" class="py-2 d-block">Services</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Have a Questions?</h2>
+                <div class="block-23 mb-3">
+                  <ul>
+                    <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
+                    <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+                    <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Subscribe to our Newsletter</h2>
+                <form action="#" class="subscribe-form">
+                  <div class="form-group d-flex">
+                    <input type="text" class="form-control" placeholder="Enter email address">
+                    <input type="submit" value="Subscribe" class="submit px-3">
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+      
+    
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen">
+    <svg class="circular" width="48px" height="48px">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/>
+    </svg>
+  </div>
+  
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'js/aos.js' %}"></script>
+  <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+  <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
+  <script src="{% static 'js/scrollax.min.js' %}"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="{% static 'js/google-map.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  <script>
+    // Add this script to change navbar background on scroll
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 50) {
+        document.querySelector('.navbar').classList.add('scrolled');
+      } else {
+        document.querySelector('.navbar').classList.remove('scrolled');
+      }
+    });
+  </script>
+  
+  </body>
+</html>
