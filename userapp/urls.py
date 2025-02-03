@@ -53,6 +53,10 @@ urlpatterns = [
     path('resorts/edit/<slug:slug>/', edit_resort, name='edit_resort'),
     path('resorts/delete/<slug:slug>/', delete_resort, name='delete_resort'),
     path('resorts/', resort_list, name='resort_list'),
+    path('resortprofile/', views.resort_profile, name='resort_profile'),
+    path('edit_resort_profile/', views.edit_resort_profile, name='edit_resort_profile'),
+
+    
 ]
 
 

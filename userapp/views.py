@@ -790,6 +790,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from .models import ResortProfile, ResortImage
+from django.shortcuts import render
+
+def resort_profile(request):
+    return render(request, 'resort_profile.html')
+
+def edit_resort_profile(request):
+    return render(request, 'edit_resort_profile.html')
+
+
+
 
 def add_resort(request):
     if request.method == 'POST':

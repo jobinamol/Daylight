@@ -325,3 +325,5 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f'Feedback {self.id} - Rating: {self.rating}'
+    
+    

@@ -1,0 +1,363 @@
+{% extends 'resortindex.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Resort Profile Header -->
+    <div class="profile-header mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-4 mb-0">Munnar Green Valley Resort & Spa</h1>
+                <p class="text-muted">
+                    <i class="fas fa-map-marker-alt me-2"></i>Munnar, Kerala
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'edit_resort_profile' %}" class="btn btn-primary">
+                    <i class="fas fa-edit me-2"></i>Edit Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resort Overview Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-card-body">
+                    <i class="fas fa-star text-warning"></i>
+                    <h3>4.8</h3>
+                    <p>Rating</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-card-body">
+                    <i class="fas fa-users text-primary"></i>
+                    <h3>3,250</h3>
+                    <p>Total Guests</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-card-body">
+                    <i class="fas fa-calendar-check text-success"></i>
+                    <h3>428</h3>
+                    <p>Bookings</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-card-body">
+                    <i class="fas fa-box text-info"></i>
+                    <h3>15</h3>
+                    <p>Active Packages</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resort Details -->
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-md-4">
+            <div class="profile-card mb-4">
+                <div class="profile-card-header">
+                    <h3><i class="fas fa-hotel me-2"></i>Resort Details</h3>
+                </div>
+                <div class="profile-card-body">
+                    <div class="resort-logo mb-4">
+                        <img src="{% static 'images/resorts/munnar-resort-logo.webp' %}" 
+                             alt="Munnar Green Valley Resort Logo" 
+                             class="img-fluid rounded">
+                    </div>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <strong><i class="fas fa-building me-2"></i>Type:</strong>
+                            <span class="badge bg-primary">Hill Resort & Spa</span>
+                        </li>
+                        <li class="mb-3">
+                            <strong><i class="fas fa-phone me-2"></i>Contact:</strong>
+                            <p class="mb-0">+91 9876543210</p>
+                        </li>
+                        <li class="mb-3">
+                            <strong><i class="fas fa-envelope me-2"></i>Email:</strong>
+                            <p class="mb-0">info@munnarvalley.com</p>
+                        </li>
+                        <li class="mb-3">
+                            <strong><i class="fas fa-globe me-2"></i>Website:</strong>
+                            <p class="mb-0">www.munnarvalley.com</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Business Information -->
+            <div class="profile-card mb-4">
+                <div class="profile-card-header">
+                    <h3><i class="fas fa-briefcase me-2"></i>Business Info</h3>
+                </div>
+                <div class="profile-card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <strong><i class="fas fa-id-card me-2"></i>License:</strong>
+                            <p class="mb-0">KL-RST-2024-1234</p>
+                        </li>
+                        <li class="mb-3">
+                            <strong><i class="fas fa-receipt me-2"></i>GST:</strong>
+                            <p class="mb-0">32AABTM4567B1ZX</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-md-8">
+            <!-- Description -->
+            <div class="profile-card mb-4">
+                <div class="profile-card-header">
+                    <h3><i class="fas fa-info-circle me-2"></i>About</h3>
+                </div>
+                <div class="profile-card-body">
+                    <p>Welcome to Munnar Green Valley Resort & Spa, nestled in the breathtaking Western Ghats of Kerala. 
+                    Our luxury hill resort offers panoramic views of endless tea plantations and misty mountains. 
+                    Experience the perfect blend of modern luxury and natural serenity, complemented by traditional 
+                    Kerala hospitality. Whether you're seeking adventure in the hills, relaxation at our Ayurvedic spa, 
+                    or a romantic getaway, we promise an unforgettable stay in God's Own Country.</p>
+                </div>
+            </div>
+
+            <!-- Amenities -->
+            <div class="profile-card mb-4">
+                <div class="profile-card-header">
+                    <h3><i class="fas fa-concierge-bell me-2"></i>Amenities</h3>
+                </div>
+                <div class="profile-card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="amenity-item">
+                                <i class="fas fa-swimming-pool"></i>
+                                <span>Infinity Pool</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="amenity-item">
+                                <i class="fas fa-spa"></i>
+                                <span>Ayurvedic Spa</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="amenity-item">
+                                <i class="fas fa-utensils"></i>
+                                <span>Mountain View Restaurant</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="amenity-item">
+                                <i class="fas fa-hiking"></i>
+                                <span>Trekking Tours</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="amenity-item">
+                                <i class="fas fa-leaf"></i>
+                                <span>Tea Garden Tours</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="amenity-item">
+                                <i class="fas fa-yoga"></i>
+                                <span>Yoga Center</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery -->
+            <div class="profile-card">
+                <div class="profile-card-header">
+                    <h3><i class="fas fa-images me-2"></i>Gallery</h3>
+                </div>
+                <div class="profile-card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="gallery-item">
+                                <img src="{% static 'images/resort1.jpg' %}" 
+                                     alt="Resort Aerial View" 
+                                     class="img-fluid rounded">
+                                <div class="gallery-caption">Resort Aerial View</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="gallery-item">
+                                <img src="{% static 'images/resorts/munnar-pool.webp' %}" 
+                                     alt="Infinity Pool" 
+                                     class="img-fluid rounded">
+                                <div class="gallery-caption">Infinity Pool</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="gallery-item">
+                                <img src="{% static 'images/resorts/munnar-room.webp' %}" 
+                                     alt="Luxury Suite" 
+                                     class="img-fluid rounded">
+                                <div class="gallery-caption">Luxury Suite</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="gallery-item">
+                                <img src="{% static 'images/resorts/munnar-spa.webp' %}" 
+                                     alt="Ayurvedic Spa" 
+                                     class="img-fluid rounded">
+                                <div class="gallery-caption">Ayurvedic Spa</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="gallery-item">
+                                <img src="{% static 'images/resorts/munnar-restaurant.webp' %}" 
+                                     alt="Mountain View Restaurant" 
+                                     class="img-fluid rounded">
+                                <div class="gallery-caption">Mountain View Restaurant</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="gallery-item">
+                                <img src="{% static 'images/resorts/munnar-tea-garden.webp' %}" 
+                                     alt="Tea Garden" 
+                                     class="img-fluid rounded">
+                                <div class="gallery-caption">Tea Garden</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-header {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card-body {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stat-card i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.stat-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+    color: #666;
+    margin: 0;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.profile-card-header {
+    background: #f8f9fa;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-card-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.profile-card-body {
+    padding: 1.5rem;
+}
+
+.resort-logo img {
+    max-width: 200px;
+    margin: 0 auto;
+    display: block;
+    border: 1px solid #eee;
+    padding: 1rem;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.amenity-item i {
+    color: #4CAF50;
+}
+
+.gallery-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.gallery-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    border-radius: 0 0 10px 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .gallery-caption {
+    opacity: 1;
+}
+
+.badge {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+}
+</style>
+{% endblock %}

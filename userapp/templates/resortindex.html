@@ -291,14 +291,12 @@
                 <i class="fas fa-hotel mr-2"></i>Resort Management
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-user mr-2"></i>Resort Profile</a>
-                <a class="dropdown-item" href="{% url 'editprofile' %}"><i class="fas fa-user-edit mr-2"></i>Edit Profile</a>
-                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-hotel mr-2"></i>Manage Resort</a>
-                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-box mr-2"></i>Manage Packages</a>
-                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-calendar-check mr-2"></i>Booking Requests</a>
+                <a class="dropdown-item" href="{% url 'resort_profile' %}"><i class="fas fa-user mr-2"></i>Resort Profile</a>
+                <a class="dropdown-item" href="{% url 'edit_resort_profile' %}"><i class="fas fa-user-edit mr-2"></i>Edit Profile</a>
+                <a class="dropdown-item" href="{% url 'package_list' %}"><i class="fas fa-box mr-2"></i>Manage Packages</a>
                 <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-chart-line mr-2"></i>Analytics</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="fas fa-history mr-2"></i>Booking List</a>
+                <a class="dropdown-item" href="{% url 'bookingmanagement' %}"><i class="fas fa-history mr-2"></i>Booking List</a>
                 <a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-history mr-2"></i>Logout</a>
 
               </div>
@@ -455,6 +453,106 @@
 
     
     <style>
+      .chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-widget {
+    width: 350px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    display: none;
+}
+
+.chat-header {
+    background: #1a73e8;
+    color: white;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-messages {
+    height: 300px;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.chat-input {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+.chat-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.chat-icon:hover {
+    transform: scale(1.1);
+}
+
+.whatsapp-icon {
+    background: #25D366;
+    color: white;
+}
+
+.chatbot-icon {
+    background: #1a73e8;
+    color: white;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 80%;
+}
+
+.bot-message {
+    background: #f0f0f0;
+    margin-right: auto;
+}
+
+.user-message {
+    background: #1a73e8;
+    color: white;
+    margin-left: auto;
+}
+
+.help-button {
+    color: #666;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 1.2rem;
+}
+
+.help-button:hover {
+    color: #1a73e8;
+}
         .block-20 {
             height: 200px; /* Adjust the height as needed */
             background-size: cover;
@@ -752,6 +850,241 @@
         document.querySelector('.navbar').classList.remove('scrolled');
       }
     });
+  </script>
+  
+  <!-- Chat Integration -->
+  <style>
+  .chat-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+  }
+
+  .chat-widget {
+      width: 350px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      display: none;
+  }
+
+  .chat-header {
+      background: #1a73e8;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+
+  .chat-messages {
+      height: 300px;
+      overflow-y: auto;
+      padding: 15px;
+  }
+
+  .chat-input {
+      padding: 15px;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 10px;
+  }
+
+  .chat-buttons {
+      display: flex;
+      gap: 10px;
+  }
+
+  .chat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  }
+
+  .chat-icon:hover {
+      transform: scale(1.1);
+  }
+
+  .whatsapp-icon {
+      background: #25D366;
+      color: white;
+  }
+
+  .chatbot-icon {
+      background: #1a73e8;
+      color: white;
+  }
+
+  .message {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 80%;
+  }
+
+  .bot-message {
+      background: #f0f0f0;
+      margin-right: auto;
+  }
+
+  .user-message {
+      background: #1a73e8;
+      color: white;
+      margin-left: auto;
+  }
+
+  .help-button {
+      color: #666;
+      cursor: pointer;
+      padding: 10px;
+      font-size: 1.2rem;
+  }
+
+  .help-button:hover {
+      color: #1a73e8;
+  }
+  </style>
+
+  <!-- Chat Container -->
+  <div class="chat-container">
+      <div class="chat-widget" id="chatWidget">
+          <div class="chat-header">
+              <span>BookingHub Assistant</span>
+              <span class="close-chat" id="closeChat">&times;</span>
+          </div>
+          <div class="chat-messages" id="chatMessages"></div>
+          <div class="chat-input">
+              <input type="text" id="userInput" placeholder="Type your message...">
+              <button id="sendMessage">Send</button>
+          </div>
+      </div>
+      <div class="chat-buttons">
+          <div class="chat-icon whatsapp-icon" onclick="window.open('https://wa.me/919207541572', '_blank')">
+              <i class="fab fa-whatsapp fa-2x"></i>
+          </div>
+          <div class="chat-icon chatbot-icon" id="chatbotToggle">
+              <i class="fas fa-comments fa-2x"></i>
+          </div>
+      </div>
+  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+      const responses = {
+          'bookings': `BookingHub Booking Management:
+• View current bookings
+• Check availability
+• Manage cancellations
+• Update booking status
+Need help with a specific booking?`,
+
+          'packages': `Available Resort Packages:
+• Luxury Day Packages
+• Weekend Getaways
+• Family Packages
+• Corporate Events
+Want to customize a package?`,
+
+          'analytics': `BookingHub Analytics:
+• Booking trends
+• Popular packages
+• Revenue insights
+• Customer feedback: 4.8/5
+Need detailed reports?`,
+
+          'facilities': `Resort Amenities:
+• Premium Pools
+• Spa Services
+• Fine Dining
+• Event Venues
+• Recreation Areas
+Want to check availability?`,
+
+          'pricing': `Package Pricing:
+• Day Pass: ₹1500/person
+• Weekend Package: ₹4500/couple
+• Family Package: ₹6000
+• Corporate Events: Custom pricing
+Need a detailed quote?`,
+
+          'support': `BookingHub Support:
+• 24/7 Customer Service
+• Technical Support
+• Booking Assistance
+• WhatsApp: +919207541572
+How can we help you today?`,
+
+          'default': `Welcome to BookingHub Resort Management!
+I can assist with:
+1. 📋 Booking Operations
+2. 📦 Package Information
+3. 💰 Pricing Details
+4. 📊 Performance Analytics
+5. 🏊‍♂️ Amenity Management
+6. 🎫 Event Bookings
+What would you like to know?`
+      };
+
+      const chatWidget = document.getElementById('chatWidget');
+      const chatbotToggle = document.getElementById('chatbotToggle');
+      const closeChat = document.getElementById('closeChat');
+      const messagesContainer = document.getElementById('chatMessages');
+      const userInput = document.getElementById('userInput');
+      const sendButton = document.getElementById('sendMessage');
+
+      function addMessage(message, isBot = false) {
+          const messageDiv = document.createElement('div');
+          messageDiv.className = `message ${isBot ? 'bot-message' : 'user-message'}`;
+          messageDiv.textContent = message;
+          messagesContainer.appendChild(messageDiv);
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      chatbotToggle.addEventListener('click', () => {
+          chatWidget.style.display = chatWidget.style.display === 'none' ? 'block' : 'none';
+          if(chatWidget.style.display === 'block') {
+              addMessage(responses['default'], true);
+          }
+      });
+
+      closeChat.addEventListener('click', () => {
+          chatWidget.style.display = 'none';
+      });
+
+      function sendMessage() {
+          const message = userInput.value.trim().toLowerCase();
+          if (message) {
+              addMessage(userInput.value);
+              userInput.value = '';
+
+              let response = responses['default'];
+              if (message.includes('book') || message.includes('reservation')) response = responses['bookings'];
+              if (message.includes('package') || message.includes('deal')) response = responses['packages'];
+              if (message.includes('analytic') || message.includes('report')) response = responses['analytics'];
+              if (message.includes('facility') || message.includes('amenity')) response = responses['facilities'];
+              if (message.includes('price') || message.includes('cost')) response = responses['pricing'];
+              if (message.includes('help') || message.includes('support')) response = responses['support'];
+
+              setTimeout(() => addMessage(response, true), 500);
+          }
+      }
+
+      sendButton.addEventListener('click', sendMessage);
+      userInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') sendMessage();
+      });
+  });
   </script>
   
   </body>

@@ -1,0 +1,287 @@
+{% extends 'resortindex.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="edit-header mb-4">
+        <h1 class="text-center mb-3">Edit Resort Profile</h1>
+        <p class="text-center text-muted">Update your resort information and amenities</p>
+    </div>
+
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="edit-form">
+        {% csrf_token %}
+        
+        <!-- Basic Information -->
+        <div class="form-card mb-4">
+            <div class="form-card-header">
+                <h3><i class="fas fa-hotel me-2"></i>Basic Information</h3>
+            </div>
+            <div class="form-card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Resort Name</label>
+                        <input type="text" class="form-control" name="name" value="{{ resort.name }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Resort Type</label>
+                        <select class="form-select" name="resort_type" required>
+                            <option value="luxury" {% if resort.resort_type == 'luxury' %}selected{% endif %}>Luxury Resort</option>
+                            <option value="boutique" {% if resort.resort_type == 'boutique' %}selected{% endif %}>Boutique Resort</option>
+                            <option value="beach" {% if resort.resort_type == 'beach' %}selected{% endif %}>Beach Resort</option>
+                            <option value="hill" {% if resort.resort_type == 'hill' %}selected{% endif %}>Hill Resort</option>
+                            <option value="adventure" {% if resort.resort_type == 'adventure' %}selected{% endif %}>Adventure Resort</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="description" rows="4" required>{{ resort.description }}</textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Logo</label>
+                        <div class="logo-preview mb-2">
+                            <img src="{{ resort.logo.url }}" alt="Resort Logo" class="img-fluid rounded">
+                        </div>
+                        <input type="file" class="form-control" name="logo" accept="image/*">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Cover Image</label>
+                        <div class="cover-preview mb-2">
+                            <img src="{{ resort.cover_image.url }}" alt="Cover Image" class="img-fluid rounded">
+                        </div>
+                        <input type="file" class="form-control" name="cover_image" accept="image/*">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="form-card mb-4">
+            <div class="form-card-header">
+                <h3><i class="fas fa-address-card me-2"></i>Contact Information</h3>
+            </div>
+            <div class="form-card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" value="{{ resort.email }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" class="form-control" name="phone" value="{{ resort.phone }}" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Website</label>
+                        <input type="url" class="form-control" name="website" value="{{ resort.website }}">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    <textarea class="form-control" name="address" rows="3" required>{{ resort.address }}</textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">City</label>
+                        <input type="text" class="form-control" name="city" value="{{ resort.city }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">State</label>
+                        <input type="text" class="form-control" name="state" value="{{ resort.state }}" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Pincode</label>
+                        <input type="text" class="form-control" name="pincode" value="{{ resort.pincode }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Country</label>
+                        <input type="text" class="form-control" name="country" value="{{ resort.country }}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Information -->
+        <div class="form-card mb-4">
+            <div class="form-card-header">
+                <h3><i class="fas fa-briefcase me-2"></i>Business Information</h3>
+            </div>
+            <div class="form-card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">License Number</label>
+                        <input type="text" class="form-control" name="license_number" value="{{ resort.license_number }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">GST Number</label>
+                        <input type="text" class="form-control" name="gst_number" value="{{ resort.gst_number }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Amenities -->
+        <div class="form-card mb-4">
+            <div class="form-card-header">
+                <h3><i class="fas fa-concierge-bell me-2"></i>Amenities</h3>
+            </div>
+            <div class="form-card-body">
+                <div id="amenities-container">
+                    {% for amenity in resort.amenities %}
+                    <div class="amenity-item mb-3">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" name="amenity_name[]" value="{{ amenity.name }}" placeholder="Amenity Name">
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" name="amenity_icon[]" value="{{ amenity.icon }}" placeholder="Icon Class (e.g., fas fa-swimming-pool)">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-danger w-100" onclick="removeAmenity(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-outline-primary" onclick="addAmenity()">
+                    <i class="fas fa-plus me-2"></i>Add Amenity
+                </button>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-save me-2"></i>Save Changes
+            </button>
+            <a href="{% url 'resort_profile' %}" class="btn btn-outline-secondary btn-lg ms-2">
+                <i class="fas fa-times me-2"></i>Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<style>
+.edit-header {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+.form-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.form-card-header {
+    background: #f8f9fa;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.form-card-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.form-card-body {
+    padding: 1.5rem;
+}
+
+.logo-preview, .cover-preview {
+    width: 100%;
+    height: 150px;
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.logo-preview img, .cover-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-primary {
+    background: #4CAF50;
+    border-color: #4CAF50;
+    padding: 0.8rem 2rem;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background: #45a049;
+    border-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2);
+}
+
+.amenity-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .btn-lg {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+}
+</style>
+
+<script>
+function addAmenity() {
+    const container = document.getElementById('amenities-container');
+    const newAmenity = document.createElement('div');
+    newAmenity.className = 'amenity-item mb-3';
+    newAmenity.innerHTML = `
+        <div class="row">
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="amenity_name[]" placeholder="Amenity Name" required>
+            </div>
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="amenity_icon[]" placeholder="Icon Class (e.g., fas fa-swimming-pool)" required>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger w-100" onclick="removeAmenity(this)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    container.appendChild(newAmenity);
+}
+
+function removeAmenity(button) {
+    button.closest('.amenity-item').remove();
+}
+</script>
+{% endblock %} 

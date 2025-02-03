@@ -175,7 +175,7 @@
             <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
             <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
             
-            {% if user.is_authenticated %}
+            {% comment %} {% if user.is_authenticated %}
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-user-circle mr-1"></i>
@@ -203,7 +203,7 @@
                 <a href="{% url 'login' %}" class="nav-link btn btn-outline-light ml-lg-3">Login</a>
               </li>
             {% endif %}
-            <li class="nav-item">
+            <li class="nav-item"> {% endcomment %}
                 <a href="{% url 'wishlist' %}" class="nav-link">My Wishlist</a>
             </li>
           </ul>
@@ -592,6 +592,405 @@
       }
     });
   </script>
+  
+  <!-- Chat Icons and Chatbot -->
+  <style>
+    .chat-icons-container {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .chat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .chatbot-icon {
+        background: linear-gradient(135deg, #37100d, #a34942);
+        color: white;
+        box-shadow: 0 4px 15px rgba(55, 16, 13, 0.3);
+    }
+
+    .whatsapp-icon {
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        color: white;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    }
+
+    .chatbox-modal {
+        display: none;
+        position: fixed;
+        bottom: 100px;
+        right: 20px;
+        width: 350px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+        z-index: 1000;
+    }
+
+    .chatbox-header {
+        background: linear-gradient(135deg, #37100d, #a34942);
+        color: white;
+        padding: 15px;
+        border-radius: 15px 15px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chatbox-body {
+        height: 400px;
+        overflow-y: auto;
+        padding: 15px;
+    }
+
+    .chatbox-footer {
+        padding: 15px;
+        border-top: 1px solid #eee;
+        display: flex;
+        gap: 10px;
+    }
+
+    .message {
+        margin: 10px 0;
+        padding: 10px 15px;
+        border-radius: 15px;
+        max-width: 80%;
+    }
+
+    .user-message {
+        background: #e3f2fd;
+        margin-left: auto;
+        border-bottom-right-radius: 5px;
+    }
+
+    .chatbot-message {
+        background: #f5f5f5;
+        margin-right: auto;
+        border-bottom-left-radius: 5px;
+    }
+
+    #user-input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        outline: none;
+    }
+
+    #send-button {
+        background: #37100d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    #send-button:hover {
+        background: #a34942;
+    }
+  </style>
+
+  <!-- Chat Icons -->
+  <div class="chat-icons-container">
+      <div class="chat-icon whatsapp-icon" onclick="window.open('https://wa.me/YOUR_PHONE_NUMBER', '_blank')">
+          <i class="fab fa-whatsapp fa-lg"></i>
+      </div>
+      <div class="chat-icon chatbot-icon" id="chatbot-icon">
+          <i class="fas fa-comments fa-lg"></i>
+      </div>
+  </div>
+
+  <!-- Chatbox -->
+  <div id="chatbox" class="chatbox-modal">
+      <div class="chatbox-header">
+          <h4 class="m-0">Daylight Resort Assistant</h4>
+          <i class="fas fa-times" id="close-chatbox" style="cursor: pointer;"></i>
+      </div>
+      <div class="chatbox-body" id="chatbox-body">
+          <!-- Messages will appear here -->
+      </div>
+      <div class="chatbox-footer">
+          <input type="text" id="user-input" placeholder="Type your message...">
+          <button id="send-button">
+              <i class="fas fa-paper-plane"></i>
+          </button>
+      </div>
+  </div>
+
+  <!-- Chatbot Script -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const chatbotResponses = {
+        // General Inquiries
+        'packages': `We offer several types of packages:
+1. 🌅 Daycation Packages (9 AM - 6 PM):
+   • Pool Access (₹1,500/person)
+   • Spa Wellness (₹3,500/person)
+   • Family Fun (₹5,000)
+   • Dining Delight (₹2,500/person)
+
+2. 🌙 Staycation Packages:
+   • Luxury Room (₹8,000/night)
+   • Suite Experience (₹12,000/night)
+   • Family Suite (₹15,000/night)
+
+Would you like specific details about any package?`,
+
+        'customize': `Yes, you can customize your package with add-ons:
+• Spa treatments (from ₹2,000)
+• Gourmet dining (from ₹1,500)
+• Activity sessions (from ₹1,000)
+• Private cabana (₹2,500)
+• Photography session (₹3,000)
+
+Would you like to know more about any add-on?`,
+
+        'availability': `You can check real-time availability:
+1. Through our website booking system
+2. Via WhatsApp: +91-9207541572
+3. Call us: +91-9207541572
+
+Would you like me to check availability for specific dates?`,
+
+        'timings': `Our timings:
+🌅 Daycation: 9 AM - 6 PM
+🏨 Staycation Check-in: 2 PM
+🏨 Staycation Check-out: 11 AM
+🏊‍♂️ Pool: 9 AM - 5:30 PM
+💆‍♀️ Spa: 10 AM - 6 PM
+🍽️ Restaurant: 8 AM - 9 PM`,
+
+        'group booking': `For group bookings, we offer special benefits:
+• 10% off for groups of 10-20
+• 15% off for groups of 20+
+• Complimentary activities
+• Custom meal plans
+• Dedicated event coordinator
+
+Would you like to speak with our group booking specialist?`,
+
+        // AI-Powered Recommendations
+        'recommend': `I can help recommend the perfect package based on:
+• Your preferences
+• Past bookings
+• Budget range
+• Group size
+• Special occasions
+
+Would you like personalized recommendations?`,
+
+        'popular packages': `Our most popular packages are:
+1. Family Fun Package (4.9/5 ⭐)
+2. Spa Wellness Package (4.8/5 ⭐)
+3. Dining Delight Package (4.7/5 ⭐)
+
+Based on current trends and guest feedback.`,
+
+        // Booking and Payment
+        'book online': `To book online:
+1. Visit our website
+2. Select your preferred package
+3. Choose date and time
+4. Add any customizations
+5. Proceed to payment
+
+Would you like me to guide you through the process?`,
+
+        'payment options': `We accept multiple payment methods:
+💳 Credit/Debit Cards
+🏦 Net Banking
+📱 UPI (GPay, PhonePe, Paytm)
+💰 EMI options available
+
+All transactions are secure and encrypted.`,
+
+        'cancellation': `Our cancellation policy:
+• Free cancellation 24 hours before
+• 50% refund up to 12 hours before
+• No refund for last-minute cancellations
+
+Special considerations for emergencies.`,
+
+        // Facilities & Services
+        'amenities': `Our resort facilities include:
+🏊‍♂️ Swimming pools (Adult & Kids)
+💆‍♀️ Spa and wellness center
+🍽️ Multi-cuisine restaurant
+🎮 Indoor games zone
+🎯 Kids play area
+🏋️‍♂️ Fitness center
+🅿️ Free parking
+🌐 High-speed Wi-Fi
+
+Need specific details about any facility?`,
+
+        'meals': `Our dining options:
+🍳 Breakfast buffet (8 AM - 10:30 AM)
+🍱 Lunch buffet (12:30 PM - 3:30 PM)
+☕ Evening snacks (4:30 PM - 6:30 PM)
+🍽️ À la carte menu available
+
+Special dietary requirements? Let us know!`,
+
+        // Guest Experience & Reviews
+        'reviews': `Our guest satisfaction metrics:
+⭐ Overall rating: 4.8/5
+👨‍👩‍👦 Family-friendly: 4.9/5
+🍽️ Dining experience: 4.7/5
+🏊‍♂️ Pool facilities: 4.8/5
+💆‍♀️ Spa services: 4.9/5
+
+Would you like to read recent reviews?`,
+
+        'safety measures': `Our safety protocols include:
+🧼 Regular sanitization
+🌡️ Temperature checks
+😷 Trained staff
+🧪 Water quality monitoring
+🏥 First aid facilities
+🚨 24/7 security
+
+Your safety is our priority!`,
+
+        'special occasions': `We offer special arrangements for:
+🎂 Birthdays
+💑 Anniversaries
+💍 Proposals
+🎉 Celebrations
+
+Would you like to know about our celebration packages?`,
+
+        // Default Response
+        'default': `I can help you with:
+1. Package details & pricing
+2. Booking & payment
+3. Facilities & amenities
+4. Special requests
+5. Safety measures
+6. Guest reviews
+
+What would you like to know about?`
+      };
+
+      // Sample questions to help users
+      const sampleQuestions = `You can ask me questions like:
+• "What packages do you offer?"
+• "How can I customize my package?"
+• "What are your payment options?"
+• "Tell me about your facilities"
+• "What are your safety measures?"
+• "How can I book online?"
+• "Do you have special occasion packages?"
+• "What are your most popular packages?"`;
+
+      const chatbotIcon = document.getElementById('chatbot-icon');
+      const chatbox = document.getElementById('chatbox');
+      const closeChatbox = document.getElementById('close-chatbox');
+      const sendButton = document.getElementById('send-button');
+      const userInput = document.getElementById('user-input');
+      const chatboxBody = document.getElementById('chatbox-body');
+
+      // Show initial greeting
+      appendMessage('chatbot', 'Hello! 👋 Welcome to Daylight Resort. How can I help you today?');
+
+      chatbotIcon.addEventListener('click', () => {
+          chatbox.style.display = 'block';
+          userInput.focus();
+      });
+
+      closeChatbox.addEventListener('click', () => {
+          chatbox.style.display = 'none';
+      });
+
+      function handleUserInput() {
+          const message = userInput.value.trim();
+          if (message) {
+              appendMessage('user', message);
+              userInput.value = '';
+
+              // Find response
+              const response = findResponse(message.toLowerCase());
+              
+              // Simulate typing delay
+              setTimeout(() => {
+                  appendMessage('chatbot', response);
+              }, 500);
+          }
+      }
+
+      function findResponse(message) {
+          for (const [key, value] of Object.entries(chatbotResponses)) {
+              if (message.includes(key)) {
+                  return value;
+              }
+          }
+          return chatbotResponses.default;
+      }
+
+      function appendMessage(sender, message) {
+          const messageDiv = document.createElement('div');
+          messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'chatbot-message');
+          messageDiv.textContent = message;
+          chatboxBody.appendChild(messageDiv);
+          chatboxBody.scrollTop = chatboxBody.scrollHeight;
+      }
+
+      sendButton.addEventListener('click', handleUserInput);
+      userInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+              handleUserInput();
+          }
+      });
+
+      // Add help button functionality
+      const helpButton = document.createElement('button');
+      helpButton.innerHTML = '<i class="fas fa-question-circle"></i>';
+      helpButton.className = 'help-button';
+      document.querySelector('.chatbox-footer').prepend(helpButton);
+
+      helpButton.addEventListener('click', () => {
+          appendMessage('chatbot', sampleQuestions);
+      });
+  });
+  </script>
+  
+  <!-- Add this CSS for the help button -->
+  <style>
+  .help-button {
+      background: none;
+      border: none;
+      color: #37100d;
+      cursor: pointer;
+      padding: 10px;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+  }
+
+  .help-button:hover {
+      color: #a34942;
+  }
+  </style>
   
   </body>
 </html>
