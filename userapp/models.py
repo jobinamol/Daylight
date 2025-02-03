@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.core.exceptions import ValidationError
 import pyotp  # Required for OTP generation
 from django.utils import timezone
+from django.utils.text import slugify
 
 
 class UserDBManager(BaseUserManager):
@@ -167,3 +168,50 @@ class Room(models.Model):
     
     def __str__(self):
         return self.room_number
+
+
+
+
+
+
+
+
+class ResortProfile(models.Model):
+    user = models.OneToOneField(UserDB, on_delete=models.CASCADE, related_name="resort_profile")
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    location = models.CharField(max_length=255)
+    contact = models.CharField(max_length=15)  # Consider adding validation for phone numbers
+    email = models.EmailField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)  # SEO-friendly URL
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Resort Profile'
+        verbose_name_plural = 'Resort Profiles'
+        db_table = 'userapp_resortprofile'
+
+
+class ResortImage(models.Model):
+    resort = models.ForeignKey(ResortProfile, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='resort_images/')
+
+    def __str__(self):
+        return f"Image for {self.resort.name}"
+
+    class Meta:
+        verbose_name = 'Resort Image'
+        verbose_name_plural = 'Resort Images'
+    
+
+
+

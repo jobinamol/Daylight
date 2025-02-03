@@ -257,14 +257,16 @@
             <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About</a></li>
             <li class="nav-item"><a href="{% url 'blog' %}" class="nav-link">Blog</a></li>
             <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Login</a></li>
+
+            {% comment %} <li class="nav-item dropdown"> {% endcomment %}
+                {% comment %} <a class="nav-link dropdown-toggle" href="{% url 'login' %}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Login
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                </a> {% endcomment %}
+                {% comment %} <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'login' %}">Guest Login</a>
                     <a class="dropdown-item" href="{% url 'login' %}">Resort Owner Login</a>
-                </div>
+                </div> {% endcomment %}
             </li>
         </ul>
         </div>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Delete Resort</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Delete Resort: {{ resort.name }}</h2>
+        <p>Are you sure you want to delete this resort?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+        </form>
+        <a href="{% url 'resort_list' %}" class="btn btn-secondary mt-3">Cancel</a>
+    </div>
+</body>
+</html>

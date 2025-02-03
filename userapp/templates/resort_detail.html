@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ resort.name }} - Resort Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            padding: 50px 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 36px;
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .resort-info p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .resort-info strong {
+            color: #007bff;
+        }
+
+        .resort-images img {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 12px;
+            margin: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .resort-images img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 25px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .back-btn {
+            background-color: #28a745;
+        }
+
+        .back-btn:hover {
+            background-color: #218838;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6c757d;
+        }
+
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .social-links i {
+            font-size: 18px;
+            margin: 0 10px;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+
+        .social-links i:hover {
+            color: #0056b3;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>{{ resort.name }}</h2>
+        
+        <div class="resort-info">
+            <p><strong>Location:</strong> {{ resort.location }}</p>
+            <p><strong>Description:</strong> {{ resort.description }}</p>
+            <p><strong>Contact:</strong> {{ resort.contact }}</p>
+            <p><strong>Email:</strong> <a href="mailto:{{ resort.email }}" style="color: #007bff;">{{ resort.email }}</a></p>
+        </div>
+
+        <h3 class="mt-4">Resort Images</h3>
+        <div class="resort-images d-flex flex-wrap justify-content-center">
+            {% for image in images %}
+                <img src="{{ image.image.url }}" alt="Resort Image">
+            {% endfor %}
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{% url 'resort_update' resort.pk %}" class="btn"><i class="fas fa-edit mr-2"></i>Edit Resort</a>
+            <a href="{% url 'resort_list' %}" class="btn back-btn"><i class="fas fa-arrow-left mr-2"></i>Back to Resort List</a>
+        </div>
+
+        <div class="footer mt-5">
+            <p>&copy; 2025 Daylight Daycation Resort Management. All rights reserved.</p>
+            <p><a href="mailto:contact@daylightresort.com">contact@daylightresort.com</a></p>
+            <div class="social-links">
+                <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

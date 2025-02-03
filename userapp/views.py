@@ -225,7 +225,8 @@ def userindex(request):
     return render(request, 'userindex.html', context)
 
 def resortindex(request):
-    return render(request, 'resortindex.html')
+    resorts = ResortProfile.objects.all()  # Retrieve all resorts
+    return render(request, 'resortindex.html', {'resorts': resorts})
 
 def check_username(request):
     username = request.GET.get('username')
@@ -249,16 +250,84 @@ from django.contrib import messages
 from django.core.cache import cache
 
 def generate_otp():
-    # Function to generate OTP (implement logic)
-    return "123456"
+    return str(random.randint(100000, 999999))
 
-def send_otp(email, otp):
-    # Function to send OTP (implement logic)
-    pass
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+
+@csrf_exempt
+def send_otp(request):
+    if request.method == 'POST':
+        try:
+            email = request.POST.get('email')
+            if not email:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Email is required'
+                })
+
+            # Check if email already exists
+            if UserDB.objects.filter(email=email).exists():
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Email already registered'
+                })
+
+            # Generate OTP
+            otp = generate_otp()
+            
+            # Store OTP in cache with email as key
+            cache.set(f'registration_otp_{email}', otp, timeout=300)  # 5 minutes expiry
+
+            # Send email
+            try:
+                send_mail(
+                    'Your OTP for SmartBookingHub Registration',
+                    f'Your OTP is: {otp}\nValid for 5 minutes.',
+                    settings.EMAIL_HOST_USER,
+                    [email],
+                    fail_silently=False,
+                )
+                return JsonResponse({
+                    'success': True,
+                    'message': 'OTP sent successfully'
+                })
+            except Exception as e:
+                print(f"Email sending error: {str(e)}")
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Failed to send OTP email'
+                })
+
+        except Exception as e:
+            print(f"Error in send_otp: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'message': 'An error occurred'
+            })
+
+    return JsonResponse({
+        'success': False,
+        'message': 'Invalid request method'
+    })
 
 def _invalidate_user_sessions(user_id, user_type):
-    # Function to invalidate previous sessions (implement logic)
-    pass
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    for session in sessions:
+        data = session.get_decoded()
+        if user_type == 'user' and data.get('user_id') == user_id:
+            session.delete()
+        elif user_type == 'staff' and data.get('staff_id') == user_id:
+            session.delete()
+
+def check_email(request):
+    email = request.GET.get('email', None)
+    if email:
+        exists = UserDB.objects.filter(email=email).exists()
+        return JsonResponse({'exists': exists})
+    return JsonResponse({'exists': False})
 
 def login_view(request):
     if request.method == 'POST':
@@ -269,7 +338,6 @@ def login_view(request):
             messages.error(request, "Please enter both username and password.")
             return redirect('login')
 
-        # Clear previous session for the current user
         request.session.flush()
 
         # Admin Login
@@ -293,164 +361,123 @@ def login_view(request):
                 request.session['username'] = username
                 messages.success(request, f'Welcome, {username.split("@")[0].capitalize()}!')
                 return redirect(redirect_url)
-            else:
-                messages.error(request, 'Invalid username or password.')
-                return redirect('login')
+            messages.error(request, 'Invalid username or password.')
+            return redirect('login')
 
-        # Regular User Login (UserDB Authentication)
+        # Regular User Login
         user = authenticate(request, username=username, password=password)
         if user is not None:
             otp = generate_otp()
             cache.set(username, otp, timeout=300)
-            send_otp(user.email, otp)
-
-            # Invalidate previous sessions
+            send_mail(
+                'Your OTP Code',
+                f'Your OTP code is {otp}. It will expire in 5 minutes.',
+                'from@example.com',
+                [user.email],
+                fail_silently=False,
+            )
             _invalidate_user_sessions(user.id, 'user')
-
-            # Start a new session for the user
-            login(request, user)
-            request.session['user_id'] = user.id
-            request.session['username'] = user.username
-            request.session['email'] = user.email
-            request.session['profile_image'] = user.profile_image.url
-            request.session['user_type'] = 'user'
-            messages.success(request, f'Welcome, {user.name}!')
-            return redirect('userindex')
-        else:
-            messages.error(request, 'Invalid username or password.')
-
+            request.session['otp_user_id'] = user.id
+            return redirect('verify_otp_view')
+        messages.error(request, 'Invalid username or password.')
     return render(request, 'login.html')
 
 def verify_otp_view(request):
-    """
-    OTP verification after login attempt.
-    """
     if request.method == "POST":
         otp_entered = request.POST.get("otp")
         user_id = request.session.get("otp_user_id")
 
         if user_id:
-            user = UserDB.objects.get(id=user_id)
-            cached_otp = cache.get(user.email)  # Retrieve OTP from cache
+            user = get_object_or_404(UserDB, id=user_id)
+            cached_otp = cache.get(user.email)
 
             if cached_otp and cached_otp == otp_entered:
-                login(request, user)  # Log in the user
-
-                # Store user session details
+                login(request, user)
                 request.session['user_id'] = user.id
                 request.session['username'] = user.username
                 request.session['email'] = user.email
                 request.session['profile_image'] = user.profile_image.url
                 request.session['user_type'] = 'user'
-
                 messages.success(request, f'Welcome, {user.name}!')
                 return redirect('userindex')
-            else:
-                messages.error(request, "Invalid OTP. Please try again.")
+            messages.error(request, "Invalid OTP. Please try again.")
         else:
             messages.error(request, "Session expired. Please log in again.")
             return redirect('login')
-
     return render(request, "verify_otp.html")
-
-
-
-
-
-def _invalidate_user_sessions(user_id, user_type):
-    """Helper function to invalidate all active sessions for a given user or staff."""
-    sessions = Session.objects.filter(expire_date__gte=timezone.now())
-    for session in sessions:
-        data = session.get_decoded()
-        if user_type == 'user' and data.get('user_id') == user_id:
-            session.delete()
-        elif user_type == 'staff' and data.get('staff_id') == user_id:
-            session.delete()
-
 
 def userregister(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        name = request.POST.get('name')
-        mobilenumber = request.POST.get('mobilenumber')
-        address = request.POST.get('address')
-        district = request.POST.get('district')
-        age = request.POST.get('age')
-        sex = request.POST.get('sex')
-        profile_image = request.FILES.get('profile_image')
+        try:
+            email = request.POST.get('email')
+            otp_entered = request.POST.get('otp')
+            
+            # Verify OTP one last time
+            stored_otp = cache.get(f'registration_otp_{email}')
+            if not stored_otp or str(stored_otp) != str(otp_entered):
+                messages.error(request, 'Invalid OTP or OTP expired')
+                return redirect('userregister')
 
-        if not username or not email or not password:
-            messages.error(request, 'Please fill in all required fields.')
+            # Create user with the provided details
+            user = UserDB.objects.create(
+                email=email,
+                name=request.POST.get('name'),
+                mobilenumber=request.POST.get('mobile'),
+                password=make_password(request.POST.get('password')),
+                username=email.split('@')[0]  # Generate username from email
+            )
+
+            # Clear OTP from cache
+            cache.delete(f'registration_otp_{email}')
+
+            messages.success(request, 'Registration successful! Please login.')
+            return redirect('login')
+
+        except Exception as e:
+            print(f"Error in userregister: {str(e)}")
+            messages.error(request, 'Registration failed. Please try again.')
             return redirect('userregister')
-
-        User = get_user_model()
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'Email is already registered.')
-            return redirect('userregister')
-
-        user = User.objects.create(
-            username=username,
-            email=email,
-            name=name,
-            mobilenumber=mobilenumber,
-            address=address,
-            district=district,
-            age=age,
-            sex=sex,
-            profile_image=profile_image,
-            is_active=False,
-        )
-        user.set_password(password)  # Hashing password
-        user.save()
-
-        otp_secret = pyotp.random_base32()
-        user.otp_secret = otp_secret
-        user.save()
-
-        totp = pyotp.TOTP(otp_secret)
-        otp_code = totp.now()
-
-        send_mail(
-            'Your OTP Code for Registration',
-            f'Your OTP code is {otp_code}. It will expire in 30 seconds.',
-            'from@example.com',
-            [user.email],
-            fail_silently=False,
-        )
-
-        messages.info(request, 'Please check your email for the OTP code.')
-        return redirect('verify_otp', user_id=user.id)
 
     return render(request, 'userregister.html')
 
-
-def verify_otp(request, user_id):
-    User = get_user_model()
-    try:
-        user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        messages.error(request, 'User not found.')
-        return redirect('login')
-
+def verify_otp(request):
     if request.method == 'POST':
-        otp_entered = request.POST.get('otp')
+        try:
+            email = request.POST.get('email')
+            otp_entered = request.POST.get('otp')
 
-        if not otp_entered:
-            messages.error(request, 'Please enter the OTP.')
-            return redirect('verify_otp', user_id=user_id)
+            stored_otp = cache.get(f'registration_otp_{email}')
 
-        totp = pyotp.TOTP(user.otp_secret)
-        if totp.verify(otp_entered):
-            user.is_active = True
-            user.save()
-            messages.success(request, 'Account successfully activated!')
-            return redirect('login')
-        else:
-            messages.error(request, 'Invalid OTP, please try again.')
+            if not stored_otp:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'OTP expired or invalid'
+                })
 
-    return render(request, 'verify_otp.html', {'email': user.email})
+            if str(stored_otp) == str(otp_entered):
+                # Clear the OTP from cache
+                cache.delete(f'registration_otp_{email}')
+                return JsonResponse({
+                    'success': True,
+                    'message': 'OTP verified successfully'
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Invalid OTP'
+                })
+
+        except Exception as e:
+            print(f"Error in verify_otp: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'message': 'An error occurred'
+            })
+
+    return JsonResponse({
+        'success': False,
+        'message': 'Invalid request method'
+    })
 
 def viewprofile(request):
     if 'username' not in request.session:
@@ -758,5 +785,73 @@ def daycation_packages(request):
     for package in packages:
         package.is_in_wishlist = package.wishlist.filter(id=request.user.id).exists() if request.user.is_authenticated else False
     return render(request, 'daycation_package.html', {'packages': packages})
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.core.exceptions import ValidationError
+from .models import ResortProfile, ResortImage
+
+def add_resort(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        location = request.POST.get('location')
+        contact = request.POST.get('contact')
+        email = request.POST.get('email')
+        image = request.FILES.get('image')
+
+        resort = ResortProfile(
+            user=request.user,  # Associate the resort with the logged-in user
+            name=name,
+            description=description,
+            location=location,
+            contact=contact,
+            email=email
+        )
+        resort.save()
+
+        if image:
+            ResortImage.objects.create(resort=resort, image=image)
+
+        return redirect('resort_list')  # Redirect to the list of resorts
+    return render(request, 'userapp/add_resort.html')
+
+def edit_resort(request, slug):
+    resort = get_object_or_404(ResortProfile, slug=slug)
+    if request.method == 'POST':
+        resort.name = request.POST.get('name')
+        resort.description = request.POST.get('description')
+        resort.location = request.POST.get('location')
+        resort.contact = request.POST.get('contact')
+        resort.email = request.POST.get('email')
+
+        # Handle image upload
+        image = request.FILES.get('image')
+        if image:
+            ResortImage.objects.filter(resort=resort).delete()  # Remove old images
+            ResortImage.objects.create(resort=resort, image=image)
+
+        resort.save()
+        return redirect('resort_list')  # Redirect to the list of resorts
+    return render(request, 'userapp/edit_resort.html', {'resort': resort})
+
+def delete_resort(request, slug):
+    resort = get_object_or_404(ResortProfile, slug=slug)
+    if request.method == 'POST':
+        resort.delete()
+        return redirect('resort_list')  # Redirect to the list of resorts
+    return render(request, 'userapp/delete_resort.html', {'resort': resort})
+
+def resort_list(request):
+    resorts = ResortProfile.objects.all()
+    return render(request, 'userapp/resort_list.html', {'resorts': resorts})
+
+
+
+
+
+
+
+
 
 

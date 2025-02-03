@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import add_resort, edit_resort, delete_resort, resort_list
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -11,11 +12,15 @@ urlpatterns = [
     path('userdashboard/', views.userdashboard, name='userdashboard'),
     path('userindex/', views.userindex, name='userindex'),
     path('resotindex/', views.resortindex, name='resortindex'),
+    path('check-email/', views.check_email, name='check_email'),
 
     path('check_username/', views.check_username, name='check_username'),
     path('verify-otp/<int:user_id>/', views.verify_otp, name='verify_otp'),
 
+
     path('userregister/', views.userregister, name='userregister'),
+    path('send-otp/', views.send_otp, name='send_otp'),    
+    path('verify-otp/', views.verify_otp, name='verify_otp'),
     path('viewprofile/', views.viewprofile, name='viewprofile'),  # URL for viewing user profile
     path('editprofile/', views.editprofile, name='editprofile'),
     path('changepassword/', views.changepassword, name='changepassword'),
@@ -42,6 +47,13 @@ urlpatterns = [
     path('create/<int:id>', views.create_booking, name='create_booking'),
     path('google-login/', views.google_login, name='google_login'),
     path('google-login/callback/', views.google_callback, name='google_callback'),
-    path('booking/<int:package_id>/',views. booking_view, name='booking_view'),
+    path('booking/<int:package_id>/', views.booking_view, name='booking_view'),
     path('booking/success/<int:booking_id>/', views.booking_success, name='booking_success'),
+    path('resorts/add/', add_resort, name='add_resort'),
+    path('resorts/edit/<slug:slug>/', edit_resort, name='edit_resort'),
+    path('resorts/delete/<slug:slug>/', delete_resort, name='delete_resort'),
+    path('resorts/', resort_list, name='resort_list'),
 ]
+
+
+

@@ -40,11 +40,11 @@ INSTALLED_APPS = [
     'reservations',
     'bookings',
     'social_django',
-    'users',
 ]
 
 # Custom User Model
 AUTH_USER_MODEL = 'userapp.UserDB'
+
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -153,8 +153,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # Use environment variable
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  # Use environment variable
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 LOGGING = {
@@ -177,3 +177,48 @@ LOGGING = {
 }
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"E:\farmingbot-ywiv-63987ab5a2b4.json"
+
+# Add these new cache settings for OTP
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 300,  # 5 minutes default timeout for cache items
+    }
+}
+
+# Add OTP Settings
+OTP_EXPIRE_TIME = 300  # 5 minutes in seconds
+OTP_LENGTH = 6
+MAX_OTP_ATTEMPTS = 3
+
+# Update Session Settings
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 86400  # 24 hours in seconds
+SESSION_COOKIE_SECURE = True  # Enable only if using HTTPS
+SESSION_COOKIE_HTTPONLY = True
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Security Settings for Forms
+CSRF_COOKIE_SECURE = True  # Enable only if using HTTPS
+CSRF_COOKIE_HTTPONLY = True
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']  # Add your domains
+
+# Add these email templates settings
+EMAIL_TEMPLATES = {
+    'otp_email': {
+        'subject': 'Your OTP for Registration',
+        'html_template': 'email/otp_email.html',
+        'text_template': 'email/otp_email.txt',
+    }
+}
+
+# Message Settings
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}

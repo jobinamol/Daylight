@@ -221,7 +221,7 @@ def delete_package(request, package_id):
 
 def package_list(request):
     categories = Category.objects.all()
-    packages = packagemanagement.objects.all()  # Assuming you have a Package model
+    packages = DaycationPackage.objects.all()  # Assuming you have a Package model
 
     context = {
         'categories': categories,
@@ -879,7 +879,6 @@ def submit_feedback(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
-
 
 
 
