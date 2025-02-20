@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'reservations',
     'bookings',
     'social_django',
+    'recommender',
+
 ]
 
 # Custom User Model
