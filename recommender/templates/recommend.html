@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resort Recommendations</title>
+</head>
+<body>
+    <h1>AI-Powered Resort Recommendations</h1>
+    
+    <h2>Content-Based Recommendations</h2>
+    <ul>
+        {% for resort in content_results %}
+        <li>{{ resort.resort_id }} - {{ resort.location }} - {{ resort.amenities }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Collaborative Recommendations</h2>
+    <ul>
+        {% for resort in collaborative_results %}
+        <li>{{ resort.resort_id }} - {{ resort.location }} - ${{ resort.price }} (Rating: {{ resort.rating }})</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
